@@ -21,3 +21,12 @@ for topic in $(kafka-topics.sh --bootstrap-server localhost:9092 --list); do
 done
 
 
+
+oc exec -it kafka-0 -n <kafka-namespace> -- bash -c '
+for topic in $(kafka-topics.sh --bootstrap-server localhost:9092 --list); do
+  echo "Deleting topic: $topic"
+  kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic "$topic"
+done
+'
+
+
