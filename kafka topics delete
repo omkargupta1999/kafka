@@ -1,0 +1,23 @@
+Correct ways to run the script
+oc rsh <kafka-broker-pod>
+./clean.sh
+ 
+ or 
+ 
+ oc exec -it <kafka-broker-pod> -- ./clean.sh
+
+
+
+Alternative: Deleting Kafka topics via Kafka CLI
+
+to delete topic data, you can also use Kafka commands (inside the pod):
+
+# Delete a topic
+kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic <topic-name>
+
+# Delete all topics (careful!)
+for topic in $(kafka-topics.sh --bootstrap-server localhost:9092 --list); do
+  kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic $topic
+done
+
+
