@@ -15,3 +15,10 @@ cd /opt/kafka/bin/
 --topic <topic-name> \
 --from-beginning \
 --timeout-ms 2000 | wc -l
+
+
+
+/opt/kafka/bin/kafka-run-class.sh -cp "/opt/kafka/libs/*" kafka.tools.GetOffsetShell \
+--broker-list localhost:9092 \
+--topic <topic-name> \
+--time -1 | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
