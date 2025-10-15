@@ -1,0 +1,78 @@
+[osuser@bastion ~]$ sh startup-multiple-namespaces.sh
+===========================================
+ Application Startup Script
+===========================================
+
+>>> Processing namespace: uat-simulators
+Are you sure you want to scale up namespace 'uat-simulators'? (y/n): y
+   - Scaling up deployments/demo-epaymerchantsimulater to demo-epaymerchantsimulater
+error: invalid argument "demo-epaymerchantsimulater" for "--replicas" flag: strconv.ParseInt: parsing "demo-epaymerchantsimulater": invalid syntax
+See 'oc scale --help' for usage.
+✅ Completed namespace: uat-simulators
+-------------------------------------------
+
+🎯 All selected namespaces have been brought up.
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$ cat startup-multiple-namespaces.sh
+#!/bin/bash
+# ------------------------------------------------------------------
+# Script: startup-multiple-namespaces.sh
+# Purpose: Bring up selected applications (scale back to 1 replica)
+# Author: Saadi
+# ------------------------------------------------------------------
+
+# ====== CONFIGURATION ======
+NAMESPACES=(
+  "uat-simulators"
+
+)
+
+# Deployments per namespace with desired replica count
+CUSTOM_DEPLOYMENTS=(
+  "uat-simulators:demo-epaymerchantsimulater"
+
+)
+
+TARGETS="deployments"
+OC_BIN="oc"
+
+echo "==========================================="
+echo " Application Startup Script "
+echo "==========================================="
+
+for ns in "${NAMESPACES[@]}"; do
+  echo ""
+  echo ">>> Processing namespace: $ns"
+
+  read -p "Are you sure you want to scale up namespace '$ns'? (y/n): " confirm
+  if [[ "$confirm" != "y" ]]; then
+    echo "Skipping namespace $ns..."
+    continue
+  fi
+
+  $OC_BIN project "$ns" >/dev/null 2>&1
+  if [ $? -ne 0 ]; then
+    echo "⚠️  Failed to switch to namespace $ns. Skipping..."
+    continue
+  fi
+
+  custom_entry=$(printf "%s\n" "${CUSTOM_DEPLOYMENTS[@]}" | grep "^$ns:" || true)
+  deploys=$(echo "$custom_entry" | cut -d':' -f2 | tr ',' '\n')
+
+  for item in $deploys; do
+    dname=$(echo "$item" | cut -d'=' -f1)
+    replicas=$(echo "$item" | cut -d'=' -f2)
+    for target in $TARGETS; do
+      echo "   - Scaling up $target/$dname to $replicas"
+      $OC_BIN scale $target "$dname" --replicas=$replicas -n "$ns"
+    done
+  done
+
+  echo "✅ Completed namespace: $ns"
+  echo "-------------------------------------------"
+done
+
+echo ""
+echo "🎯 All selected namespaces have been brought up."
