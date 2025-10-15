@@ -2,7 +2,7 @@
 # ------------------------------------------------------------------
 # Script: shutdown-multiple-namespaces.sh
 # Purpose: Gracefully bring down selected applications (scale to 0)
-# Author: Saadi
+# Author: Omkar Gupta
 # ------------------------------------------------------------------
 
 # ====== CONFIGURATION ======
@@ -24,7 +24,7 @@ CUSTOM_DEPLOYMENTS=(
 )
 
 SCALE_TO=0
-TARGETS="deployments statefulsets"
+TARGETS="deployments"
 OC_BIN="oc"
 
 echo "==========================================="
@@ -64,3 +64,16 @@ done
 
 echo ""
 echo "🎯 All selected namespaces have been processed."
+# ====== STATUS CHECK SECTION ======
+echo ""
+echo "==========================================="
+echo " Checking Deployment Status After Shutdown "
+echo "==========================================="
+for ns in "${NAMESPACES[@]}"; do
+  echo ""
+  echo ">>> Namespace: $ns"
+  $OC_BIN get deploy -n "$ns"
+done
+
+echo ""
+echo "✅ Status check completed for all namespaces."
