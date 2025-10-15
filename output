@@ -1,0 +1,310 @@
+
+=======================================DC ================================================
+
+oc scale deploy --replicas=0 -n prod-dc-admin         admin-adminservice                           
+oc scale deploy --replicas=0 -n prod-dc-frontend      transactionfe-transaction-frontend                
+oc scale deploy --replicas=0 -n prod-dc-kms           kms-kmsservice                               
+oc scale deploy --replicas=0 -n prod-dc-simulators    demo-merchantsimulator                       
+oc scale deploy --replicas=0 -n prod-dc-simulators    javasimulator-javautilityapisimulator                                          
+oc scale deploy --replicas=0 -n prod-dc-transaction   payment-paymentservice                       
+oc scale deploy --replicas=0 -n prod-dc-transaction   txn-transactionservice 
+
+
+oc scale deploy --replicas=1 -n prod-dc-admin         admin-adminservice                           
+oc scale deploy --replicas=1 -n prod-dc-frontend      transactionfe-transaction-frontend                
+oc scale deploy --replicas=1 -n prod-dc-kms           kms-kmsservice                               
+oc scale deploy --replicas=1 -n prod-dc-simulators    demo-merchantsimulator                       
+oc scale deploy --replicas=1 -n prod-dc-simulators    javasimulator-javautilityapisimulator                                          
+oc scale deploy --replicas=1 -n prod-dc-transaction   payment-paymentservice                       
+oc scale deploy --replicas=1 -n prod-dc-transaction   txn-transactionservice
+
+=======================================DR ================================================
+
+
+oc scale deploy --replicas=0 -n prod-dr-admin         admin-adminservice                           
+oc scale deploy --replicas=0 -n prod-dr-frontend      transactionfe-transaction-frontend                
+oc scale deploy --replicas=0 -n prod-dr-kms           kms-kmsservice                               
+oc scale deploy --replicas=0 -n prod-dr-simulators    demo-merchantsimulator                       
+oc scale deploy --replicas=0 -n prod-dr-simulators    javasimulator-javautilityapisimulator                                          
+oc scale deploy --replicas=0 -n prod-dr-transaction   payment-paymentservice                       
+oc scale deploy --replicas=0 -n prod-dr-transaction   txn-transactionservice
+
+oc scale deploy --replicas=1 -n prod-dr-admin         admin-adminservice                           
+oc scale deploy --replicas=1 -n prod-dr-frontend      transactionfe-transaction-frontend                
+oc scale deploy --replicas=1 -n prod-dr-kms           kms-kmsservice                               
+oc scale deploy --replicas=1 -n prod-dr-simulators    demo-merchantsimulator                       
+oc scale deploy --replicas=1 -n prod-dr-simulators    javasimulator-javautilityapisimulator                                          
+oc scale deploy --replicas=1 -n prod-dr-transaction   payment-paymentservice                       
+oc scale deploy --replicas=1 -n prod-dr-transaction   txn-transactionservice
+
+
+[osuser@drepayprodbastion Drill_Script]$ oc rsh prod-dr-kafka-cluster-broker-0
+sh-5.1$ cd bin/
+sh-5.1$
+sh-5.1$
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
+__consumer_offsets
+heartbeats
+mirrormaker2-cluster-configs
+mirrormaker2-cluster-offsets
+mirrormaker2-cluster-status
+ops_refund_adjust_confirmation_topic
+ops_refund_adjust_detail_topic
+process_bookingDetails_topic
+process_bulk_refund_topic
+prod-dr-connect-cluster-configs
+prod-dr-connect-cluster-offsets
+prod-dr-connect-cluster-status
+recon_fail_ack_topic
+recon_record_duplicate_topic
+recon_record_matched_topic
+recon_record_unmatched_topic
+source.checkpoints.internal
+strimzi.cruisecontrol.metrics
+strimzi.cruisecontrol.modeltrainingsamples
+strimzi.cruisecontrol.partitionmetricsamples
+transaction_email_notification_topic
+transaction_push_verification_topic
+transaction_sms_notification_topic
+
+
+[osuser@dcepayprodbastion Drill_Script]$ oc rsh prod-dc-kafka-cluster-broker-0
+sh-5.1$
+sh-5.1$
+sh-5.1$ cd bin/
+sh-5.1$
+sh-5.1$
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
+__consumer_offsets
+mirrormaker2-cluster-configs
+mirrormaker2-cluster-offsets
+mirrormaker2-cluster-status
+mm2-offset-syncs.target.internal
+ops_refund_adjust_confirmation_topic
+ops_refund_adjust_detail_topic
+process_bookingDetails_topic
+process_bulk_refund_topic
+recon_fail_ack_topic
+recon_record_duplicate_topic
+recon_record_matched_topic
+recon_record_unmatched_topic
+strimzi.cruisecontrol.metrics
+strimzi.cruisecontrol.modeltrainingsamples
+strimzi.cruisecontrol.partitionmetricsamples
+transaction_email_notification_topic
+transaction_push_verification_topic
+transaction_sms_notification_topic
+sh-5.1$ exit
+exit
+
+
+=============================
+
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
+__consumer_offsets
+heartbeats
+mirrormaker2-cluster-configs
+mirrormaker2-cluster-offsets
+mirrormaker2-cluster-status
+ops_refund_adjust_confirmation_topic
+ops_refund_adjust_detail_topic
+process_bookingDetails_topic
+process_bulk_refund_topic
+prod-dr-connect-cluster-configs
+prod-dr-connect-cluster-offsets
+prod-dr-connect-cluster-status
+recon_fail_ack_topic
+recon_record_duplicate_topic
+recon_record_matched_topic
+recon_record_unmatched_topic
+source.checkpoints.internal
+strimzi.cruisecontrol.metrics
+strimzi.cruisecontrol.modeltrainingsamples
+strimzi.cruisecontrol.partitionmetricsamples
+transaction_email_notification_topic
+transaction_push_verification_topic
+transaction_sms_notification_topic
+sh-5.1$
+sh-5.1$
+sh-5.1$
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic recon_record_unmatched_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'^C
+sh-5.1$ cd bin
+sh: cd: bin: No such file or directory
+sh-5.1$ pwd
+/opt/kafka/bin
+sh-5.1$
+sh-5.1$
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic recon_record_unmatched_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+Total messages:
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic prod-dr-connect-cluster-configs  | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+Total messages:
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic recon_record_unmatched_topic  | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+Total messages:
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic transaction_email_notification_topic   | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+
+
+=================
+
+[osuser@dcepayprodbastion Drill_Script]$ oc rsh prod-dc-kafka-cluster-broker-0
+sh-5.1$
+sh-5.1$
+sh-5.1$
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
+sh: ./kafka-topics.sh: No such file or directory
+sh-5.1$ cd bin/
+sh-5.1$
+sh-5.1$
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
+__consumer_offsets
+mirrormaker2-cluster-configs
+mirrormaker2-cluster-offsets
+mirrormaker2-cluster-status
+mm2-offset-syncs.target.internal
+ops_refund_adjust_confirmation_topic
+ops_refund_adjust_detail_topic
+process_bookingDetails_topic
+process_bulk_refund_topic
+recon_fail_ack_topic
+recon_record_duplicate_topic
+recon_record_matched_topic
+recon_record_unmatched_topic
+strimzi.cruisecontrol.metrics
+strimzi.cruisecontrol.modeltrainingsamples
+strimzi.cruisecontrol.partitionmetricsamples
+transaction_email_notification_topic
+transaction_push_verification_topic
+transaction_sms_notification_topic
+sh-5.1$
+sh-5.1$ /opt/kafka/bin/kafka-run-class.sh kafka.tools.GetOffsetShell \
+--broker-list localhost:9092 --topic recon_record_duplicate_topic | \
+awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+Total messages:
+sh-5.1$
+sh-5.1$
+sh-5.1$ /opt/kafka/bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic recon_record_unmatched_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+Total messages:
+sh-5.1$ pwd
+/opt/kafka/bin
+sh-5.1$
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic recon_record_unmatched_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+Total messages:
+sh-5.1$
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic transaction_email_notification_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+Total messages:
+sh-5.1$
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic transaction_push_verification_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+Total messages:
+sh-5.1$
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic transaction_sms_notification_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+Total messages:
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic recon_fail_ack_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+Total messages:
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic process_bookingDetails_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+Total messages:
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic ops_refund_adjust_confirmation_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+Total messages:
+
+
+
+
+
+
+
+
+=====================================
+
+
+[osuser@dcepayprodbastion ~]$ oc get po
+NAME                                                     READY   STATUS    RESTARTS       AGE
+prod-dc-kafka-cluster-broker-0                           1/1     Running   0              4d1h
+prod-dc-kafka-cluster-broker-1                           1/1     Running   0              4d1h
+prod-dc-kafka-cluster-broker-2                           1/1     Running   0              4d1h
+prod-dc-kafka-cluster-controller-3                       1/1     Running   0              26d
+prod-dc-kafka-cluster-controller-4                       1/1     Running   0              26d
+prod-dc-kafka-cluster-controller-5                       1/1     Running   0              26d
+prod-dc-kafka-cluster-cruise-control-5594865799-q6qjv    1/1     Running   16 (26d ago)   26d
+prod-dc-kafka-cluster-entity-operator-6fd9fdf6c4-77vsd   2/2     Running   0              26d
+prod-dc-kafka-mirror-maker-mirrormaker2-0                1/1     Running   0              14m
+[osuser@dcepayprodbastion ~]$
+c [osuser@dcepayprodbastion ~]$ oc logs -f prod-dc-kafka-mirror-maker-mirrormaker2-0  -n prod-dc-kafka | grep -i lag
+        offset.lag.max = 100
+        offset.lag.max = 100
+        offset.lag.max = 100
+        offset.lag.max = 100
+^C
+
+
+===========================
+
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
+__consumer_offsets
+mirrormaker2-cluster-configs
+mirrormaker2-cluster-offsets
+mirrormaker2-cluster-status
+mm2-offset-syncs.target.internal
+ops_refund_adjust_confirmation_topic
+ops_refund_adjust_detail_topic
+process_bookingDetails_topic
+process_bulk_refund_topic
+recon_fail_ack_topic
+recon_record_duplicate_topic
+recon_record_matched_topic
+recon_record_unmatched_topic
+strimzi.cruisecontrol.metrics
+strimzi.cruisecontrol.modeltrainingsamples
+strimzi.cruisecontrol.partitionmetricsamples
+transaction_email_notification_topic
+transaction_push_verification_topic
+transaction_sms_notification_topic
+sh-5.1$
+sh-5.1$
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell \
+--broker-list localhost:9092 \
+--topic recon_record_unmatched_topic \
+--time -1 | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+Total messages:
+sh-5.1$
+
+
+
+====================================
+
+
+
+
+
+
+
+
+
+
+
+
