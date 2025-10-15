@@ -75,3 +75,17 @@ done
 
 echo ""
 echo "🎯 All selected namespaces have been successfully scaled up to $SCALE_TO replicas."
+
+# ====== STATUS CHECK SECTION ======
+echo ""
+echo "==========================================="
+echo " Checking Deployment Status After Shutdown "
+echo "==========================================="
+for ns in "${NAMESPACES[@]}"; do
+  echo ""
+  echo ">>> Namespace: $ns"
+  $OC_BIN get deploy -n "$ns" | awk 'NR==1 || /NAME|0/ {print}'
+done
+
+echo ""
+echo "✅ Status check completed for all namespaces."
