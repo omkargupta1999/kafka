@@ -1,0 +1,32 @@
+check if Kafka messages are synced between Prod-DR and Prod-DC
+
+Step 1 – Check Topics List
+Run inside both broker pods (DR & DC):
+oc rsh -n prod-dr-kafka prod-dr-kafka-cluster-broker-0
+cd /opt/kafka/bin/
+./kafka-topics.sh --bootstrap-server localhost:9092 --list
+exit
+
+oc rsh -n prod-dc-kafka prod-dc-kafka-cluster-broker-0
+cd /opt/kafka/bin/
+./kafka-topics.sh --bootstrap-server localhost:9092 --list
+exit
+
+
+#The topic names in DC and DR should match.
+
+
+Step 2 – Check Message Count
+Run inside both clusters (one topic at a time):
+/opt/kafka/bin/kafka-run-class.sh kafka.tools.GetOffsetShell \
+--broker-list localhost:9092 --topic <topic-name> | \
+awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+
+#The message counts should be almost the same in DC and DR
+(small difference is OK).
+
+Step 3 – Check Replication Lag
+
+Run on DC (where MM2 is running):
+oc logs -n prod-dc-kafka <mm2-pod-name> | grep -i lag
+
