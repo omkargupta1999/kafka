@@ -2,7 +2,7 @@
 # ------------------------------------------------------------------
 # Script: startup-multiple-namespaces.sh
 # Purpose: Bring up selected applications (scale back to desired replica count)
-# Author: Saadi
+# Author: Omkar Gupta
 # ------------------------------------------------------------------
 
 # ====== USER CONFIGURATION ======
@@ -28,7 +28,7 @@ CUSTOM_DEPLOYMENTS=(
 SCALE_TO=1
 
 # What to scale (usually "deployments" or "statefulsets")
-TARGETS="deployments statefulsets"
+TARGETS="deployments"
 
 # OpenShift CLI binary
 OC_BIN="oc"
@@ -75,7 +75,6 @@ done
 
 echo ""
 echo "🎯 All selected namespaces have been successfully scaled up to $SCALE_TO replicas."
-
 # ====== STATUS CHECK SECTION ======
 echo ""
 echo "==========================================="
@@ -84,7 +83,7 @@ echo "==========================================="
 for ns in "${NAMESPACES[@]}"; do
   echo ""
   echo ">>> Namespace: $ns"
-  $OC_BIN get deploy -n "$ns" | awk 'NR==1 || /NAME|0/ {print}'
+  $OC_BIN get deploy -n "$ns"
 done
 
 echo ""
