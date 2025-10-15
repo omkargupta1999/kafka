@@ -2,3 +2,16 @@
 --broker-list localhost:9092 \
 --topic recon_record_unmatched_topic \
 --time -1 | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
+
+
+
+
+
+cd /opt/kafka/bin/
+
+# Just read messages count without printing all
+./kafka-console-consumer.sh \
+--bootstrap-server localhost:9092 \
+--topic <topic-name> \
+--from-beginning \
+--timeout-ms 2000 | wc -l
