@@ -305,6 +305,24 @@ sh-5.1$
 
 
 
+[osuser@dcepayprodbastion ~]$ oc rsh prod-dc-kafka-cluster-broker-0
+sh-5.1$
+sh-5.1$
+sh-5.1$ cd bin/
+sh-5.1$
+sh-5.1$
+sh-5.1$
+sh-5.1$
+sh-5.1$ ./kafka-console-consumer.sh \
+--bootstrap-server localhost:9092 \
+--topic recon_record_unmatched_topic \
+--from-beginning \
+--timeout-ms 2000 | wc -l
+[2025-10-15 09:47:26,123] ERROR Error processing message, terminating consumer process:  (org.apache.kafka.tools.consumer.ConsoleConsumer)
+org.apache.kafka.common.errors.TimeoutException
+Processed a total of 0 messages
+0
+
 
 
 
