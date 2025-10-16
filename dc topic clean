@@ -1,0 +1,15 @@
+Clean the DC Cluster Topics
+
+Run inside DC broker pod:
+
+oc rsh -n prod-dr-kafka prod-dr-kafka-cluster-broker-0
+
+cd /opt/kafka/bin/
+
+for t in $(./kafka-topics.sh --bootstrap-server localhost:9092 --list | grep -v '^__' | grep -v 'mm2-' | grep -v 'mirrormaker2-'); do
+  echo "Deleting topic: $t"
+  ./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic "$t"
+done
+exit
+
+
