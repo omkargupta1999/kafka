@@ -1,3 +1,15 @@
 025-10-29 10:20:59.114 ERROR | com.epay.merchant.etl.producer.KafkaMessagePublisher:36 | principal=  | scenario=/api/merchant/v1/otp/generation | operation=POST | correlation=4004130e-712f-4bf3-a6c2-838185c2f88c | publish | Exception thrown when sending a message with key='email.LOGIN.sbi_admin' and payload='{"entityId":"3ccab5ec-fe78-a9f0-e063-0687b10a4ebe","requestType":"LOGIN","entityType":"OTP_MANAGEMEN...' to topic merchant_email_notification_topic:
-org.apache.kafka.common.errors.TimeoutException: Topic merchant_email_notification_topic not present in metadata after 60000 ms.
+org.apache.kafka.common.errors.TimeoutException: Topic   not present in metadata after 60000 ms.
 2025-10-29 10:20:59.124 ERROR | com.epay.merchant.exceptionhandlers.MerchantExceptionHandler:151 | principal=  | scenario=/api/merchant/v1/otp/generation | operation=POST | correlation=4004130e-712f-4bf3-a6c2-838185c2f88c | handleGenericException | Handling Generic Exception: Send failed
+
+
+
+1. Check if topic exists
+Run on pre-prod Kafka cluster:
+bin/kafka-topics.sh --bootstrap-server <BROKER:PORT> --list | grep merchant_email_notification_topic
+
+
+If it doesn’t show up, create it manually:
+bin/kafka-topics.sh --bootstrap-server <BROKER:PORT> --create \
+  --topic merchant_email_notification_topic \
+  --partitions 3 --replication-factor 3
