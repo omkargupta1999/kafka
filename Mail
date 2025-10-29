@@ -8,3 +8,49 @@ Perform the Kafka Clean-up Activity at DC side.
 Swapped the routes details in Git-lab of both DC and DR.
 Brought up the application at DR side.
 Check the application status and Kafka.
+
+
+[osuser@bastion ~]$ oc apply -f prod-dc-rns.yaml
+namespace/prod-dc-rns created
+Error from server (NotFound): error when creating "prod-dc-rns.yaml": namespaces "prod-dc-rns\u00a0" not found
+Error from server (NotFound): error when creating "prod-dc-rns.yaml": namespaces "prod-dc-rns\u00a0" not found
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$ cat prod-dc-rns.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod-dc-rns
+  labels:
+    eip: prod-dc-cluster
+    dynatrace.com/inject: "true"
+    istio-discovery: prod-dc-istio
+    istio.io/rev: prod-dc-istio
+---
+#Role and Role-binding for epay_devops group in prod-dc-rns namespace
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-delete-rollout
+  namespace: prod-dc-rns 
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "delete"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: bind-pod-delete-rollout
+  namespace: prod-dc-rns 
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: pod-delete-rollout
+subjects:
+  - kind: Group
+    name: EPAY_OCP_DEVOPS
+    apiGroup: rbac.authorization.k8s.io
