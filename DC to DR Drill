@@ -1,0 +1,33 @@
+Drill Switchover Activity steps:
+
+step 1 : DNS Switchover from DC to DR.
+
+step 2 : Stop the application at DC side.
+		 will ran our script at bastian server.
+
+step 3&4 : Database switchover from DC to DR.
+
+step 3&4 : Perform the Kafka Clean-up Activity at DC side.
+			 cd /opt/kafka/bin/
+			./kafka-topics.sh --bootstrap-server localhost:9092 --list
+		
+			for t in $(./kafka-topics.sh --bootstrap-server localhost:9092 --list | grep -v '^__' | grep -v 'mm2-' | grep -v 'mirrormaker2-'); do
+			echo "Deleting topic: $t"
+			./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic "$t"
+			done
+			exit
+
+step 5 : Swap the routes in Git-lab of both DC and DR.
+			Update DC & DR (Reverse Direction)
+
+
+step 6 : Brought up the application at DR side.
+		 will ran our script at bastian server
+
+step 7 : Check the application status and Kafka.
+		 Verify MM2 Logs
+		 Validate Topic Sync
+		 cd /opt/kafka/bin/
+		./kafka-topics.sh --bootstrap-server localhost:9092 --list
+		exit
+=======
