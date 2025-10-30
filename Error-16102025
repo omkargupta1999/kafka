@@ -1,3 +1,56 @@
+[osuser@bastion ~]$ oc exec -it websitefe-epay-website-645c99fc-vg6cl -n dev-frontend sh
+kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+sh-5.1$ cat /usr/share/nginx/html/transactiontracking/index.html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/assets/sbi_images-EBidvxNX.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transaction Tracking</title>
+    <script type="module" crossorigin src="/assets/index-COjTgxmU.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-OtJTgJWN.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+
+ [osuser@bastion ~]$ oc get gw -n dev-istio-system epay-dev-gateway -o yaml
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  annotations:
+    meta.helm.sh/release-name: common
+    meta.helm.sh/release-namespace: default
+  creationTimestamp: "2025-04-11T09:00:32Z"
+  generation: 3
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: epay-dev-gateway
+  namespace: dev-istio-system
+  resourceVersion: "426894719"
+  uid: 2df33901-3611-4207-8534-b5c8db718831
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - dev.epay.sbi
+    port:
+      name: http
+      number: 80
+      protocol: HTTP
+
+
+
+
+
+
+
+
+
+
 https://dev.epay.sbi/transactiontracking  After hitting this URL its redirecting to http://dev.epay.sbi:8080/transactiontracking/   and giving error and not accessible this Page ..
 
 [osuser@bastion ~]$ oc get po -n dev-frontend
