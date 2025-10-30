@@ -1,319 +1,130 @@
-podman login -u='fe+fe' -p='7DI05IVNQRLB17VERFZDTEDJ9AQWZBBT9KW1EL5AN7EYPQANQ9TAB6280UH7TFWS' proddc-registry-route-quay-enterprise.apps.dc.prod.epay.sbi
+https://dev.epay.sbi/transactiontracking  After hitting this URL its redirecting to http://dev.epay.sbi:8080/transactiontracking/   and giving error and not accessible this Page ..
 
-DREPAYPRODBASTION	 10.177.82.28
-DCEPAYPRODBASTION    10.189.35.28
+[osuser@bastion ~]$ oc get po -n dev-frontend
+NAME                                                      READY   STATUS    RESTARTS   AGE
+integration-5bf7d8cbc8-2l7pn                              2/2     Running   0          5d20h
+maintenancefe-maintenance-frontend-54695fc794-d8tvt       2/2     Running   0          9d
+merchantfe-merchant-frontend-bd8d8bd4d-bb6dr              2/2     Running   0          14d
+merchantsimulator-epaymerchantsimulater-9cbd5d47c-hqvwh   2/2     Running   0          60d
+merchantsimulator-epaymerchantsimulater-9cbd5d47c-s4frf   2/2     Running   0          20d
+transactionfe-transaction-frontend-5b5ccf4c94-c2msw       2/2     Running   0          27h
+websitefe-epay-website-645c99fc-rv252                     2/2     Running   0          8m51s
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc get svc -n dev-frontend
+NAME                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+integration                               ClusterIP   172.30.120.167   <none>        8080/TCP,8443/TCP   5d20h
+maintenancefe-maintenance-frontend        ClusterIP   172.30.94.239    <none>        8080/TCP            13d
+merchantfe-merchant-frontend              ClusterIP   172.30.34.35     <none>        8080/TCP            91d
+merchantsimulator-epaymerchantsimulater   ClusterIP   172.30.48.37     <none>        8080/TCP            201d
+transactionfe-transaction-frontend        ClusterIP   172.30.236.239   <none>        8080/TCP            201d
+websitefe-epay-website                    ClusterIP   172.30.30.126    <none>        8080/TCP            42h
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc get vs -n dev-frontend dev-epay-website-epay-website -o yaml
+Warning: short name "vs" could also match lower priority resource volumesnapshots.snapshot.storage.k8s.io
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  annotations:
+    meta.helm.sh/release-name: websitefe
+    meta.helm.sh/release-namespace: dev-frontend
+  creationTimestamp: "2025-10-28T15:23:28Z"
+  generation: 5
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: dev-epay-website-epay-website
+  namespace: dev-frontend
+  resourceVersion: "482093864"
+  uid: 9ab283d6-43c9-45e0-94c9-6c83af842ebc
+spec:
+  gateways:
+  - dev-istio-system/epay-dev-gateway
+  hosts:
+  - dev.epay.sbi
+  http:
+  - match:
+    - uri:
+        prefix: /transactiontracking
+    route:
+    - destination:
+        host: websitefe-epay-website
+        port:
+          number: 8080
 
+http {
 
-[osuser@dcepayprodbastion Drill_Script]$ oc get po -A | grep -i prod-dc | grep -i 2/2
-prod-dc-admin                                      admin-adminservice-d75c6b95d-7s2qb                              2/2     Running            0                23h
-prod-dc-admin                                      admin-adminservice-d75c6b95d-fjk5w                              2/2     Running            0                23h
-prod-dc-frontend                                   transactionfe-transaction-frontend-5685cb8c4b-m7cqc             2/2     Running            0                23h
-prod-dc-kafka                                      prod-dc-kafka-cluster-entity-operator-6fd9fdf6c4-77vsd          2/2     Running            0                27d
-prod-dc-kms                                        kms-kmsservice-76bf44b764-gpct8                                 2/2     Running            0                23h
-prod-dc-simulators                                 demo-merchantsimulator-f495d9c74-dfwrr                          2/2     Running            0                23h
-prod-dc-simulators                                 javasimulator-javautilityapisimulator-79d7f6689-vqt7x           2/2     Running            0                23h
-prod-dc-transaction                                payment-paymentservice-588745768d-6kxdp                         2/2     Running            0                139m
-prod-dc-transaction                                payment-paymentservice-588745768d-7lg8d                         2/2     Running            0                139m
-prod-dc-transaction                                txn-transactionservice-576c9d9688-2m8n9                         2/2     Running            0                103m
-prod-dc-transaction                                txn-transactionservice-576c9d9688-8jj7s                         2/2     Running            0                103m
+    log_format main 'ACCESS: $remote_addr - $remote_user [$time_local] '
+                  '"$request" $status $body_bytes_sent '
+                  '"$http_referer" "$http_user_agent"';
+				  
+	# Access logs go to STDOUT
+    access_log /dev/stdout main;
+	
+	#Error logs go to STDERR
+    error_log /dev/stderr warn;
 
+    include       mime.types;
 
+    set_real_ip_from    0.0.0.0/0;
+    real_ip_recursive   on;
+    real_ip_header      X-Forwarded-For;  
 
-oc get deploy -A | grep -i prod-dr | grep -i 0/0
-oc get po -A | grep -i prod-dc | grep -i 2/2
+    limit_req_zone      $binary_remote_addr zone=mylimit:10m rate=10r/s;
+    limit_conn_zone     $binary_remote_addr zone=limitperip:10m;
 
+    ## Start: Size Limits & Buffer Overflows ##
+    client_body_buffer_size 1k;
+    client_header_buffer_size 1k;
+    client_max_body_size 1m;  
+    large_client_header_buffers 2 1k;  
+    ## END: Size Limits & Buffer Overflows ##
 
-[osuser@dcepayprodbastion Drill_Script]$ oc get KafkaMirrorMaker2 -A
-NAMESPACE       NAME                         DESIRED REPLICAS   READY
-prod-dc-kafka   prod-dc-kafka-mirror-maker   1                  True
-[osuser@dcepayprodbastion Drill_Script]$
-[osuser@dcepayprodbastion Drill_Script]$ oc scale KafkaMirrorMaker2 prod-dc-kafka-mirror-maker -n prod-dc-kafka --replicas=0
-Error from server (Forbidden): kafkamirrormaker2s.kafka.strimzi.io "prod-dc-kafka-mirror-maker" is forbidden: User "V1021008" cannot patch resource "kafkamirrormaker2s/scale" in API group "kafka.strimzi.io" in the namespace "prod-dc-kafka": RBAC: [clusterrole.rbac.authorization.k8s.io "namespace-admin" not found, clusterrole.rbac.authorization.k8s.io "log-reader" not found]
+    client_header_timeout 10s;
+    client_body_timeout 10s;
 
+    server {
+        listen 8080;
+        server_name localhost;
 
+        root /usr/share/nginx/html;
 
-Clean the DC Cluster Topics
+        limit_req zone=mylimit burst=70 nodelay;
+        limit_conn limitperip 10;
 
-Run inside DC broker pod:
+        if ($request_method !~ ^(GET|HEAD|POST)$) {
+            return 444;
+        }
 
-oc rsh -n prod-dr-kafka prod-dr-kafka-cluster-broker-0
+        server_tokens off;
 
-cd /opt/kafka/bin/
+        keepalive_timeout 15s;  
+        keepalive_requests 10000;
 
-for t in $(./kafka-topics.sh --bootstrap-server localhost:9092 --list | grep -v '^__' | grep -v 'mm2-' | grep -v 'mirrormaker2-'); do
-  echo "Deleting topic: $t"
-  ./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic "$t"
-done
-exit
+        # CSP Headers
+        add_header Content-Security-Policy "default-src 'self' https: ; script-src 'self' ; object-src 'none' ; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com ; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com ; img-src 'self' blob: data: ; base-uri 'self' ; connect-src 'self' https://dev.epay.sbi ; media-src 'self' data:;" always;
 
-podman pull epayproddr-registry-quay-quay-enterprise.apps.dr.prod.epay.sbi/microservices/javautilityapisimulator:v1.0.2
+        # Security Headers
+        add_header X-Frame-Options "SAMEORIGIN" always;  
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-XSS-Protection "1; mode=block" always;
 
+        location /transactiontracking/ {
+            index index.html index.htm;
+            alias /usr/share/nginx/html/transactiontracking/;
+            try_files $uri $uri/ /transactiontracking/index.html;
+            #   index  index.html index.htm;
+            #   try_files $uri  $uri/ /index.html;
+        }
 
+        error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+            root /usr/share/nginx/html/transactiontracking;
+        }
 
-[osuser@drepayprodbastion Drill_Script]$  oc get hpa  -A | grep -i prod-dr
-prod-dr-admin          admin-adminservice-hpa                   Deployment/admin-adminservice                   0%/70%, 18%/80%                1         6         1          46h
-prod-dr-frontend       transactionfe-transaction-frontend-hpa   Deployment/transactionfe-transaction-frontend   0%/70%, 81%/80%                2         4         2          46h
-prod-dr-istio-system   istio-gateway-hpa                        Deployment/prod-dr-istio-gateway                2%/70%, 42%/80%                2         6         2          44d
-prod-dr-istio-system   istiod-hpa                               Deployment/istiod                               <unknown>/70%, <unknown>/80%   2         5         0          44d
-prod-dr-istio-system   istiod-prod-dr-istio                     Deployment/istiod-prod-dr-istio                 0%/80%                         1         5         1          15d
-prod-dr-kms            kms-kmsservice-hpa                       Deployment/kms-kmsservice                       0%/70%, 21%/80%                1         6         1          46h
-prod-dr-merchant       demo-epaymerchantsimulater-hpa           Deployment/demo-epaymerchantsimulater           <unknown>/70%, <unknown>/80%   2         4         0          15d
-prod-dr-merchant       merchant-merchantservice-hpa             Deployment/merchant-merchantservice             <unknown>/70%, <unknown>/80%   3         10        3          44d
-prod-dr-merchant       report-reportservice-hpa                 Deployment/report-reportservice                 <unknown>/70%, <unknown>/80%   2         6         2          14d
-prod-dr-simulators     demo-epaymerchantsimulater-hpa           Deployment/demo-epaymerchantsimulater           <unknown>/70%, <unknown>/80%   1         4         1          15d
-prod-dr-simulators     demo-merchantdemo-hpa                    Deployment/demo-merchantdemo                    <unknown>/70%, <unknown>/80%   1         4         1          14d
-prod-dr-simulators     demo-merchantsimulater-hpa               Deployment/demo-merchantsimulater               <unknown>/70%, <unknown>/80%   1         4         1          15d
-prod-dr-simulators     demo-merchantsimulator-hpa               Deployment/demo-merchantsimulator               0%/70%, 8%/80%                 1         4         1          14d
-prod-dr-transaction    payment-paymentservice-hpa               Deployment/payment-paymentservice               0%/70%, 29%/80%                2         6         2          44d
-prod-dr-transaction    txn-transactionservice-hpa               Deployment/txn-transactionservice               0%/70%, 28%/80%                2         6         2          46h
-[osuser@drepayprodbastion Drill_Script]$
+        location ~ /\. {
+            deny all;
+            return 404;
+        }
+    }
+}
 
-
-
-2025-10-16 10:02:23.850 INFO | com.sbi.epay.encryptdecrypt.service.EncryptionService:62 | principal=1003406  | scenario=/api/transaction/v1/order/create | operation=POST | correlation=0d8a052e-f61e-4821-9038-e925c8d274ad | methodName=encryptValueBySecretKey | EncryptionService :: encryptValueBySecretKey  key : javax.crypto.spec.SecretKeySpec@fffeb6f0, value : {"customerId":null,"currencyCode":"INR","orderAmount":1,"orderRefNumber":"MMZZA","sbiOrderRefNumber":"31CA01672CAC4A8CAB6B","status":"CREATED","otherDetails":null,"expiry":1760610743844,"multiAccounts":null,"paymentMode":"NB","orderHash":"k01sy4e23NV8mHzoeXPz2natKgpLJfe0p8zMtzBBVJDUwDZMpHPjtzTX0ayiUIHNXwxbCG10fMCgPis4A5jQ","returnUrl":"https://sbiepay.sbi.bank.in/demo/transaction-status","transactionUrl":"https://sbiepay.sbi.bank.in/ui/#k01sy4e23NV8mHzoeXPz2natKgpLJfe0p8zMtzBBVJDUwDZMpHPjtzTX0ayiUIHNXwxbCG10fMCgPis4A5jQ","orderRetryCount":3,"thirdPartyDetails":null,"mId":"1003406"}, algorithm : AES_GCM_NO_PADDING, gcmIvLength : MAXIMUM, gcmTagLength : STANDARD
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:997 | principal=  | scenario= | operation= | correlation= | methodName=handleDisconnections | [Producer clientId=transaction-producer-2ba39415-8082-4026-b2f7-b8795331a5ca-1] Node -1 disconnected.
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:997 | principal=  | scenario= | operation= | correlation= | methodName=handleDisconnections | [Consumer clientId=consumer-transaction-consumers-8, groupId=transaction-consumers] Node -1 disconnected.
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:997 | principal=  | scenario= | operation= | correlation= | methodName=handleDisconnections | [Consumer clientId=consumer-transaction-consumers-7, groupId=transaction-consumers] Node -1 disconnected.
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:997 | principal=  | scenario= | operation= | correlation= | methodName=handleDisconnections | [Consumer clientId=consumer-transaction-consumers-3, groupId=transaction-consumers] Node -1 disconnected.
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:997 | principal=  | scenario= | operation= | correlation= | methodName=handleDisconnections | [Consumer clientId=consumer-transaction-consumers-5, groupId=transaction-consumers] Node -1 disconnected.
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:997 | principal=  | scenario= | operation= | correlation= | methodName=handleDisconnections | [Consumer clientId=consumer-transaction-consumers-6, groupId=transaction-consumers] Node -1 disconnected.
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:353 | principal=  | scenario= | operation= | correlation= | methodName=cancelInFlightRequests | [Consumer clientId=consumer-transaction-consumers-8, groupId=transaction-consumers] Cancelled in-flight API_VERSIONS request with correlation id 461 due to node -1 being disconnected (elapsed time since creation: 6935ms, elapsed time since send: 6935ms, request timeout: 30000ms)
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:353 | principal=  | scenario= | operation= | correlation= | methodName=cancelInFlightRequests | [Consumer clientId=consumer-transaction-consumers-3, groupId=transaction-consumers] Cancelled in-flight API_VERSIONS request with correlation id 452 due to node -1 being disconnected (elapsed time since creation: 7104ms, elapsed time since send: 7104ms, request timeout: 30000ms)
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:353 | principal=  | scenario= | operation= | correlation= | methodName=cancelInFlightRequests | [Consumer clientId=consumer-transaction-consumers-5, groupId=transaction-consumers] Cancelled in-flight API_VERSIONS request with correlation id 441 due to node -1 being disconnected (elapsed time since creation: 5107ms, elapsed time since send: 5107ms, request timeout: 30000ms)
-2025-10-16 10:02:24.018 WARN | org.apache.kafka.clients.NetworkClient$DefaultMetadataUpdater:1144 | principal=  | scenario= | operation= | correlation= | methodName=handleServerDisconnect | [Consumer clientId=consumer-transaction-consumers-8, groupId=transaction-consumers] Bootstrap broker prod-dr-kafka-cluster-cruise-control.prod-dr-kafka.svc.cluster.local:9090 (id: -1 rack: null) disconnected
-2025-10-16 10:02:24.018 WARN | org.apache.kafka.clients.NetworkClient$DefaultMetadataUpdater:1144 | principal=  | scenario= | operation= | correlation= | methodName=handleServerDisconnect | [Consumer clientId=consumer-transaction-consumers-3, groupId=transaction-consumers] Bootstrap broker prod-dr-kafka-cluster-cruise-control.prod-dr-kafka.svc.cluster.local:9090 (id: -1 rack: null) disconnected
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:353 | principal=  | scenario= | operation= | correlation= | methodName=cancelInFlightRequests | [Consumer clientId=consumer-transaction-consumers-6, groupId=transaction-consumers] Cancelled in-flight API_VERSIONS request with correlation id 444 due to node -1 being disconnected (elapsed time since creation: 5175ms, elapsed time since send: 5175ms, request timeout: 30000ms)
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:997 | principal=  | scenario= | operation= | correlation= | methodName=handleDisconnections | [Consumer clientId=consumer-transaction-consumers-9, groupId=transaction-consumers] Node -1 disconnected.
-2025-10-16 10:02:24.018 WARN | org.apache.kafka.clients.NetworkClient$DefaultMetadataUpdater:1144 | principal=  | scenario= | operation= | correlation= | methodName=handleServerDisconnect | [Consumer clientId=consumer-transaction-consumers-6, groupId=transaction-consumers] Bootstrap broker prod-dr-kafka-cluster-cruise-control.prod-dr-kafka.svc.cluster.local:9090 (id: -1 rack: null) disconnected
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:997 | principal=  | scenario= | operation= | correlation= | methodName=handleDisconnections | [Consumer clientId=consumer-transaction-consumers-1, groupId=transaction-consumers] Node -1 disconnected.
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:353 | principal=  | scenario= | operation= | correlation= | methodName=cancelInFlightRequests | [Producer clientId=transaction-producer-2ba39415-8082-4026-b2f7-b8795331a5ca-1] Cancelled in-flight API_VERSIONS request with correlation id 147 due to node -1 being disconnected (elapsed time since creation: 5011ms, elapsed time since send: 5011ms, request timeout: 30000ms)
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:353 | principal=  | scenario= | operation= | correlation= | methodName=cancelInFlightRequests | [Consumer clientId=consumer-transaction-consumers-9, groupId=transaction-consumers] Cancelled in-flight API_VERSIONS request with correlation id 435 due to node -1 being disconnected (elapsed time since creation: 5021ms, elapsed time since send: 5021ms, request timeout: 30000ms)
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:353 | principal=  | scenario= | operation= | correlation= | methodName=cancelInFlightRequests | [Consumer clientId=consumer-transaction-consumers-7, groupId=transaction-consumers] Cancelled in-flight API_VERSIONS request with correlation id 453 due to node -1 being disconnected (elapsed time since creation: 5159ms, elapsed time since send: 5159ms, request timeout: 30000ms)
-2025-10-16 10:02:24.018 INFO | org.apache.kafka.clients.NetworkClient:353 | principal=  | scenario= | operation= | correlation= | methodName=cancelInFlightRequests | [Consumer clientId=consumer-transaction-consumers-1, groupId=transaction-consumers] Cancelled in-flight API_VERSIONS request with correlation id 447 due to node -1 being disconnected (elapsed time since creation: 5057ms, elapsed time since send: 5057ms, request timeout: 30000ms)
-2025-10-16 10:02:24.018 WARN | org.apache.kafka.clients.NetworkClient$DefaultMetadataUpdater:1144 | principal=  | scenario= | operation= | correlation= | methodName=handleServerDisconnect | [Consumer clientId=consumer-transaction-consumers-5, groupId=transaction-consumers] Bootstrap broker prod-dr-kafka-cluster-cruise-control.prod-dr-kafka.svc.cluster.local:9090 (id: -1 rack: null) disconnected
-2025-10-16 10:02:24.018 WARN | org.apache.kafka.clients.NetworkClient$DefaultMetadataUpdater:1144 | principal=  | scenario= | operation= | correlation= | methodName=handleServerDisconnect | [Consumer clientId=consumer-transaction-consumers-9, groupId=transaction-consumers] Bootstrap broker prod-dr-kafka-cluster-cruise-control.prod-dr-kafka.svc.cluster.local:9090 (id: -1 rack: null) disconnected
-2025-10-16 10:02:24.018 WARN | org.apache.kafka.clients.NetworkClient$DefaultMetadataUpdater:1144 | principal=  | scenario= | operation= | correlation= | methodName=handleServerDisconnect | [Consumer clientId=consumer-transaction-consumers-1, groupId=transaction-consumers] Bootstrap broker prod-dr-kafka-cluster-cruise-control.prod-dr-kafka.svc.cluster.local:9090 (id: -1 rack: null) disconnected
-2025-10-16 10:02:24.018 WARN | org.apache.kafka.clients.NetworkClient$DefaultMetadataUpdater:1144 | principal=  | scenario= | operation= | correlation= | methodName=handleServerDisconnect | [Producer clientId=transaction-producer-2ba39415-8082-4026-b2f7-b8795331a5ca-1] Bootstrap broker prod-dr-kafka-cluster-cruise-control.prod-dr-kafka.svc.cluster.local:9090 (id: -1 rack: null) disconnected
-2025-10-16 10:02:24.018 WARN | org.apache.kafka.clients.NetworkClient$DefaultMetadataUpdater:1144 | principal=  | scenario= | operation= | correlation= | methodName=handleServerDisconnect | [Consumer clientId=consumer-transaction-consumers-7, groupId=transaction-consumers] Bootstrap broker prod-dr-kafka-cluster-cruise-control.prod-dr-kafka.svc.cluster.local:9090 (id: -1 rack: null) disconnected
-2025-10-16 10:02:24.126 INFO | com.sbi.epay.authentication.service.JwtService:150 | principal=1003406  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=getAllClaimsFromToken | ClassName - JwtService,MethodName - getAllClaimsFromToken, getting all claims from token.
-2025-10-16 10:02:24.126 INFO | com.sbi.epay.authentication.service.JwtService:168 | principal=1003406  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=getSignKey | ClassName - JwtService,MethodName - getSignKey, getting SigningKey.
-2025-10-16 10:02:24.127 INFO | com.sbi.epay.authentication.service.JwtService:180 | principal=1003406  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=isTokenExpired | ClassName - JwtService,MethodName - isTokenExpired, getting expiration time from token.
-2025-10-16 10:02:24.127 INFO | com.epay.transaction.dao.TokenDao:197 | principal=1003406  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=findByGeneratedTokenAndStatus | Checking if token exists
-Hibernate: select t1_0.id from token t1_0 where t1_0.generated_token=? and t1_0.token_type=? and t1_0.status=? and t1_0.is_token_valid=? fetch first ? rows only
-2025-10-16 10:02:24.131 INFO | com.sbi.epay.authentication.service.JwtService:129 | principal=1003406  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=verifyJwtTokenAndGetClaims | Token request received for userNameWithTokenType: E2A8E8A3033B41529A88:TRANSACTION
-Hibernate: select o1_0.sbi_order_ref_number,o1_0.created_by,o1_0.created_date,o1_0.currency_code,o1_0.customer_id,o1_0.expiry,o1_0.merchant_id,o1_0.multi_accounts,o1_0.order_amount,o1_0.order_hash,o1_0.order_ref_number,o1_0.order_retry_count,o1_0.other_details,o1_0.payment_mode,o1_0.return_url,o1_0.status,o1_0.third_party_details,o1_0.updated_by,o1_0.updated_date from merchant_orders o1_0 where o1_0.sbi_order_ref_number=?
-2025-10-16 10:02:24.133 INFO | com.epay.transaction.dao.OrderDao:124 | principal=1003406  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=getValidOrderBySBIOrderRefNumber | Get order from DB by active order reference number:com.epay.transaction.entity.Order@71f95d9e
-2025-10-16 10:02:24.133 INFO | com.sbi.epay.authentication.service.JwtService:131 | principal=1003406  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=verifyJwtTokenAndGetClaims | Token request received for userNameWithTokenType: E2A8E8A3033B41529A88:TRANSACTION
-2025-10-16 10:02:24.135 INFO | com.epay.transaction.controller.SbiUPIController:62 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=getStatusEnquiry | Initiated transaction status request:
-2025-10-16 10:02:24.135 INFO | com.epay.transaction.service.SbiUPIService:70 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=getStatusEnquiry | Validating PaymentUPIVpaRequest from payment service.
-2025-10-16 10:02:24.135 INFO | com.epay.transaction.dao.SbiUPIDao:42 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=getEncryptedAESKey | Fetching encrypted AES key.
-Hibernate: select t1_0.id,t1_0.aes_key,t1_0.created_by,t1_0.created_date,t1_0.expired_at,t1_0.failed_reason,t1_0.generated_token,t1_0.is_token_valid,t1_0.merchant_id,t1_0.order_hash,t1_0.remarks,t1_0.status,t1_0.token_expiry_time,t1_0.token_type,t1_0.updated_by,t1_0.updated_date from token t1_0 where t1_0.generated_token=? and t1_0.status=? fetch first ? rows only
-2025-10-16 10:02:24.138 INFO | com.epay.transaction.dao.TokenDao:159 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=getEncryptionAESKey | Getting Aes Key
-2025-10-16 10:02:24.138 INFO | com.epay.transaction.util.TransactionUtil:122 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=buildRequestByEncryptRequest | Request for decryption
-2025-10-16 10:02:24.138 INFO | com.epay.transaction.util.EncryptionDecryptionUtil:55 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=decryptValue | Decrypting value with provided key using AES-GCM algorithm.
-2025-10-16 10:02:24.138 INFO | com.sbi.epay.encryptdecrypt.service.DecryptionService:50 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=decryptValueByStringKey | Decryption Service ::  key : esKerUxsj17qhgY4RCtKJA9f61RqzGWr1/86tMvG+lM=, value : NYOZjBtTLXW3avkZ4LZmuJQm2ZXllYNgLB8r2eVeyGlGN/h6AqIOPrivZwRLZ0my/pimCvmKar+3cfi+dHbBWrcAJcV/qKkNdUQ+rQ==, algorithm : AES_GCM_NO_PADDING, gcmIvLength : MAXIMUM, gcmTagLength : STANDARD
-2025-10-16 10:02:24.138 INFO | com.sbi.epay.encryptdecrypt.service.DecryptionService:65 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=decryptValueBySecretKey | Decryption Service ::  key : javax.crypto.spec.SecretKeySpec@16aa7, value : NYOZjBtTLXW3avkZ4LZmuJQm2ZXllYNgLB8r2eVeyGlGN/h6AqIOPrivZwRLZ0my/pimCvmKar+3cfi+dHbBWrcAJcV/qKkNdUQ+rQ==, algorithm : AES_GCM_NO_PADDING, gcmIvLength : MAXIMUM, gcmTagLength : STANDARD
-2025-10-16 10:02:24.138 INFO | com.epay.transaction.validator.PaymentUpiValidator:102 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=validateStatusEnquiryRequest | Validating Status Enquiry Request
-2025-10-16 10:02:24.138 INFO | com.epay.transaction.validator.PaymentUpiValidator:140 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=validateStatusEnquiryMandatoryFields | Validating Status Enquiry Mandatory Fields
-2025-10-16 10:02:24.138 INFO | com.epay.transaction.validator.PaymentUpiValidator:152 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=validateStatusEnquiryLeadingTrailingSpace | Validating Status Enquiry Leading Trailing Space
-2025-10-16 10:02:24.138 INFO | com.epay.transaction.validator.PaymentUpiValidator:128 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=validateStatusEnquiryLength | Validating Status Enquiry Length
-2025-10-16 10:02:24.138 INFO | com.epay.transaction.validator.PaymentUpiValidator:116 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=validateStatusEnquiryFieldsValue | Validating Status Enquiry Fields Value
-2025-10-16 10:02:24.138 INFO | com.epay.transaction.validator.PaymentUpiValidator:159 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=validateAtrnMapping | Validating Atrn Mapping
-2025-10-16 10:02:24.138 INFO | com.epay.transaction.dao.SbiUPIDao:71 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=validateByAtrnMidAndOrderRefNumber | Validating Mid, Atrn And OrderRefNumber
-Hibernate: select mop1_0.atrn_num from merchant_order_payments mop1_0 where mop1_0.merchant_id=? and mop1_0.sbi_order_ref_number=? and mop1_0.atrn_num=? fetch first ? rows only
-2025-10-16 10:02:24.140 INFO | com.epay.transaction.dao.SbiUPIDao:66 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=upiPaymentStatusEnquiry | Performing UPI payment status enquiry for request: PaymentStatusRequest(atrn=UP406SWM09TGMRP9ILCS, status=O)
-2025-10-16 10:02:24.140 INFO | com.epay.transaction.dao.PaymentDao:92 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=upiPaymentStatusEnquiry | Checking UPI payment status for request: PaymentStatusRequest(atrn=UP406SWM09TGMRP9ILCS, status=O)
-2025-10-16 10:02:24.140 INFO | com.epay.transaction.externalservice.PaymentServicesClient:125 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=upiPaymentStatusEnquiry | Checking UPI payment status: PaymentStatusRequest(atrn=UP406SWM09TGMRP9ILCS, status=O)
-2025-10-16 10:02:24.140 INFO | com.epay.transaction.client.ApiClient:65 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/upi/sbi/txn/status | operation=POST | correlation=a95f44ea-476e-49a6-82ee-cd6e398fcb73 | methodName=post | Calling uri: http://payment-paymentservice.prod-dr-transaction.svc.cluster.local:9093/api/payments/v1/upi/sbi/txn-status
-2025-10-16 10:02:24.217 INFO | org.apache.kafka.clients.admin.internals.AdminMetadataManager:267 | principal=  | scenario= | operation= | correlation= | methodName=updateFailed | [AdminClient clientId=adminclient-1] Metadata update failed
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-^C
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-[osuser@drepayprodbastion Drill_Script]$ oc logs -f txn-transactionservice-77f959cf4-vzm9r -n prod-dr-transaction  | grep -i error
-2025-10-16 09:36:48.808 DEBUG | com.sbi.epay.authentication.config.SecurityConfig:37 | principal=  | scenario= | operation= | correlation= | methodName=log | No configuration value for liquibase.errorOnCircularIncludeAll found
-2025-10-16 09:36:48.808 DEBUG | com.sbi.epay.authentication.config.SecurityConfig:37 | principal=  | scenario= | operation= | correlation= | methodName=log | Configuration liquibase.errorOnCircularIncludeAll is using the default value of true
-2025-10-16 09:36:48.869 INFO | com.sbi.epay.authentication.config.SecurityConfig:37 | principal=  | scenario= | operation= | correlation= | methodName=log | Reading resource: db/changelog/scripts/109_create_table_error_log.sql
-2025-10-16 09:36:48.870 DEBUG | com.sbi.epay.authentication.config.SecurityConfig:37 | principal=  | scenario= | operation= | correlation= | methodName=log | Matched file 'db/changelog/scripts/109_create_table_error_log.sql' to parser 'FormattedSqlChangeLogParser'
-2025-10-16 09:36:48.890 INFO | com.sbi.epay.authentication.config.SecurityConfig:37 | principal=  | scenario= | operation= | correlation= | methodName=log | Reading resource: db/changelog/scripts/125_event_error_log.sql
-2025-10-16 09:36:48.890 DEBUG | com.sbi.epay.authentication.config.SecurityConfig:37 | principal=  | scenario= | operation= | correlation= | methodName=log | Matched file 'db/changelog/scripts/125_event_error_log.sql' to parser 'FormattedSqlChangeLogParser'
-2025-10-16 09:36:51.390 INFO | com.sbi.epay.authentication.config.SecurityConfig:53 | principal=  | scenario= | operation= | correlation= | methodName=resolveConstructor | HHH000182: No default (no-argument) constructor for class: com.epay.transaction.entity.event.audit.EventErrorLog (class must be instantiated by Interceptor)
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 09:37:25.338 ERROR | com.sbi.epay.authentication.filter.JwtFilter:58 | principal=  | scenario= | operation= | correlation= | methodName=s3client | Could not configure topics
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 09:51:25.052 ERROR | com.epay.transaction.etl.producer.PaymentPushVerificationProducer:33 | principal=  | scenario= | operation= | correlation= | methodName=publish | Exception thrown when sending a message with key='paymentPushVerification.PaymentVerification.UP406VRDO8TGMETDJXMY' and payload='{"atrnNumber":"UP406VRDO8TGMETDJXMY","mId":"1003406"}' to topic transaction_push_verification_topic:
-org.apache.kafka.common.errors.TimeoutException: Topic transaction_push_verification_topic not present in metadata after 60000 ms.
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 09:52:30.401 ERROR | com.epay.transaction.client.ApiClient:82 | principal=7268C162E12E4DADA30F  | scenario=/api/transaction/v1/booking/j6dqOrmvCZ0atEuHad4qHdMrHu6powQPVwWJkzX5bek1lpoF22s3xzzLquX7muxKUuRuCrMQClAF8fbGw | operation=POST | correlation=9b7d6fe5-4b2e-4fc4-9d41-7198425639ad | methodName=get | Got exception while calling url: Content type 'text/plain' not supported for bodyType=com.epay.transaction.model.response.TransactionResponse<com.epay.transaction.externalservice.response.merchant.MerchantThemeResponse>
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 09:53:30.011 ERROR | com.epay.transaction.etl.producer.PaymentPushVerificationProducer:33 | principal=  | scenario= | operation= | correlation= | methodName=publish | Exception thrown when sending a message with key='paymentPushVerification.PaymentVerification.UP406VRDO8TGMETDJXMY' and payload='{"atrnNumber":"UP406VRDO8TGMETDJXMY","mId":"1003406"}' to topic transaction_push_verification_topic:
-org.apache.kafka.common.errors.TimeoutException: Topic transaction_push_verification_topic not present in metadata after 60000 ms.
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 09:54:59.137 ERROR | com.epay.transaction.client.ApiClient:82 | principal=9124731742C3494B84F0  | scenario=/api/transaction/v1/booking/uPUBoq7LlacRxc1MMjLR3T9ijfm2kfm3eJJJYI0FXVNZrVwzKdJuhyoCdbzFVzgjEZ3fXIcQl04ihjTFAAg | operation=POST | correlation=4d2dbb49-4b99-426f-ba6d-9046252b3bd1 | methodName=get | Got exception while calling url: Content type 'text/plain' not supported for bodyType=com.epay.transaction.model.response.TransactionResponse<com.epay.transaction.externalservice.response.merchant.MerchantThemeResponse>
-2025-10-16 09:55:23.694 ERROR | com.epay.transaction.exceptionhandlers.TransactionExceptionHandler:68 | principal=3995356068464D3E88DD  | scenario=/api/transaction/v1/payment/update-fail | operation=POST | correlation=549c3769-50e2-4549-9bff-52378ee1a174 | methodName=handleSecurityException | Error in handleSecurityException [2002 : atrn is invalid. Reason : atrn status is not valid.]
-2025-10-16 09:55:23.698 ERROR | com.epay.transaction.exceptionhandlers.TransactionExceptionHandler:303 | principal=3995356068464D3E88DD  | scenario=/api/transaction/v1/payment/update-fail | operation=POST | correlation=549c3769-50e2-4549-9bff-52378ee1a174 | methodName=generateResponseWithErrors | inside generateResponseWithErrors [ErrorDto(errorCode=2002, errorMessage=atrn is invalid. Reason : atrn status is not valid.)]
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 09:56:35.013 ERROR | com.epay.transaction.etl.producer.PaymentPushVerificationProducer:33 | principal=  | scenario= | operation= | correlation= | methodName=publish | Exception thrown when sending a message with key='paymentPushVerification.PaymentVerification.UP406BAER8TGMIYKMP9R' and payload='{"atrnNumber":"UP406BAER8TGMIYKMP9R","mId":"1003406"}' to topic transaction_push_verification_topic:
-org.apache.kafka.common.errors.TimeoutException: Topic transaction_push_verification_topic not present in metadata after 60000 ms.
-2025-10-16 09:56:41.558 INFO | com.epay.transaction.externalservice.EISServicesClient:131 | principal=5DB0013477904C09B711  | scenario=/api/transaction/v1/eis/validate-gstn | operation=POST | correlation=1fd4b1e3-895c-4297-a4bd-11e73cd87843 | methodName=getEISGstResponse | GST eisGstResponse : EISGstResponse(encryptedResponse=ltcA0DfRrH0ATKMrkdyYRmSjxi6wmNT8vXcF7esO7sjQkg1ePY+d5YRSlYqKBwcR6BnQE1XTe1XVBSySxdpYrqAIVeu5IXTR5mH2+kxXWym+1ZmiEmLTliKDupS6+igIHOZUKOHs5VWtxDOoTMW17KBKIW4sepTbs2EqUZc3WeUvwj6eiDeAU//ZLoDJxlvz9EHh1EwFa3rMpU5x1e1Kyy0oif7eqZXUfkAbjkx3cL8cmd4201letsIy9XkVneOB9tjeE2K704bWvFCVEL+ebGLH5wj5sCYB2vc16/xuUhEARBN84ut3Vg6vyJAO6yiYZO0LZdIiLFNSk0DXEsMgspEDxkpMq4WcU4noXPzdFsfVeRGX8L4bVeFp2e0PqY0oXPo1fbN91rvBRBNd2TfQJ2+nDG22DgohgtJFbwseZAOMTv5s+S3g6GPlynZu+u3LgmIISCWVX+sdmlvMowDBX5El5IzcxlZQEt/dN16zmc/06JiBnIhwxZhiI8pjUVv79JN2e9tBTirfSDWyPhzDMwcgmtizkJohtPs4m8eYD83X2XquEXkUtNS708P4VFOhtEMaDYpJrYs5L87C/4g6mhmHvRk/Q54YpTevf5jIF9MB0DOZKhfjZaEQvgYJg3McbOqQfIYHeGRFVdVLvDcsibLJiub9SA9q2XxrqioEsOjoovLLk3jvA7oBCvExbCfVb+q6LcAE6wkJy4W/23aKDidzKIKBqw6xhQtPX5kNFWgs3GiraIoKtRZvU+/rwMyvZh0CKLYIBvn906dkbvwdDCeWgRzPNoNFWWMOU23Y5A762fgxajktdQ/0Uq0If7lwvMtYZq4MIzhU9M//t92pXX3n7ksIlJ8k1D+8Mje93fuhVp1jqRsdV5IudGkifPb/RhOYC9wQTqr23IizaRyJyVaw5XInyZzPTPAw+KU5yDApzysUneFdOArjgvBXdmD2ZMXQFgVdenon973A2MRedS3a2RZApUDu3HGE63rsAU4GUUx/FXBVHiLPdc9R/qJQ2mP1AKs9xcmgOAk+RTGZAfthLDeoVJu9VZDRjGcjdYc+HEWL27y53IW+QwmMkZG1uBdNtgkJrJEUhjwkCvPMWsNYuwQRAhPoBlORv9hJR6xW/D8L6izqGK07ztmZ4/CVLAimry05dIzo0nh6HcCsGlNWjz5/+RtPms8cev3AbgYkBAwhb7hYfwmZYVkTJrtriqyk4dP1QT8iD7zqWqthrR9WZfqefCFt6sTTXRx4yXmN4pE6p7d5xeyC2EGnuzI5xTIn3ZrBVp4HHA9R44tlEcOGZMu3MOEuQRdjJ83NKu+HT2F99yib3iqP9+Hs6Vh4udyKhb7x3Wdpssw3ORtqzJF7I9sy86cKj2hwH1vXT0hSpVMKdcjduAtpRPY1eH5tjoM7i4hIZ7S3sC5/C7PvImkVuCA+7iZ76Th1LIG0UEI71jsCJ2P6TspvhaxPsaNzErg19/EY9ynLCjFmqpPo2xdA9d0tYOjtYymC4kJGuhjVI8ZkQTIFEnIwAWK+NiPq/WxIJtKQ2wdlBz16BS0/9y23HhvdcQ3Gv06KJ2m6RYR+W/P59hViE6qiMBC7Puq/esoB2dQi7AFEkVSRop5PoshSNJwft8cAtUy8ZGNBGUP3O/uv9xQNZw58U9a+5Syq+quKN88etjDj4a0=, errorCode=null, errorDescription=null, responseStatus=null, digiSign=G6F892fjyKPfQzqrkXxhRgxdPwyEqXPfWoW9KwoOwphYIL5yx9pAS5hdTARsRfuDGGQmahOUybpxs5P5tpcMBB0d7e2ZXVLdgmixS4eYz86KMuw9HQWwXFrLBJl/kuGotbs1kUzk2Z0Aktkaduh/xMHtMJMwL9mBVWj0O4YVJ3TUA+7J53hRIEvZrpgElBe4dydAME2HhbCXSKOn0agu0o/yf4Za++AuXD+Wfh7fxfCoJXbpMSg5nHyOo0xA3wrAp3AfaNGXtlngyj96z3MOtxfWcGpDztP9nLPvkJ87f0W57i2L84yZFnz5kQyuxsXG6YAKvjKXu5vVjEwlhn7tvw==, requestReferenceNumber=SBIEY25289095641083555490, responseDate=16-10-2025 15:26:57)
-2025-10-16 09:56:41.558 INFO | com.epay.transaction.externalservice.EISServicesClient:133 | principal=5DB0013477904C09B711  | scenario=/api/transaction/v1/eis/validate-gstn | operation=POST | correlation=1fd4b1e3-895c-4297-a4bd-11e73cd87843 | methodName=getEISGstResponse | GST decryptResponse : {"RESPONSE_STATUS":"0","ERROR_DESCRIPTION":"","ERROR_CODE":"","RESPONSE_DESCRIPTION":"O.K.","GSTIN_DETAILS":{"detailsofgst":{"GSTINSEARCHID":2568911,"GSTIN":"27AGCPM7533Q1ZS","LEGAL_NAME":"KANTILAL MOHANLAL MUNOT","CONSTITUTION":"Proprietorship","ACTIVE_STATUS":"Active","STATE_JURI":"GIRGAON_701","CENTER_JURI":"RANGE-III","REGISTRATION_DATE":"03-08-2018 00:00:00","CANCELLATION_DATE":null,"CREATED_DATE":"15-10-2025 11:45:07","NBA":"Retail Business,Wholesale Business","TAX_PAYER_TYPE":"Regular","CALL_COUNT":0,"FP":null,"FILE_DATA":"GSTR1-102024,112024,122024,012025,022025,032025,042025,052025,062025,072025,082025,092025 GSTR2X-102024,112024,122024,012025,022025,032025,052025,062025,072025 GSTR3B-102024,112024,122024,012025,022025,032025,042025,052025,062025,072025,082025","TRADE_NAME":"DIVYA RAJ STEEL","ADDRESS":[],"PRINCIPAL_ADDRESS":{"addr":{"bnm":"K. P. Estate","st":"Khetwadi 6th Lane","loc":"Girgaon","bno":"Shop No. 3, A Wing","dst":"Mumbai","stcd":"Maharashtra","flno":"Ground Floor","lt":"","lg":null,"pncd":"400004"}},"PREFERENCEJSON":"{\"response\":[{\"preference\":\"M\",\"quarter\":\"Q1\"},{\"preference\":\"M\",\"quarter\":\"Q2\"},{\"preference\":\"M\",\"quarter\":\"Q3\"},{\"preference\":\"M\",\"quarter\":\"Q4\"}]}"}}}
-2025-10-16 09:56:41.563 INFO | com.epay.transaction.dao.SbiEisDao:83 | principal=5DB0013477904C09B711  | scenario=/api/transaction/v1/eis/validate-gstn | operation=POST | correlation=1fd4b1e3-895c-4297-a4bd-11e73cd87843 | methodName=verifyGSTInNumber | EISGstResponse : GSTResponse(responseStatus=0, errorDescription=null, errorCode=null, responseDecription=O.K., gstinDetails=GstinDetails(detailsofgst=Detailsofgst(gstinsearchid=2568911, gstin=27AGCPM7533Q1ZS, legalName=KANTILAL MOHANLAL MUNOT, constitution=Proprietorship, activeStatus=Active, stateJuri=GIRGAON_701, centerJuri=RANGE-III, registrationDate=03-08-2018 00:00:00, cancellationDate=null, createdDate=15-10-2025 11:45:07, nBA=Retail Business,Wholesale Business, taxPayerType=Regular, callCount=0, fP=null, fileData=GSTR1-102024,112024,122024,012025,022025,032025,042025,052025,062025,072025,082025,092025 GSTR2X-102024,112024,122024,012025,022025,032025,052025,062025,072025 GSTR3B-102024,112024,122024,012025,022025,032025,042025,052025,062025,072025,082025, tradeName=DIVYA RAJ STEEL, address=[], principalAddress=PrincipalAddress(addr=Addr(bnm=K. P. Estate, st=Khetwadi 6th Lane, loc=Girgaon, bno=Shop No. 3, A Wing, dst=Mumbai, stcd=Maharashtra, city=null, flno=Ground Floor, lt=null, lg=null, pncd=400004)), preferencejson={"response":[{"preference":"M","quarter":"Q1"},{"preference":"M","quarter":"Q2"},{"preference":"M","quarter":"Q3"},{"preference":"M","quarter":"Q4"}]}))) for gstNumber : 27AGCPM7533Q1ZS
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 09:57:35.013 ERROR | com.epay.transaction.etl.producer.PaymentPushVerificationProducer:33 | principal=  | scenario= | operation= | correlation= | methodName=publish | Exception thrown when sending a message with key='paymentPushVerification.PaymentVerification.NB4061ZBT8TGMJDKFVY3' and payload='{"atrnNumber":"NB4061ZBT8TGMJDKFVY3","mId":"1003406"}' to topic transaction_push_verification_topic:
-org.apache.kafka.common.errors.TimeoutException: Topic transaction_push_verification_topic not present in metadata after 60000 ms.
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 09:58:35.014 ERROR | com.epay.transaction.etl.producer.PaymentPushVerificationProducer:33 | principal=  | scenario= | operation= | correlation= | methodName=publish | Exception thrown when sending a message with key='paymentPushVerification.PaymentVerification.DC406W7LT8TGMI8MHUYW' and payload='{"atrnNumber":"DC406W7LT8TGMI8MHUYW","mId":"1003406"}' to topic transaction_push_verification_topic:
-org.apache.kafka.common.errors.TimeoutException: Topic transaction_push_verification_topic not present in metadata after 60000 ms.
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: fetchMetadata
-2025-10-16 09:59:19.781 ERROR | com.epay.transaction.client.ApiClient:82 | principal=828884DF92394AD59A86  | scenario=/api/transaction/v1/booking/H0E98iVMba1iPE6TK5oWON3ArMEVuh39besfYz5xq0RqBsmo5q7b86xpBMY0rZKeqn32IXNLvEGT0wmrOOdTQ | operation=POST | correlation=22daece0-53ca-429b-a53d-8106e316935e | methodName=get | Got exception while calling url: Content type 'text/plain' not supported for bodyType=com.epay.transaction.model.response.TransactionResponse<com.epay.transaction.externalservice.response.merchant.MerchantThemeResponse>
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 09:59:34.786 ERROR | com.epay.transaction.client.ApiClient:82 | principal=89952261BCCC4F978D68  | scenario=/api/transaction/v1/booking/vL5TFiup1xPJ8auYJquSzNFkmbXy3KPjYuitJGn4WcyO4YCd4NStmBwMTn1RwolqeXRo7GIYqJQU5HeF6R8jVw | operation=POST | correlation=67c27f4c-df41-448c-a488-dec8a27f53fc | methodName=get | Got exception while calling url: Content type 'text/plain' not supported for bodyType=com.epay.transaction.model.response.TransactionResponse<com.epay.transaction.externalservice.response.merchant.MerchantThemeResponse>
-2025-10-16 09:59:35.015 ERROR | com.epay.transaction.etl.producer.PaymentPushVerificationProducer:33 | principal=  | scenario= | operation= | correlation= | methodName=publish | Exception thrown when sending a message with key='paymentPushVerification.PaymentVerification.NB4062SLU8TGMD0JMFEC' and payload='{"atrnNumber":"NB4062SLU8TGMD0JMFEC","mId":"1003406"}' to topic transaction_push_verification_topic:
-org.apache.kafka.common.errors.TimeoutException: Topic transaction_push_verification_topic not present in metadata after 60000 ms.
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 10:00:35.015 ERROR | com.epay.transaction.etl.producer.PaymentPushVerificationProducer:33 | principal=  | scenario= | operation= | correlation= | methodName=publish | Exception thrown when sending a message with key='paymentPushVerification.PaymentVerification.NB406S5JR8TGMI7VE8MG' and payload='{"atrnNumber":"NB406S5JR8TGMI7VE8MG","mId":"1003406"}' to topic transaction_push_verification_topic:
-org.apache.kafka.common.errors.TimeoutException: Topic transaction_push_verification_topic not present in metadata after 60000 ms.
-2025-10-16 10:00:42.522 ERROR | com.epay.transaction.exceptionhandlers.TransactionExceptionHandler:68 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/token/txn/iRtqNJFR8dJAhYBbNHY9btHVSDDd6e1cVeRkSlTMTCtHP7Tvy1Xf3oz7hWzD4IMWdATHEXw7fS9QPTXMStFw | operation=POST | correlation=71387406-663b-4a12-a1a2-c75707cf6bad | methodName=handleSecurityException | Error in handleSecurityException [2202 : Booking attempts limit exceeded for merchant order.]
-2025-10-16 10:00:42.522 ERROR | com.epay.transaction.exceptionhandlers.TransactionExceptionHandler:303 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/token/txn/iRtqNJFR8dJAhYBbNHY9btHVSDDd6e1cVeRkSlTMTCtHP7Tvy1Xf3oz7hWzD4IMWdATHEXw7fS9QPTXMStFw | operation=POST | correlation=71387406-663b-4a12-a1a2-c75707cf6bad | methodName=generateResponseWithErrors | inside generateResponseWithErrors [ErrorDto(errorCode=2202, errorMessage=Booking attempts limit exceeded for merchant order.)]
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 10:00:55.315 ERROR | com.epay.transaction.client.ApiClient:82 | principal=AAAC6346B87142928F4D  | scenario=/api/transaction/v1/booking/hL1UMoRzHAMsv5slwJOnNok0XRBbl7MyxgVTG4ZaRxuhoGZJXXpYXi0SR33p48iSnmjuzF9Ma0FcG5kYA | operation=POST | correlation=5d2c9377-e2b5-431f-999d-ea22b1be9f2f | methodName=get | Got exception while calling url: Content type 'text/plain' not supported for bodyType=com.epay.transaction.model.response.TransactionResponse<com.epay.transaction.externalservice.response.merchant.MerchantThemeResponse>
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 10:01:40.011 ERROR | com.epay.transaction.etl.producer.PaymentPushVerificationProducer:33 | principal=  | scenario=TokenExpiryScheduler | operation=checkExpiredToken | correlation=36f6b2fe-19ab-400e-b2fe-82027489f80a | methodName=publish | Exception thrown when sending a message with key='paymentPushVerification.PaymentVerification.NB4062SLU8TGMD0JMFEC' and payload='{"atrnNumber":"NB4062SLU8TGMD0JMFEC","mId":"1003406"}' to topic transaction_push_verification_topic:
-org.apache.kafka.common.errors.TimeoutException: Topic transaction_push_verification_topic not present in metadata after 60000 ms.
-2025-10-16 10:01:50.686 ERROR | com.epay.transaction.exceptionhandlers.TransactionExceptionHandler:68 | principal=AAAC6346B87142928F4D  | scenario=/api/transaction/v1/token/txn/vL5TFiup1xPJ8auYJquSzNFkmbXy3KPjYuitJGn4WcyO4YCd4NStmBwMTn1RwolqeXRo7GIYqJQU5HeF6R8jVw | operation=POST | correlation=64c3a53e-690f-45d6-baeb-36b573a973a8 | methodName=handleSecurityException | Error in handleSecurityException [2004 : Token already exists.]
-2025-10-16 10:01:50.686 ERROR | com.epay.transaction.exceptionhandlers.TransactionExceptionHandler:303 | principal=AAAC6346B87142928F4D  | scenario=/api/transaction/v1/token/txn/vL5TFiup1xPJ8auYJquSzNFkmbXy3KPjYuitJGn4WcyO4YCd4NStmBwMTn1RwolqeXRo7GIYqJQU5HeF6R8jVw | operation=POST | correlation=64c3a53e-690f-45d6-baeb-36b573a973a8 | methodName=generateResponseWithErrors | inside generateResponseWithErrors [ErrorDto(errorCode=2004, errorMessage=Token already exists.)]
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 10:02:40.011 ERROR | com.epay.transaction.etl.producer.PaymentPushVerificationProducer:33 | principal=  | scenario=TokenExpiryScheduler | operation=checkExpiredToken | correlation=36f6b2fe-19ab-400e-b2fe-82027489f80a | methodName=publish | Exception thrown when sending a message with key='paymentPushVerification.PaymentVerification.UP406UTSX8TGMTMTNMCU' and payload='{"atrnNumber":"UP406UTSX8TGMTMTNMCU","mId":"1003406"}' to topic transaction_push_verification_topic:
-org.apache.kafka.common.errors.TimeoutException: Topic transaction_push_verification_topic not present in metadata after 60000 ms.
-2025-10-16 10:02:42.207 ERROR | com.epay.transaction.exceptionhandlers.TransactionExceptionHandler:68 | principal=975D48C2E3244B2F85F5  | scenario=/api/transaction/v1/payment/update-fail | operation=POST | correlation=43021e12-0919-4849-b836-e85d2419276b | methodName=handleSecurityException | Error in handleSecurityException [2002 : atrn is invalid. Reason : atrn status is not valid.]
-2025-10-16 10:02:42.207 ERROR | com.epay.transaction.exceptionhandlers.TransactionExceptionHandler:303 | principal=975D48C2E3244B2F85F5  | scenario=/api/transaction/v1/payment/update-fail | operation=POST | correlation=43021e12-0919-4849-b836-e85d2419276b | methodName=generateResponseWithErrors | inside generateResponseWithErrors [ErrorDto(errorCode=2002, errorMessage=atrn is invalid. Reason : atrn status is not valid.)]
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting for a node assignment. Call: fetchMetadata
-2025-10-16 10:03:32.448 ERROR | com.epay.transaction.exceptionhandlers.TransactionExceptionHandler:93 | principal=31CA01672CAC4A8CAB6B  | scenario=/api/transaction/v1/payment/update-fail | operation=POST | correlation=bce6d195-d46e-4c2f-84c6-936814063563 | methodName=handleValidationException | Error in handleValidationException null
-2025-10-16 10:03:32.449 ERROR | com.epay.transaction.exceptionhandlers.TransactionExceptionHandler:303 | principal=31CA01672CAC4A8CAB6B  | scenario=/api/transaction/v1/payment/update-fail | operation=POST | correlation=bce6d195-d46e-4c2f-84c6-936814063563 | methodName=generateResponseWithErrors | inside generateResponseWithErrors [ErrorDto(errorCode=2001, errorMessage=ATRN is required.)]
-2025-10-16 10:03:40.012 ERROR | com.epay.transaction.etl.producer.PaymentPushVerificationProducer:33 | principal=  | scenario=TokenExpiryScheduler | operation=checkExpiredToken | correlation=36f6b2fe-19ab-400e-b2fe-82027489f80a | methodName=publish | Exception thrown when sending a message with key='paymentPushVerification.PaymentVerification.UP406A5I19TGM37ZP9HI' and payload='{"atrnNumber":"UP406A5I19TGM37ZP9HI","mId":"1003406"}' to topic transaction_push_verification_topic:
-org.apache.kafka.common.errors.TimeoutException: Topic transaction_push_verification_topic not present in metadata after 60000 ms.
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-org.apache.kafka.common.errors.TimeoutException: Timed out waiting to send the call. Call: fetchMetadata
-2025-10-16 10:04:40.013 ERROR | com.epay.transaction.etl.producer.PaymentPushVerificationProducer:33 | principal=  | scenario=TokenExpiryScheduler | operation=checkExpiredToken | correlation=36f6b2fe-19ab-400e-b2fe-82027489f80a | methodName=publish | Exception thrown when sending a message with key='paymentPushVerification.PaymentVerification.UP406TTE09TGMLX74IVQ' and payload='{"atrnNumber":"UP406TTE09TGMLX74IVQ","mId":"1003406"}' to topic transaction_push_verification_topic:
-org.apache.kafka.common.errors.TimeoutException: Topic transaction_push_verification_topic not present in metadata after 60000 ms.
-2025-10-16 10:04:49.498 ERROR | com.epay.transaction.exceptionhandlers.TransactionExceptionHandler:68 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/payment/update-fail | operation=POST | correlation=7c7a014a-5883-47d9-b7b5-4127e70f19cb | methodName=handleSecurityException | Error in handleSecurityException [2002 : atrn is invalid. Reason : atrn status is not valid.]
-2025-10-16 10:04:49.498 ERROR | com.epay.transaction.exceptionhandlers.TransactionExceptionHandler:303 | principal=E2A8E8A3033B41529A88  | scenario=/api/transaction/v1/payment/update-fail | operation=POST | correlation=7c7a014a-5883-47d9-b7b5-4127e70f19cb | methodName=generateResponseWithErrors | inside generateResponseWithErrors [ErrorDto(errorCode=2002, errorMessage=atrn is invalid. Reason : atrn status is not valid.)]
-^C
-[osuser@drepayprodbastion Drill_Script]$
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-2025-10-16 10:07:28,137 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] (Re-)joining group (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,226 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) is unavailable or invalid due to cause: error response NOT_COORDINATOR. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,226 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Requesting disconnect from last known coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,226 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] JoinGroup failed: This is not the correct coordinator. Marking coordinator unknown. Sent generation was Generation{generationId=-1, memberId='', protocol='null'} (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,226 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Request joining group due to: rebalance failed due to 'This is not the correct coordinator.' (NotCoordinatorException) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,326 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Client requested disconnect from node 2147483646 (org.apache.kafka.clients.NetworkClient) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,347 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Discovered group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,347 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) is unavailable or invalid due to cause: coordinator unavailable. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,347 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Requesting disconnect from last known coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,464 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Discovered group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,464 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] (Re-)joining group (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,553 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) is unavailable or invalid due to cause: error response NOT_COORDINATOR. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,553 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Requesting disconnect from last known coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,553 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] JoinGroup failed: This is not the correct coordinator. Marking coordinator unknown. Sent generation was Generation{generationId=-1, memberId='', protocol='null'} (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,553 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Request joining group due to: rebalance failed due to 'This is not the correct coordinator.' (NotCoordinatorException) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,653 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Client requested disconnect from node 2147483646 (org.apache.kafka.clients.NetworkClient) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,675 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Discovered group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,675 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) is unavailable or invalid due to cause: coordinator unavailable. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,675 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Requesting disconnect from last known coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,809 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Discovered group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,810 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] (Re-)joining group (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,898 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) is unavailable or invalid due to cause: error response NOT_COORDINATOR. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,898 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Requesting disconnect from last known coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,898 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] JoinGroup failed: This is not the correct coordinator. Marking coordinator unknown. Sent generation was Generation{generationId=-1, memberId='', protocol='null'} (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,899 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Request joining group due to: rebalance failed due to 'This is not the correct coordinator.' (NotCoordinatorException) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:28,999 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Client requested disconnect from node 2147483646 (org.apache.kafka.clients.NetworkClient) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:29,020 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Discovered group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:29,020 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) is unavailable or invalid due to cause: coordinator unavailable. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:29,020 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Requesting disconnect from last known coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:29,140 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Discovered group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:29,140 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] (Re-)joining group (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:29,229 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) is unavailable or invalid due to cause: error response NOT_COORDINATOR. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:29,229 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Requesting disconnect from last known coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:29,229 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] JoinGroup failed: This is not the correct coordinator. Marking coordinator unknown. Sent generation was Generation{generationId=-1, memberId='', protocol='null'} (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:29,229 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Request joining group due to: rebalance failed due to 'This is not the correct coordinator.' (NotCoordinatorException) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:29,329 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Client requested disconnect from node 2147483646 (org.apache.kafka.clients.NetworkClient) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:29,350 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, groupId=mirrormaker2-cluster] Discovered group coordinator prod-dc-kafka-cluster-broker-1-prod-dc-kafka.apps.dc.prod.epay.sbi:443 (id: 2147483646 rack: null) (org.apache.kafka.connect.runtime.distributed.WorkerCoordinator) [DistributedHerder-connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083-1]
-2025-10-16 10:07:29,350 INFO [Worker clientId=connect-prod-dr-kafka-mirror-maker-mirrormaker2-0.prod-dr-kafka-mirror-maker-mirrormaker2.prod-dr-kafka.svc:8083, g
-
-
-
+events {}
