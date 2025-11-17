@@ -11,3 +11,6 @@
 11. if any step fails rollback dns to DC
 
 Vice versa for DR to DC
+
+
+Can you instead create a CI Job, to change replica s in dc helm to 0 and to the actual in dr when its dc to dr and vice versa for dr to dc? Test in pre prod?
