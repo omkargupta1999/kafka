@@ -1,0 +1,13 @@
+1. Start Maintenance service page in DC and DR
+2. Wait until its propagated
+3. Go for DNS change
+4. check if traffic to frontend and P1services like transaction services < 1% of previous traffic
+5. if no wait for it to go down. if yes, start DB replication
+6. Enable kafka mirror maker
+7. Once 5 and 6 are done
+8. Start DR services by increasing replica count by deployment repo MR
+9. Once sanity testing is done in DR, remove maintenance service in DR
+10. Once traffic is steady, stop DC services replica count including maintenance (this step is optional)
+11. if any step fails rollback dns to DC
+
+Vice versa for DR to DC
