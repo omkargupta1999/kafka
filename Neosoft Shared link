@@ -1,1 +1,11 @@
 https://neosofttechnologiesmail-my.sharepoint.com/:f:/g/personal/binoy_medhi_neosofttech_com/En35FMBnFlVNkEv5swpW7fYB0QHK_BFyKospf7bEJdfixA?e=2ytwjQs
+
+
+
+If you want, I can:
+
+provide a ready-to-use deploy-all-charts job that detects changed charts in the MR and runs helm upgrade sequentially with logging (helm status + kubectl events) built in; or
+
+convert your current multi-job pipeline to use resource_group and show the minimal .gitlab-ci.yml diff for your repo.
+
+Which would help you most — a sequential job script or resource_group modifications for your existing jobs?
