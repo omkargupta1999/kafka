@@ -14,3 +14,69 @@ Vice versa for DR to DC
 
 
 Can you instead create a CI Job, to change replica s in dc helm to 0 and to the actual in dr when its dc to dr and vice versa for dr to dc? Test in pre prod?
+
+
+
+
+
+
+
+
+
+
+
+
+==========================================
+
+
+stages:
+  - update-helm-values
+  # - deploy # Add deploy stage if you have one
+
+update-specific-values-job:
+  stage: update-helm-values
+  image: 
+    # Use an image that has yq and git installed
+    name: mikefarah/yq:4
+    entrypoint: ["/bin/sh", "-c"]
+  script:
+    # 1. Configure git with the access token (replace with your actual token variable name if different)
+    - git config --global user.email "gitlab-ci-user@example.com"
+    - git config --global user.name "GitLab CI User"
+    - git remote set-url origin https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git
+    - git checkout ${CI_COMMIT_BRANCH}
+
+    # Define the new values
+    - NEW_VALUE_KEY1="new-image-tag-123"
+    - NEW_VALUE_KEY2="5" # for a replica count or similar numeric value
+
+    # Define the specific files you want to update in an array/list
+    - SPECIFIC_FILES=(
+        "charts/service-api/values.yaml"
+        "charts/frontend-app/values.yaml"
+        # Add more specific paths here as needed
+      )
+
+    # 2. Iterate over the specific list of files and update them with yq
+    - |
+      for values_file in "${SPECIFIC_FILES[@]}"; do
+        if [ -f "$values_file" ]; then
+          echo "Updating $values_file..."
+          # Update first specific key (adjust key path as needed, e.g., ".image.tag")
+          yq -i ".your.key.path.here = env(NEW_VALUE_KEY1)" "$values_file"
+          # Update second specific key (adjust key path as needed, e.g., ".replicaCount")
+          yq -i ".another.key.path.here = env(NEW_VALUE_KEY2)" "$values_file"
+        else
+          echo "Warning: $values_file not found. Skipping."
+        fi
+      done
+
+    # 3. Commit and push the changes back to the repository
+    - git add "${SPECIFIC_FILES[@]}"
+    - git commit -m "CI: Update specific Helm chart values"
+    # The '|| true' allows the job to succeed even if no changes were detected (nothing to commit)
+    - git push origin ${CI_COMMIT_BRANCH} || true
+
+
+
+=============================================================================================================================================================================================================
