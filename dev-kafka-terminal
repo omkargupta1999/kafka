@@ -1,0 +1,108 @@
+sh-5.1$ cd bin/
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list                                                                                           
+__consumer_offsets
+inb_offline_gateway_pooling_local
+local_admin_sms_notification_topic
+local_merchant_email_notification_topic
+local_merchant_report_alert_topic
+local_merchant_report_topic
+local_merchant_report_topic_shilpa
+local_merchant_sms_notification_topic
+local_ops_payout_topic
+local_ops_payout_topic_shilpa
+local_ops_recon_fail_ack_topic
+local_ops_recon_fail_ack_topic_shilpa
+local_ops_recon_file_topic
+local_ops_recon_file_topic_shilpa
+local_ops_recon_record_duplicate_topic
+local_ops_recon_record_duplicate_topic_shilpa
+local_ops_recon_record_matched_topic
+local_ops_recon_record_matched_topic_shilpa
+local_ops_recon_record_unmatched_topic
+local_ops_recon_record_unmatched_topic_shilpa
+local_ops_refund_adjust_confirmation_topic
+local_ops_refund_adjust_confirmation_topic_shilpa
+local_ops_refund_adjust_detail_topic
+local_ops_refund_adjust_detail_topic_shilpa
+local_ops_report_confirmation_topic
+local_ops_report_confirmation_topic_shilpa
+local_ops_report_generation_topic_shilpa
+local_process-bookingdetails-topic
+local_process-bulk-refund-topic
+local_recon_report_generation_topic
+local_report_sms_notification_topic
+local_transaction_email_notification_topic
+local_transaction_push_verification_topic
+local_transaction_sms_notification_topic
+merchant_email_notification_topic
+merchant_report_alert_topic
+merchant_report_topic
+merchant_sms_notification_topic
+ops_payout_topic
+ops_recon_fail_ack_topic
+ops_recon_file_topic
+ops_recon_record_duplicate_topic
+ops_recon_record_matched_topic
+ops_recon_record_unmatched_topic
+ops_refund_adjust_confirmation_topic
+ops_refund_adjust_detail_topic
+ops_report_confirmation_topic
+ops_report_generation_topic
+otherinb_offline_gateway_pooling_dev_other_inb
+payment_cashstatusquery_notification_topic
+payment_cashstatusquery_notification_topicexit
+payment_email_notification_topic
+payment_sms_notification_topic
+payments
+process_bookingDetails_topic
+process_bulk_refund_topic
+saadi
+smm
+smm-new-topic
+strimzi.cruisecontrol.metrics
+strimzi.cruisecontrol.modeltrainingsamples
+strimzi.cruisecontrol.partitionmetricsamples
+transaction_email_notification_topic
+transaction_push_verification_topic
+transaction_sms_notification_topic
+upibhimqr_offline_gateway_pooling_dev_upi_qr
+upiself_offline_gateway_pooling_dev_upi_self
+sh-5.1$ ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+epay-payment-service-local-group
+payment-consumers
+gatewayOfflinePooling-consumers
+transaction-consumers
+rns-consumers
+admin-consumers
+operation-consumers
+merchant-consumers
+sh-5.1$ kafka-console-producer.sh --topic saadi --bootstrap-server localhost:9092
+sh: kafka-console-producer.sh: command not found
+sh-5.1$ ./kafka-console-producer.sh --topic saadi --bootstrap-server localhost:9092
+>saadi
+>m1
+>m2
+>suraj
+>omkar
+>devendra
+>baboo
+>sir
+>exit
+>exit()  
+sh-5.1$     ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group epay-payment-service-local-group
+
+GROUP                            TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                                      HOST            CLIENT-ID
+epay-payment-service-local-group payments        0          0               0               0               consumer-epay-payment-service-local-group-1-6e7d3446-7705-42ae-8479-9c758b9872b4 /17sh-5.1$ hostory
+sh: hostory: command not found
+sh-5.1$ history
+    1  cd bin/
+    2  ./kafka-topics.sh --bootstrap-server localhost:9092 --list
+    3  ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+    4  kafka-console-producer.sh --topic saadi --bootstrap-server localhost:9092
+    5  ./kafka-console-producer.sh --topic saadi --bootstrap-server localhost:9092
+    6      ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group epay-payment-service-local-group
+    7  hostory
+    8  history
+sh-5.1$  ^C
+sh-5.1$ ^C
+sh-5.1$ 
