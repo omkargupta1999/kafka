@@ -1,0 +1,39 @@
+Kindly share the handover details for the following:
+
+1. Helm Charts
+
+   - All application-specific charts
+   - Common templates or reusable modules
+   - Deployment values and environment-wise configurations
+
+2. CI/CD Configurations
+
+   - GitLab/GitHub pipelines
+   - Runner configurations and build scripts
+   - Deployment stages and automation logic
+   - Any custom scripts or integrations used in the pipelines
+
+3. Istio Configuration
+
+   - VirtualServices, DestinationRules, Gateways
+   - ConfigMaps and traffic routing logic
+   - mTLS and any service mesh–related configurations
+
+4. Application Deployments
+
+   - Spring Boot application deployment process
+   - Container build steps
+   - Environment variables, secrets, and dependency details
+
+5. Other Tools / Technologies
+
+   - Monitoring/alerting dashboards
+   - Internal automation tools or scripts
+   - Any additional components you have been managing (e.g - Kafka, hpfortyfi,Gemfire, Spring Boot..etc)
+
+Please share the documents, links, repositories, or any reference materials that will help the team take over smoothly.
+If possible, please also schedule a short walkthrough session for the team.
+
+Please let us know your availability on daily basis for a 120-minute DevSecOps KT session.
+
+Your support in completing the handover will be greatly appreciated.
