@@ -1,3 +1,100 @@
+[osuser@bastion ~]$ oc rsh payment-paymentservice-6c5c46c78b-clbcn
+sh-5.1$
+sh-5.1$
+sh-5.1$
+sh-5.1$
+sh-5.1$
+sh-5.1$ curl -kv 10.176.10.213:2001
+*   Trying 10.176.10.213:2001...
+* Connected to 10.176.10.213 (10.176.10.213) port 2001 (#0)
+> GET / HTTP/1.1
+> Host: 10.176.10.213:2001
+> User-Agent: curl/7.76.1
+> Accept: */*
+>
+^C
+sh-5.1$
+sh-5.1$ curl -kv 10.176.10.213:2002
+*   Trying 10.176.10.213:2002...
+* Connected to 10.176.10.213 (10.176.10.213) port 2002 (#0)
+> GET / HTTP/1.1
+> Host: 10.176.10.213:2002
+> User-Agent: curl/7.76.1
+> Accept: */*
+>
+* Empty reply from server
+* Closing connection 0
+curl: (52) Empty reply from server
+sh-5.1$ ^C
+sh-5.1$
+sh-5.1$ curl -kv 10.177.141.117:2001
+*   Trying 10.177.141.117:2001...
+* Connected to 10.177.141.117 (10.177.141.117) port 2001 (#0)
+> GET / HTTP/1.1
+> Host: 10.177.141.117:2001
+> User-Agent: curl/7.76.1
+> Accept: */*
+>
+* Recv failure: Connection reset by peer
+* Closing connection 0
+curl: (56) Recv failure: Connection reset by peer
+sh-5.1$
+sh-5.1$ curl -kv 10.177.141.117:2002
+*   Trying 10.177.141.117:2002...
+* Connected to 10.177.141.117 (10.177.141.117) port 2002 (#0)
+> GET / HTTP/1.1
+> Host: 10.177.141.117:2002
+> User-Agent: curl/7.76.1
+> Accept: */*
+>
+* Recv failure: Connection reset by peer
+* Closing connection 0
+curl: (56) Recv failure: Connection reset by peer
+sh-5.1$ curl -kv 10.177.141.117:2003
+*   Trying 10.177.141.117:2003...
+* Connected to 10.177.141.117 (10.177.141.117) port 2003 (#0)
+> GET / HTTP/1.1
+> Host: 10.177.141.117:2003
+> User-Agent: curl/7.76.1
+> Accept: */*
+>
+^[[A^C
+sh-5.1$ curl -kv 10.177.141.117:2005
+*   Trying 10.177.141.117:2005...
+* Connected to 10.177.141.117 (10.177.141.117) port 2005 (#0)
+> GET / HTTP/1.1
+> Host: 10.177.141.117:2005
+> User-Agent: curl/7.76.1
+> Accept: */*
+>
+* Recv failure: Connection reset by peer
+* Closing connection 0
+curl: (56) Recv failure: Connection reset by peer
+sh-5.1$ curl -kv 10.177.141.117:2004
+*   Trying 10.177.141.117:2004...
+* Connected to 10.177.141.117 (10.177.141.117) port 2004 (#0)
+> GET / HTTP/1.1
+> Host: 10.177.141.117:2004
+> User-Agent: curl/7.76.1
+> Accept: */*
+>
+^C
+sh-5.1$ curl -kv 10.177.141.117:2005
+*   Trying 10.177.141.117:2005...
+* Connected to 10.177.141.117 (10.177.141.117) port 2005 (#0)
+> GET / HTTP/1.1
+> Host: 10.177.141.117:2005
+> User-Agent: curl/7.76.1
+> Accept: */*
+
+
+
+
+
+
+
+==============================================================================
+
 10.177.141.117-10.177.141.119
 10.177.136.126-10.177.136.128
 10.177.143.144-10.177.143.146
