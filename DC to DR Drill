@@ -31,3 +31,33 @@ step 7 : Check the application status and Kafka.
 		./kafka-topics.sh --bootstrap-server localhost:9092 --list
 		exit
 =======
+
+
+
+
+
+
+# Replace these placeholders with your actual details
+NAMESPACE="<your-namespace>"
+POD_NAME="<your-pod-name>"
+
+# Execute the topic deletion script inside the specified pod
+kubectl exec -it "$POD_NAME" --namespace "$NAMESPACE" -- /bin/bash <<'EOF'
+  echo "--- Navigating to Kafka bin directory ---"
+  cd /opt/kafka/bin/
+
+  echo "--- Listing all topics before deletion ---"
+  ./kafka-topics.sh --bootstrap-server localhost:9092 --list
+
+  echo "--- Starting deletion of eligible user topics ---"
+  for t in $(./kafka-topics.sh --bootstrap-server localhost:9092 --list | grep -v '^__' | grep -v 'mm2-' | grep -v 'mirrormaker2-'); do
+    echo "Deleting topic: $t"
+    ./kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic "$t"
+  done
+
+  echo "--- Deletion complete. Listing remaining topics ---"
+  ./kafka-topics.sh --bootstrap-server localhost:9092 --list
+  exit
+EOF
+
+
