@@ -1,12 +1,14 @@
-Subject: NEFT Inbound MQ – Queue Manager & Listener Clarification
+Subject: NEFT Inbound MQ – Queue Manager & Listener Mapping Clarification
 
 Hi Team,
 
-We are getting the below error while connecting to **NEFT inbound MQ**:
+NEFT **outbound (Kafka → MQ) connectivity is working successfully** using the details shared earlier.
+
+However, **NEFT inbound (MQ → Kafka)** connection is failing with the below error:
 
 `MQRC_Q_MGR_NAME_ERROR (2058)`
 
-This indicates a mismatch between the **queue manager name and the listener (host/port)**.
+This indicates a mismatch between the **queue manager name and the listener (host/port)** for the inbound flow.
 
 Kindly confirm the **exact inbound MQ connection details** for **NeftInboundQueue**:
 
@@ -15,7 +17,7 @@ Kindly confirm the **exact inbound MQ connection details** for **NeftInboundQueu
 * Port
 * SVRCONN channel
 
-Once the correct QM–host–port mapping is confirmed, we will update Kafka Connect and re-test immediately.
+Once the correct inbound QM–host–port mapping is confirmed, we will update Kafka Connect and re-test immediately.
 
 Thanks,
 **Saadi**
