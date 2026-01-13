@@ -1,0 +1,548 @@
+[osuser@bastion ~]$ oc get pods
+NAME                                                      READY   STATUS        RESTARTS       AGE
+pre-prod-console-console-deployment-777f885796-fk4s5      2/2     Running       0              13d
+pre-prod-kafka-cluster-broker-0                           1/1     Running       0              26d
+pre-prod-kafka-cluster-broker-1                           1/1     Running       0              26d
+pre-prod-kafka-cluster-broker-2                           1/1     Running       0              11d
+pre-prod-kafka-cluster-controller-3                       1/1     Running       0              26d
+pre-prod-kafka-cluster-controller-4                       1/1     Running       0              26d
+pre-prod-kafka-cluster-controller-5                       1/1     Running       0              26d
+pre-prod-kafka-cluster-cruise-control-7c5fbf9585-98lxl    1/1     Terminating   40 (11d ago)   13d
+pre-prod-kafka-cluster-cruise-control-7c5fbf9585-bx7qc    1/1     Running       1 (41h ago)    2d11h
+pre-prod-kafka-cluster-entity-operator-55d9ddf78c-5676j   2/2     Running       0              2d11h
+pre-prod-kafka-cluster-entity-operator-55d9ddf78c-wdbkt   2/2     Terminating   0              13d
+[osuser@bastion ~]$ oc describe po pre-prod-kafka-cluster-entity-operator-55d9ddf78c-wdbkt
+Name:                      pre-prod-kafka-cluster-entity-operator-55d9ddf78c-wdbkt
+Namespace:                 pre-prod-kafka
+Priority:                  0
+Service Account:           pre-prod-kafka-cluster-entity-operator
+Node:                      zookeeper3.preprod.epay.sbi/10.177.143.239
+Start Time:                Wed, 31 Dec 2025 13:55:11 +0530
+Labels:                    app.kubernetes.io/instance=pre-prod-kafka-cluster
+                           app.kubernetes.io/managed-by=strimzi-cluster-operator
+                           app.kubernetes.io/name=entity-operator
+                           app.kubernetes.io/part-of=strimzi-pre-prod-kafka-cluster
+                           com.company=Red_Hat
+                           environment=preprod
+                           pod-template-hash=55d9ddf78c
+                           rht.comp=AMQ_Streams
+                           rht.comp_ver=3.0.1
+                           rht.prod_name=Red_Hat_Application_Foundations
+                           rht.prod_ver=2025.Q3
+                           rht.subcomp=entity-operator
+                           rht.subcomp_t=infrastructure
+                           strimzi.io/cluster=pre-prod-kafka-cluster
+                           strimzi.io/component-type=entity-operator
+                           strimzi.io/kind=Kafka
+                           strimzi.io/name=pre-prod-kafka-cluster-entity-operator
+Annotations:               dynakube.dynatrace.com/injected: true
+                           k8s.ovn.org/pod-networks:
+                             {"default":{"ip_addresses":["172.16.36.147/23"],"mac_address":"0a:58:ac:10:24:93","gateway_ips":["172.16.36.1"],"routes":[{"dest":"172.16....
+                           k8s.v1.cni.cncf.io/network-status:
+                             [{
+                                 "name": "ovn-kubernetes",
+                                 "interface": "eth0",
+                                 "ips": [
+                                     "172.16.36.147"
+                                 ],
+                                 "mac": "0a:58:ac:10:24:93",
+                                 "default": true,
+                                 "dns": {}
+                             }]
+                           metadata-enrichment.dynatrace.com/injected: true
+                           metadata.dynatrace.com: {}
+                           metadata.dynatrace.com/k8s.workload.kind: deployment
+                           metadata.dynatrace.com/k8s.workload.name: pre-prod-kafka-cluster-entity-operator
+                           oneagent.dynatrace.com/injected: true
+                           openshift.io/scc: restricted-v2
+                           seccomp.security.alpha.kubernetes.io/pod: runtime/default
+                           strimzi.io/auth-hash: 6655bc71
+                           strimzi.io/cluster-ca-cert-generation: 0
+                           strimzi.io/cluster-ca-key-generation: 0
+                           strimzi.io/server-cert-hash: 97bf1e89f12718bd
+Status:                    Terminating (lasts 2d11h)
+Termination Grace Period:  30s
+SeccompProfile:            RuntimeDefault
+IP:                        172.16.36.147
+IPs:
+  IP:           172.16.36.147
+Controlled By:  ReplicaSet/pre-prod-kafka-cluster-entity-operator-55d9ddf78c
+Init Containers:
+  dynatrace-operator:
+    Container ID:  cri-o://0fa68b991308e425eb40bfe9347adf4a81c005b7c5497a10f5a9448ccfe2a208
+    Image:         epaynonprod-registry-quay-quay-enterprise.apps.preprod.epay.sbi/dynatrace/dynatrace-operator:1.7.1
+    Image ID:      epaynonprod-registry-quay-quay-enterprise.apps.preprod.epay.sbi/dynatrace/dynatrace-operator@sha256:5c95f9882d3d3c505e69ec558f5d397264610d8a4970d5400c5411ef60430958
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      bootstrap
+      --config-directory=/mnt/config
+      --input-directory=/mnt/input
+      --suppress-error
+      --source=/opt/dynatrace/oneagent
+      --target=/mnt/bin
+      --install-path=/opt/dynatrace/oneagent-paas
+      --fullstack
+      --tenant=64d5c751-2d94-4f1b-aba4-2f9d79a47620
+      --attribute=k8s.workload.name=pre-prod-kafka-cluster-entity-operator
+      --attribute=k8s.workload.kind=deployment
+      --metadata-enrichment
+      --attribute-container={"container_image.registry":"registry.redhat.io","container_image.repository":"amq-streams/strimzi-rhel9-operator","container_image.digest":"sha256:42733933be49e2f08ffd06c4c8f31dbfc6eac0327779a54da79ec78f487d19b1","k8s.container.name":"topic-operator"}
+      --attribute-container={"container_image.registry":"registry.redhat.io","container_image.repository":"amq-streams/strimzi-rhel9-operator","container_image.digest":"sha256:42733933be49e2f08ffd06c4c8f31dbfc6eac0327779a54da79ec78f487d19b1","k8s.container.name":"user-operator"}
+      --attribute=k8s.pod.name=$(K8S_PODNAME)
+      --attribute=k8s.pod.uid=$(K8S_PODUID)
+      --attribute=k8s.node.name=$(K8S_NODE_NAME)
+      --attribute=k8s.namespace.name=pre-prod-kafka
+      --attribute=k8s.cluster.uid=3c99c619-55f1-41b3-952a-96024a4ca8f5
+      --attribute=k8s.cluster.name=epay-preprod
+      --attribute=dt.entity.kubernetes_cluster=KUBERNETES_CLUSTER-C3D48038EF599462
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Wed, 31 Dec 2025 13:55:12 +0530
+      Finished:     Wed, 31 Dec 2025 13:55:14 +0530
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  60Mi
+    Requests:
+      cpu:     30m
+      memory:  30Mi
+    Environment:
+      K8S_PODNAME:    pre-prod-kafka-cluster-entity-operator-55d9ddf78c-wdbkt (v1:metadata.name)
+      K8S_PODUID:      (v1:metadata.uid)
+      K8S_NODE_NAME:   (v1:spec.nodeName)
+    Mounts:
+      /mnt/bin from oneagent-bin (ro)
+      /mnt/config from dynatrace-config (rw)
+      /mnt/input from dynatrace-input (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-42csn (ro)
+Containers:
+  topic-operator:
+    Container ID:  cri-o://432af0c60dd280dcb0b73830f804897dd8e9212e191819654f5c66a59aeab8a5
+    Image:         registry.redhat.io/amq-streams/strimzi-rhel9-operator@sha256:42733933be49e2f08ffd06c4c8f31dbfc6eac0327779a54da79ec78f487d19b1
+    Image ID:      registry.redhat.io/amq-streams/strimzi-rhel9-operator@sha256:2df26188b0589027d05193745dacf3ff5f6216a8f1c783eb1329eff9a45b5e80
+    Port:          8080/TCP
+    Host Port:     0/TCP
+    Args:
+      /opt/strimzi/bin/topic_operator_run.sh
+    State:          Running
+      Started:      Wed, 31 Dec 2025 13:55:38 +0530
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:healthcheck/healthy delay=10s timeout=5s period=10s #success=1 #failure=3
+    Readiness:      http-get http://:healthcheck/ready delay=10s timeout=5s period=10s #success=1 #failure=3
+    Startup:        http-get http://:healthcheck/healthy delay=15s timeout=5s period=10s #success=1 #failure=12
+    Environment:
+      STRIMZI_RESOURCE_LABELS:              strimzi.io/cluster=pre-prod-kafka-cluster
+      STRIMZI_KAFKA_BOOTSTRAP_SERVERS:      pre-prod-kafka-cluster-kafka-bootstrap:9091
+      STRIMZI_NAMESPACE:                    pre-prod-kafka
+      STRIMZI_SECURITY_PROTOCOL:            SSL
+      STRIMZI_TLS_ENABLED:                  true
+      STRIMZI_GC_LOG_ENABLED:               false
+      STRIMZI_CRUISE_CONTROL_ENABLED:       true
+      STRIMZI_CRUISE_CONTROL_RACK_AWARE:    false
+      STRIMZI_CRUISE_CONTROL_HOSTNAME:      pre-prod-kafka-cluster-cruise-control.pre-prod-kafka.svc
+      STRIMZI_CRUISE_CONTROL_PORT:          9090
+      STRIMZI_CRUISE_CONTROL_SSL_ENABLED:   true
+      STRIMZI_CRUISE_CONTROL_AUTH_ENABLED:  true
+      DT_DEPLOYMENT_METADATA:               orchestration_tech=Operator-cloud_native_fullstack;script_version=v1.7.1;orchestrator_id=3c99c619-55f1-41b3-952a-96024a4ca8f5
+      LD_PRELOAD:                           /opt/dynatrace/oneagent-paas/agent/lib64/liboneagentproc.so
+      DT_STORAGE:                           /var/lib/dynatrace/oneagent
+      DT_NETWORK_ZONE:                      epay-preprod
+    Mounts:
+      /etc/eto-cc-api/ from eto-cc-api (rw)
+      /etc/eto-certs/ from eto-certs (rw)
+      /etc/ld.so.preload from dynatrace-config (rw,path="oneagent/ld.so.preload")
+      /etc/tls-sidecar/cluster-ca-certs/ from cluster-ca-certs (rw)
+      /opt/dynatrace/oneagent-paas from oneagent-bin (ro)
+      /opt/topic-operator/custom-config/ from entity-topic-operator-metrics-and-logging (rw)
+      /tmp from strimzi-to-tmp (rw)
+      /var/lib/dynatrace from dynatrace-config (rw,path="topic-operator")
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-42csn (ro)
+  user-operator:
+    Container ID:  cri-o://e3846b201f45d89fceb408319f61579fe76d037e6e77a8975aa1fc7f01e49a72
+    Image:         registry.redhat.io/amq-streams/strimzi-rhel9-operator@sha256:42733933be49e2f08ffd06c4c8f31dbfc6eac0327779a54da79ec78f487d19b1
+    Image ID:      registry.redhat.io/amq-streams/strimzi-rhel9-operator@sha256:2df26188b0589027d05193745dacf3ff5f6216a8f1c783eb1329eff9a45b5e80
+    Port:          8081/TCP
+    Host Port:     0/TCP
+    Args:
+      /opt/strimzi/bin/user_operator_run.sh
+    State:          Running
+      Started:      Wed, 31 Dec 2025 13:55:38 +0530
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:healthcheck/healthy delay=10s timeout=5s period=10s #success=1 #failure=3
+    Readiness:      http-get http://:healthcheck/ready delay=10s timeout=5s period=10s #success=1 #failure=3
+    Environment:
+      STRIMZI_KAFKA_BOOTSTRAP_SERVERS:      pre-prod-kafka-cluster-kafka-bootstrap:9091
+      STRIMZI_NAMESPACE:                    pre-prod-kafka
+      STRIMZI_LABELS:                       strimzi.io/cluster=pre-prod-kafka-cluster
+      STRIMZI_CA_KEY_NAME:                  pre-prod-kafka-cluster-clients-ca
+      STRIMZI_CA_CERT_NAME:                 pre-prod-kafka-cluster-clients-ca-cert
+      STRIMZI_CA_NAMESPACE:                 pre-prod-kafka
+      STRIMZI_CA_VALIDITY:                  365
+      STRIMZI_CA_RENEWAL:                   30
+      STRIMZI_CLUSTER_CA_CERT_SECRET_NAME:  pre-prod-kafka-cluster-cluster-ca-cert
+      STRIMZI_EO_KEY_SECRET_NAME:           pre-prod-kafka-cluster-entity-user-operator-certs
+      STRIMZI_GC_LOG_ENABLED:               false
+      STRIMZI_SECRET_PREFIX:
+      STRIMZI_ACLS_ADMIN_API_SUPPORTED:     false
+      DT_DEPLOYMENT_METADATA:               orchestration_tech=Operator-cloud_native_fullstack;script_version=v1.7.1;orchestrator_id=3c99c619-55f1-41b3-952a-96024a4ca8f5
+      LD_PRELOAD:                           /opt/dynatrace/oneagent-paas/agent/lib64/liboneagentproc.so
+      DT_STORAGE:                           /var/lib/dynatrace/oneagent
+      DT_NETWORK_ZONE:                      epay-preprod
+    Mounts:
+      /etc/euo-certs/ from euo-certs (rw)
+      /etc/ld.so.preload from dynatrace-config (rw,path="oneagent/ld.so.preload")
+      /etc/tls-sidecar/cluster-ca-certs/ from cluster-ca-certs (rw)
+      /opt/dynatrace/oneagent-paas from oneagent-bin (ro)
+      /opt/user-operator/custom-config/ from entity-user-operator-metrics-and-logging (rw)
+      /tmp from strimzi-uo-tmp (rw)
+      /var/lib/dynatrace from dynatrace-config (rw,path="user-operator")
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-42csn (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       False
+  ContainersReady             True
+  PodScheduled                True
+  DisruptionTarget            True
+Volumes:
+  entity-topic-operator-metrics-and-logging:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      pre-prod-kafka-cluster-entity-topic-operator-config
+    Optional:  false
+  strimzi-to-tmp:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     Memory
+    SizeLimit:  5Mi
+  eto-certs:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  pre-prod-kafka-cluster-entity-topic-operator-certs
+    Optional:    false
+  eto-cc-api:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  pre-prod-kafka-cluster-entity-topic-operator-cc-api
+    Optional:    false
+  entity-user-operator-metrics-and-logging:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      pre-prod-kafka-cluster-entity-user-operator-config
+    Optional:  false
+  strimzi-uo-tmp:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     Memory
+    SizeLimit:  5Mi
+  euo-certs:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  pre-prod-kafka-cluster-entity-user-operator-certs
+    Optional:    false
+  cluster-ca-certs:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  pre-prod-kafka-cluster-cluster-ca-cert
+    Optional:    false
+  kube-api-access-42csn:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+    ConfigMapName:           openshift-service-ca.crt
+    ConfigMapOptional:       <nil>
+  oneagent-bin:
+    Type:              CSI (a Container Storage Interface (CSI) volume source)
+    Driver:            csi.oneagent.dynatrace.com
+    FSType:
+    ReadOnly:          true
+    VolumeAttributes:      dynakube=epay-preprod
+                           mode=app
+                           retryTimeout=10m0s
+  dynatrace-input:
+    Type:                Projected (a volume that contains injected data from multiple sources)
+    SecretName:          dynatrace-bootstrapper-config
+    SecretOptionalName:  0xc0006fe4e5
+    SecretName:          dynatrace-bootstrapper-certs
+    SecretOptionalName:  0xc0006fe4e6
+  dynatrace-config:
+    Type:        EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:   <unset>
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/memory-pressure:NoSchedule op=Exists
+                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:          <none>
+[osuser@bastion ~]$
+
+
+
+
+
+[osuser@bastion ~]$ oc describe po pre-prod-kafka-cluster-entity-operator-55d9ddf78c-wdbkt -n pre-prod-kafka
+Name:                      pre-prod-kafka-cluster-entity-operator-55d9ddf78c-wdbkt
+Namespace:                 pre-prod-kafka
+Priority:                  0
+Service Account:           pre-prod-kafka-cluster-entity-operator
+Node:                      zookeeper3.preprod.epay.sbi/10.177.143.239
+Start Time:                Wed, 31 Dec 2025 13:55:11 +0530
+Labels:                    app.kubernetes.io/instance=pre-prod-kafka-cluster
+                           app.kubernetes.io/managed-by=strimzi-cluster-operator
+                           app.kubernetes.io/name=entity-operator
+                           app.kubernetes.io/part-of=strimzi-pre-prod-kafka-cluster
+                           com.company=Red_Hat
+                           environment=preprod
+                           pod-template-hash=55d9ddf78c
+                           rht.comp=AMQ_Streams
+                           rht.comp_ver=3.0.1
+                           rht.prod_name=Red_Hat_Application_Foundations
+                           rht.prod_ver=2025.Q3
+                           rht.subcomp=entity-operator
+                           rht.subcomp_t=infrastructure
+                           strimzi.io/cluster=pre-prod-kafka-cluster
+                           strimzi.io/component-type=entity-operator
+                           strimzi.io/kind=Kafka
+                           strimzi.io/name=pre-prod-kafka-cluster-entity-operator
+Annotations:               dynakube.dynatrace.com/injected: true
+                           k8s.ovn.org/pod-networks:
+                             {"default":{"ip_addresses":["172.16.36.147/23"],"mac_address":"0a:58:ac:10:24:93","gateway_ips":["172.16.36.1"],"routes":[{"dest":"172.16....
+                           k8s.v1.cni.cncf.io/network-status:
+                             [{
+                                 "name": "ovn-kubernetes",
+                                 "interface": "eth0",
+                                 "ips": [
+                                     "172.16.36.147"
+                                 ],
+                                 "mac": "0a:58:ac:10:24:93",
+                                 "default": true,
+                                 "dns": {}
+                             }]
+                           metadata-enrichment.dynatrace.com/injected: true
+                           metadata.dynatrace.com: {}
+                           metadata.dynatrace.com/k8s.workload.kind: deployment
+                           metadata.dynatrace.com/k8s.workload.name: pre-prod-kafka-cluster-entity-operator
+                           oneagent.dynatrace.com/injected: true
+                           openshift.io/scc: restricted-v2
+                           seccomp.security.alpha.kubernetes.io/pod: runtime/default
+                           strimzi.io/auth-hash: 6655bc71
+                           strimzi.io/cluster-ca-cert-generation: 0
+                           strimzi.io/cluster-ca-key-generation: 0
+                           strimzi.io/server-cert-hash: 97bf1e89f12718bd
+Status:                    Terminating (lasts 2d11h)
+Termination Grace Period:  30s
+SeccompProfile:            RuntimeDefault
+IP:                        172.16.36.147
+IPs:
+  IP:           172.16.36.147
+Controlled By:  ReplicaSet/pre-prod-kafka-cluster-entity-operator-55d9ddf78c
+Init Containers:
+  dynatrace-operator:
+    Container ID:  cri-o://0fa68b991308e425eb40bfe9347adf4a81c005b7c5497a10f5a9448ccfe2a208
+    Image:         epaynonprod-registry-quay-quay-enterprise.apps.preprod.epay.sbi/dynatrace/dynatrace-operator:1.7.1
+    Image ID:      epaynonprod-registry-quay-quay-enterprise.apps.preprod.epay.sbi/dynatrace/dynatrace-operator@sha256:5c95f9882d3d3c505e69ec558f5d397264610d8a4970d5400c5411ef60430958
+    Port:          <none>
+    Host Port:     <none>
+    Args:
+      bootstrap
+      --config-directory=/mnt/config
+      --input-directory=/mnt/input
+      --suppress-error
+      --source=/opt/dynatrace/oneagent
+      --target=/mnt/bin
+      --install-path=/opt/dynatrace/oneagent-paas
+      --fullstack
+      --tenant=64d5c751-2d94-4f1b-aba4-2f9d79a47620
+      --attribute=k8s.workload.name=pre-prod-kafka-cluster-entity-operator
+      --attribute=k8s.workload.kind=deployment
+      --metadata-enrichment
+      --attribute-container={"container_image.registry":"registry.redhat.io","container_image.repository":"amq-streams/strimzi-rhel9-operator","container_image.digest":"sha256:42733933be49e2f08ffd06c4c8f31dbfc6eac0327779a54da79ec78f487d19b1","k8s.container.name":"topic-operator"}
+      --attribute-container={"container_image.registry":"registry.redhat.io","container_image.repository":"amq-streams/strimzi-rhel9-operator","container_image.digest":"sha256:42733933be49e2f08ffd06c4c8f31dbfc6eac0327779a54da79ec78f487d19b1","k8s.container.name":"user-operator"}
+      --attribute=k8s.pod.name=$(K8S_PODNAME)
+      --attribute=k8s.pod.uid=$(K8S_PODUID)
+      --attribute=k8s.node.name=$(K8S_NODE_NAME)
+      --attribute=k8s.namespace.name=pre-prod-kafka
+      --attribute=k8s.cluster.uid=3c99c619-55f1-41b3-952a-96024a4ca8f5
+      --attribute=k8s.cluster.name=epay-preprod
+      --attribute=dt.entity.kubernetes_cluster=KUBERNETES_CLUSTER-C3D48038EF599462
+    State:          Terminated
+      Reason:       Completed
+      Exit Code:    0
+      Started:      Wed, 31 Dec 2025 13:55:12 +0530
+      Finished:     Wed, 31 Dec 2025 13:55:14 +0530
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     100m
+      memory:  60Mi
+    Requests:
+      cpu:     30m
+      memory:  30Mi
+    Environment:
+      K8S_PODNAME:    pre-prod-kafka-cluster-entity-operator-55d9ddf78c-wdbkt (v1:metadata.name)
+      K8S_PODUID:      (v1:metadata.uid)
+      K8S_NODE_NAME:   (v1:spec.nodeName)
+    Mounts:
+      /mnt/bin from oneagent-bin (ro)
+      /mnt/config from dynatrace-config (rw)
+      /mnt/input from dynatrace-input (ro)
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-42csn (ro)
+Containers:
+  topic-operator:
+    Container ID:  cri-o://432af0c60dd280dcb0b73830f804897dd8e9212e191819654f5c66a59aeab8a5
+    Image:         registry.redhat.io/amq-streams/strimzi-rhel9-operator@sha256:42733933be49e2f08ffd06c4c8f31dbfc6eac0327779a54da79ec78f487d19b1
+    Image ID:      registry.redhat.io/amq-streams/strimzi-rhel9-operator@sha256:2df26188b0589027d05193745dacf3ff5f6216a8f1c783eb1329eff9a45b5e80
+    Port:          8080/TCP
+    Host Port:     0/TCP
+    Args:
+      /opt/strimzi/bin/topic_operator_run.sh
+    State:          Running
+      Started:      Wed, 31 Dec 2025 13:55:38 +0530
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:healthcheck/healthy delay=10s timeout=5s period=10s #success=1 #failure=3
+    Readiness:      http-get http://:healthcheck/ready delay=10s timeout=5s period=10s #success=1 #failure=3
+    Startup:        http-get http://:healthcheck/healthy delay=15s timeout=5s period=10s #success=1 #failure=12
+    Environment:
+      STRIMZI_RESOURCE_LABELS:              strimzi.io/cluster=pre-prod-kafka-cluster
+      STRIMZI_KAFKA_BOOTSTRAP_SERVERS:      pre-prod-kafka-cluster-kafka-bootstrap:9091
+      STRIMZI_NAMESPACE:                    pre-prod-kafka
+      STRIMZI_SECURITY_PROTOCOL:            SSL
+      STRIMZI_TLS_ENABLED:                  true
+      STRIMZI_GC_LOG_ENABLED:               false
+      STRIMZI_CRUISE_CONTROL_ENABLED:       true
+      STRIMZI_CRUISE_CONTROL_RACK_AWARE:    false
+      STRIMZI_CRUISE_CONTROL_HOSTNAME:      pre-prod-kafka-cluster-cruise-control.pre-prod-kafka.svc
+      STRIMZI_CRUISE_CONTROL_PORT:          9090
+      STRIMZI_CRUISE_CONTROL_SSL_ENABLED:   true
+      STRIMZI_CRUISE_CONTROL_AUTH_ENABLED:  true
+      DT_DEPLOYMENT_METADATA:               orchestration_tech=Operator-cloud_native_fullstack;script_version=v1.7.1;orchestrator_id=3c99c619-55f1-41b3-952a-96024a4ca8f5
+      LD_PRELOAD:                           /opt/dynatrace/oneagent-paas/agent/lib64/liboneagentproc.so
+      DT_STORAGE:                           /var/lib/dynatrace/oneagent
+      DT_NETWORK_ZONE:                      epay-preprod
+    Mounts:
+      /etc/eto-cc-api/ from eto-cc-api (rw)
+      /etc/eto-certs/ from eto-certs (rw)
+      /etc/ld.so.preload from dynatrace-config (rw,path="oneagent/ld.so.preload")
+      /etc/tls-sidecar/cluster-ca-certs/ from cluster-ca-certs (rw)
+      /opt/dynatrace/oneagent-paas from oneagent-bin (ro)
+      /opt/topic-operator/custom-config/ from entity-topic-operator-metrics-and-logging (rw)
+      /tmp from strimzi-to-tmp (rw)
+      /var/lib/dynatrace from dynatrace-config (rw,path="topic-operator")
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-42csn (ro)
+  user-operator:
+    Container ID:  cri-o://e3846b201f45d89fceb408319f61579fe76d037e6e77a8975aa1fc7f01e49a72
+    Image:         registry.redhat.io/amq-streams/strimzi-rhel9-operator@sha256:42733933be49e2f08ffd06c4c8f31dbfc6eac0327779a54da79ec78f487d19b1
+    Image ID:      registry.redhat.io/amq-streams/strimzi-rhel9-operator@sha256:2df26188b0589027d05193745dacf3ff5f6216a8f1c783eb1329eff9a45b5e80
+    Port:          8081/TCP
+    Host Port:     0/TCP
+    Args:
+      /opt/strimzi/bin/user_operator_run.sh
+    State:          Running
+      Started:      Wed, 31 Dec 2025 13:55:38 +0530
+    Ready:          True
+    Restart Count:  0
+    Liveness:       http-get http://:healthcheck/healthy delay=10s timeout=5s period=10s #success=1 #failure=3
+    Readiness:      http-get http://:healthcheck/ready delay=10s timeout=5s period=10s #success=1 #failure=3
+    Environment:
+      STRIMZI_KAFKA_BOOTSTRAP_SERVERS:      pre-prod-kafka-cluster-kafka-bootstrap:9091
+      STRIMZI_NAMESPACE:                    pre-prod-kafka
+      STRIMZI_LABELS:                       strimzi.io/cluster=pre-prod-kafka-cluster
+      STRIMZI_CA_KEY_NAME:                  pre-prod-kafka-cluster-clients-ca
+      STRIMZI_CA_CERT_NAME:                 pre-prod-kafka-cluster-clients-ca-cert
+      STRIMZI_CA_NAMESPACE:                 pre-prod-kafka
+      STRIMZI_CA_VALIDITY:                  365
+      STRIMZI_CA_RENEWAL:                   30
+      STRIMZI_CLUSTER_CA_CERT_SECRET_NAME:  pre-prod-kafka-cluster-cluster-ca-cert
+      STRIMZI_EO_KEY_SECRET_NAME:           pre-prod-kafka-cluster-entity-user-operator-certs
+      STRIMZI_GC_LOG_ENABLED:               false
+      STRIMZI_SECRET_PREFIX:
+      STRIMZI_ACLS_ADMIN_API_SUPPORTED:     false
+      DT_DEPLOYMENT_METADATA:               orchestration_tech=Operator-cloud_native_fullstack;script_version=v1.7.1;orchestrator_id=3c99c619-55f1-41b3-952a-96024a4ca8f5
+      LD_PRELOAD:                           /opt/dynatrace/oneagent-paas/agent/lib64/liboneagentproc.so
+      DT_STORAGE:                           /var/lib/dynatrace/oneagent
+      DT_NETWORK_ZONE:                      epay-preprod
+    Mounts:
+      /etc/euo-certs/ from euo-certs (rw)
+      /etc/ld.so.preload from dynatrace-config (rw,path="oneagent/ld.so.preload")
+      /etc/tls-sidecar/cluster-ca-certs/ from cluster-ca-certs (rw)
+      /opt/dynatrace/oneagent-paas from oneagent-bin (ro)
+      /opt/user-operator/custom-config/ from entity-user-operator-metrics-and-logging (rw)
+      /tmp from strimzi-uo-tmp (rw)
+      /var/lib/dynatrace from dynatrace-config (rw,path="user-operator")
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-42csn (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True
+  Initialized                 True
+  Ready                       False
+  ContainersReady             True
+  PodScheduled                True
+  DisruptionTarget            True
+Volumes:
+  entity-topic-operator-metrics-and-logging:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      pre-prod-kafka-cluster-entity-topic-operator-config
+    Optional:  false
+  strimzi-to-tmp:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     Memory
+    SizeLimit:  5Mi
+  eto-certs:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  pre-prod-kafka-cluster-entity-topic-operator-certs
+    Optional:    false
+  eto-cc-api:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  pre-prod-kafka-cluster-entity-topic-operator-cc-api
+    Optional:    false
+  entity-user-operator-metrics-and-logging:
+    Type:      ConfigMap (a volume populated by a ConfigMap)
+    Name:      pre-prod-kafka-cluster-entity-user-operator-config
+    Optional:  false
+  strimzi-uo-tmp:
+    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:     Memory
+    SizeLimit:  5Mi
+  euo-certs:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  pre-prod-kafka-cluster-entity-user-operator-certs
+    Optional:    false
+  cluster-ca-certs:
+    Type:        Secret (a volume populated by a Secret)
+    SecretName:  pre-prod-kafka-cluster-cluster-ca-cert
+    Optional:    false
+  kube-api-access-42csn:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    ConfigMapOptional:       <nil>
+    DownwardAPI:             true
+    ConfigMapName:           openshift-service-ca.crt
+    ConfigMapOptional:       <nil>
+  oneagent-bin:
+    Type:              CSI (a Container Storage Interface (CSI) volume source)
+    Driver:            csi.oneagent.dynatrace.com
+    FSType:
+    ReadOnly:          true
+    VolumeAttributes:      dynakube=epay-preprod
+                           mode=app
+                           retryTimeout=10m0s
+  dynatrace-input:
+    Type:                Projected (a volume that contains injected data from multiple sources)
+    SecretName:          dynatrace-bootstrapper-config
+    SecretOptionalName:  0xc00128a805
+    SecretName:          dynatrace-bootstrapper-certs
+    SecretOptionalName:  0xc00128a806
+  dynatrace-config:
+    Type:        EmptyDir (a temporary directory that shares a pod's lifetime)
+    Medium:
+    SizeLimit:   <unset>
+QoS Class:       Burstable
+Node-Selectors:  <none>
+Tolerations:     node.kubernetes.io/memory-pressure:NoSchedule op=Exists
+                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                 node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:          <none>
+[osuser@bastion ~]$
