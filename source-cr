@@ -1,36 +1,95 @@
-Subject: NEFT MQ Inbound – Intermittent Queue Manager Mapping Issue
+[osuser@bastion ~]$ oc get kafkaconnector -n dev-kafka
+NAME                   CLUSTER                     CONNECTOR CLASS                                           MAX TASKS   READY
+neft-mq-sink           dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-sink-dest      dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-source         dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1           True
+neft-mq-source-point   dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1			 True
+[osuser@bastion ~]$ oc exec -it dev-kafka-connect-mq-test-connect-0 -n dev-kafka -- \
+> curl http://localhost:8083/
+{"version":"3.9.0","commit":"a60e31147e6b01ee","kafka_cluster_id":"3aEx1xmUSTWs8xSplBnYtA"}[osuser@bastion ~]$ oc exec -it dev-kafka-connect-mq-test-connect-0 -n dev-kafka -- \
+> curl http://localhost:8083/connectors/neft-mq-source/status
+{"name":"neft-mq-source","connector":{"state":"RUNNING","worker_id":"dev-kafka-connect-mq-test-connect-2.dev-kafka-connect-mq-test-connect.dev-kafka.svc:8083"},"tasks":[{"id":0,"state":"RUNNING","worker_id":"dev-kafka-connect-mq-test-connect-2.dev-kafka-connect-mq-test-connect.dev-kafka.svc:8083"}],"type":"source"}[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc exec -it dev-kafka-connect-mq-test-connect-0 -n dev-kafka -- \
+> curl http://localhost:8083/connectors/neft-mq-sink/status
+{"name":"neft-mq-sink","connector":{"state":"RUNNING","worker_id":"dev-kafka-connect-mq-test-connect-0.dev-kafka-connect-mq-test-connect.dev-kafka.svc:8083"},"tasks":[{"id":0,"state":"RUNNING","worker_id":"dev-kafka-connect-mq-test-connect-0.dev-kafka-connect-mq-test-connect.dev-kafka.svc:8083"}],"type":"sink"}[osuser@bastion ~]$
+[osuser@bastion ~]$
 
-Hi Team,
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc exec -it dev-kafka-cluster-broker-0 -n dev-kafka -- \
+> bin/kafka-topics.sh \
+> --bootstrap-server localhost:9093 \
+> --list | grep neft
 
-NEFT **outbound (Kafka → MQ) Sink connector is working successfully** and remains stable using the details shared.
 
-However, **NEFT inbound (MQ → Kafka) Source connector intermittently moves between READY and NOTREADY states**.
 
-**Observed error during failure:**
-`MQRC_Q_MGR_NAME_ERROR (2058)`
 
-This indicates that the listener at **10.176.10.213:2001** intermittently does not correspond to the queue manager **SBIEPAY_NEFT_INWARD**, leading to connection failure during reconnect attempts.
+Using username "osuser".
+Pre-authentication banner message from server:
+| This system is restricted to authorized users. Individuals attempting unautho
+> rized access will be prosecuted. If unauthorized, terminate access now! Click
+> ing on OK indicates your acceptance of the information in the background.
+|
+End of banner message from server
+This system is restricted to authorized users. Individuals attempting unauthorized access will be prosecuted. If unauthorized, terminate access now! Clicking on OK indicates your acceptance of the information in the background.
 
-**Request your support to confirm one of the following for NEFT inbound:**
+Activate the web console with: systemctl enable --now cockpit.socket
 
-1. A **stable/dedicated listener (host:port)** mapped only to queue manager **SBIEPAY_NEFT_INWARD**, OR
-2. The **correct queue manager name** that consistently listens on port **2001**, OR
-3. A **VIP/DNS/CCDT-based endpoint** that always resolves to the active instance of **SBIEPAY_NEFT_INWARD**.
+Register this system with Red Hat Insights: insights-client --register
+Create an account or view all your systems at https://red.ht/insights-dashboard
+Last login: Tue Jan 13 11:30:28 2026 from 10.30.64.58
+[osuser@bastion ~]$ oc get kafkaconnector -n dev-kafka
+NAME                   CLUSTER                     CONNECTOR CLASS                                           MAX TASKS   READY
+neft-mq-sink           dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-sink-dest      dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-source         dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1           True
+neft-mq-source-point   dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1
+[osuser@bastion ~]$ oc exec -it dev-kafka-connect-mq-test-connect-0 -n dev-kafka -- \
+> curl http://localhost:8083/
+{"version":"3.9.0","commit":"a60e31147e6b01ee","kafka_cluster_id":"3aEx1xmUSTWs8xSplBnYtA"}[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc exec -it dev-kafka-connect-mq-test-connect-0 -n dev-kafka -- \
+> curl http://localhost:8083/connectors/neft-mq-source/status
+{"name":"neft-mq-source","connector":{"state":"RUNNING","worker_id":"dev-kafka-connect-mq-test-connect-2.dev-kafka-connect-mq-test-connect.dev-kafka.svc:8083"},"tasks":[{"id":0,"state":"UNASSIGNED","worker_id":"dev-kafka-connect-mq-test-connect-2.dev-kafka-connect-mq-test-connect.dev-kafka.svc:8083"}],"type":"source"}[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc exec -it dev-kafka-connect-mq-test-connect-0 -n dev-kafka -- \
+> curl http://localhost:8083/connectors/neft-mq-sink/status
+{"name":"neft-mq-sink","connector":{"state":"RUNNING","worker_id":"dev-kafka-connect-mq-test-connect-0.dev-kafka-connect-mq-test-connect.dev-kafka.svc:8083"},"tasks":[{"id":0,"state":"RUNNING","worker_id":"dev-kafka-connect-mq-test-connect-0.dev-kafka-connect-mq-test-connect.dev-kafka.svc:8083"}],"type":"sink"}[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$ clear
+[osuser@bastion ~]$ oc get kafkaconnector -n dev-kafka
+NAME                   CLUSTER                     CONNECTOR CLASS                                           MAX TASKS   READY
+neft-mq-sink           dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-sink-dest      dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-source         dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1           True
+neft-mq-source-point   dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1
+[osuser@bastion ~]$ oc get kafkaconnector -n dev-kafka
+NAME                   CLUSTER                     CONNECTOR CLASS                                           MAX TASKS   READY
+neft-mq-sink           dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-sink-dest      dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-source         dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1           True
+neft-mq-source-point   dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1
+[osuser@bastion ~]$ oc exec -it dev-kafka-connect-mq-test-connect-0 -n dev-kafka -- curl http://localhost:8083/connectors/neft-mq-source/status
+{"name":"neft-mq-source","connector":{"state":"RUNNING","worker_id":"dev-kafka-connect-mq-test-connect-2.dev-kafka-connect-mq-test-connect.dev-kafka.svc:8083"},"tasks":[{"id":0,"state":"RUNNING","worker_id":"dev-kafka-connect-mq-test-connect-2.dev-kafka-conoc exec -it dev-kafka-connect-mq-test-connect-0 -n dev-kafka -- curl http://localhost:8083/connectors/neft-mq-sink/status
+{"name":"neft-mq-sink","connector":{"state":"RUNNING","worker_id":"dev-kafka-connect-mq-test-connect-0.dev-kafka-connect-mq-test-connect.dev-kafka.svc:8083"},"tasks":[{"id":0,"state":"RUNNING","worker_id":"dev-kafka-connect-mq-test-connect-0.dev-kafka-conne
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc get kafkaconnector -n dev-kafka
+NAME                   CLUSTER                     CONNECTOR CLASS                                           MAX TASKS   READY
+neft-mq-sink           dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-sink-dest      dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-source         dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1           True
+neft-mq-source-point   dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1
+[osuser@bastion ~]$
 
-Once a stable inbound MQ endpoint is confirmed, we will update Kafka Connect and re-validate immediately.
 
-Thanks & Regards,
-**Saadi**
 
----
-
-### ✅ Why this mail is correct
-
-* Mentions **Sink success** (important signal)
-* Mentions **exact MQ error (2058)**
-* Clearly explains **intermittent behavior**
-* Asks MQ team to **choose a solution**, not debate
-* Short, professional, and technically accurate
-
-Send this as-is.
-After MQ replies, paste their response here — I’ll convert it into the **final, stable Source CR** in one step 👍
