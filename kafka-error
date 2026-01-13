@@ -1,0 +1,93 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  creationTimestamp: '2026-01-13T10:52:42Z'
+  generation: 1
+  labels:
+    strimzi.io/cluster: dev-kafka-connect-mq-test
+  managedFields:
+    - apiVersion: kafka.strimzi.io/v1beta2
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:labels':
+            .: {}
+            'f:strimzi.io/cluster': {}
+        'f:spec':
+          .: {}
+          'f:class': {}
+          'f:config':
+            'f:mq.message.body.format': {}
+            'f:mq.connection.name.list': {}
+            'f:mq.channel.name': {}
+            .: {}
+            'f:value.converter': {}
+            'f:mq.record.builder': {}
+            'f:mq.queue.manager': {}
+            'f:mq.queue': {}
+            'f:topic': {}
+            'f:value.converter.schemas.enable': {}
+          'f:tasksMax': {}
+      manager: Mozilla
+      operation: Update
+      time: '2026-01-13T10:52:42Z'
+    - apiVersion: kafka.strimzi.io/v1beta2
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status':
+          .: {}
+          'f:conditions': {}
+          'f:connectorStatus':
+            .: {}
+            'f:connector':
+              .: {}
+              'f:state': {}
+              'f:worker_id': {}
+            'f:name': {}
+            'f:tasks': {}
+            'f:type': {}
+          'f:observedGeneration': {}
+          'f:tasksMax': {}
+          'f:topics': {}
+      manager: strimzi-cluster-operator
+      operation: Update
+      subresource: status
+      time: '2026-01-13T10:53:08Z'
+  name: neft-mq-source-point
+  namespace: dev-kafka
+  resourceVersion: '569832926'
+  uid: b9ee4bd8-83a5-40fa-85d9-04f095e189c2
+spec:
+  class: com.ibm.eventstreams.connect.mqsource.MQSourceConnector
+  config:
+    mq.channel.name: SBIEPAY2.SVRCONN
+    value.converter: org.apache.kafka.connect.converters.ByteArrayConverter
+    mq.queue.manager: SBI_NEFT
+    mq.queue: NeftInboundQueue
+    mq.record.builder: com.ibm.eventstreams.connect.mqsource.builders.DefaultRecordBuilder
+    value.converter.schemas.enable: 'false'
+    topic: neft.inbound.kafka.topic
+    mq.message.body.format: string
+    mq.connection.name.list: 10.176.10.213(2001)
+  tasksMax: 1
+status:
+  conditions:
+    - lastTransitionTime: '2026-01-13T10:53:08.026725152Z'
+      message: 'The following tasks have failed: 0, see connectorStatus for more details.'
+      reason: Throwable
+      status: 'True'
+      type: NotReady
+  connectorStatus:
+    connector:
+      state: RUNNING
+      worker_id: 'dev-kafka-connect-mq-test-connect-0.dev-kafka-connect-mq-test-connect.dev-kafka.svc:8083'
+    name: neft-mq-source-point
+    tasks:
+      - id: 0
+        state: FAILED
+        trace: "org.apache.kafka.connect.errors.ConnectException: com.ibm.msg.client.jms.DetailedInvalidDestinationRuntimeException: JMSWMQ2008: Failed to open MQ queue 'NeftInboundQueue'.\nJMS attempted to perform an MQOPEN, but IBM MQ reported an error.\nUse the linked exception to determine the cause of this error. Check that the specified queue and queue manager are defined correctly.\n\tat com.ibm.eventstreams.connect.mqsource.util.ExceptionProcessor.handleException(ExceptionProcessor.java:89)\n\tat com.ibm.eventstreams.connect.mqsource.MQSourceTask.poll(MQSourceTask.java:266)\n\tat org.apache.kafka.connect.runtime.AbstractWorkerSourceTask.poll(AbstractWorkerSourceTask.java:466)\n\tat org.apache.kafka.connect.runtime.AbstractWorkerSourceTask.execute(AbstractWorkerSourceTask.java:354)\n\tat org.apache.kafka.connect.runtime.WorkerTask.doRun(WorkerTask.java:226)\n\tat org.apache.kafka.connect.runtime.WorkerTask.run(WorkerTask.java:281)\n\tat org.apache.kafka.connect.runtime.AbstractWorkerSourceTask.run(AbstractWorkerSourceTask.java:79)\n\tat org.apache.kafka.connect.runtime.isolation.Plugins.lambda$withClassLoader$1(Plugins.java:238)\n\tat java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)\n\tat java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)\n\tat java.base/java.lang.Thread.run(Thread.java:840)\nCaused by: com.ibm.msg.client.jms.DetailedInvalidDestinationRuntimeException: JMSWMQ2008: Failed to open MQ queue 'NeftInboundQueue'.\nJMS attempted to perform an MQOPEN, but IBM MQ reported an error.\nUse the linked exception to determine the cause of this error. Check that the specified queue and queue manager are defined correctly.\n\tat com.ibm.msg.client.jms.DetailedInvalidDestinationException.getUnchecked(DetailedInvalidDestinationException.java:275)\n\tat com.ibm.msg.client.jms.internal.JmsErrorUtils.convertJMSException(JmsErrorUtils.java:173)\n\tat com.ibm.msg.client.jms.internal.JmsContextImpl.createConsumer(JmsContextImpl.java:420)\n\tat com.ibm.eventstreams.connect.mqsource.JMSWorker.receive(JMSWorker.java:252)\n\tat com.ibm.eventstreams.connect.mqsource.MQSourceTask.pollSourceQueue(MQSourceTask.java:433)\n\tat com.ibm.eventstreams.connect.mqsource.MQSourceTask.internalPoll(MQSourceTask.java:338)\n\tat com.ibm.eventstreams.connect.mqsource.MQSourceTask.poll(MQSourceTask.java:262)\n\t... 11 more\nCaused by: com.ibm.mq.MQException: JMSCMQ0001: IBM MQ call failed with compcode '2' ('MQCC_FAILED') reason '2085' ('MQRC_UNKNOWN_OBJECT_NAME').\n\tat com.ibm.msg.client.wmq.common.internal.Reason.createException(Reason.java:217)\n\tat com.ibm.msg.client.wmq.internal.WMQMessageConsumer.checkJmqiCallSuccess(WMQMessageConsumer.java:222)\n\tat com.ibm.msg.client.wmq.internal.WMQMessageConsumer.checkJmqiCallSuccess(WMQMessageConsumer.java:156)\n\tat com.ibm.msg.client.wmq.internal.WMQConsumerShadow.initialize(WMQConsumerShadow.java:1172)\n\tat com.ibm.msg.client.wmq.internal.WMQSyncConsumerShadow.initialize(WMQSyncConsumerShadow.java:133)\n\tat com.ibm.msg.client.wmq.internal.WMQMessageConsumer.<init>(WMQMessageConsumer.java:486)\n\tat com.ibm.msg.client.wmq.internal.WMQSession.createConsumer(WMQSession.java:969)\n\tat com.ibm.msg.client.jms.internal.JmsSessionImpl.createConsumer(JmsSessionImpl.java:1012)\n\tat com.ibm.msg.client.jms.internal.JmsSessionImpl.createConsumer(JmsSessionImpl.java:1097)\n\tat com.ibm.msg.client.jms.internal.JmsContextImpl$SessionWrapper.createConsumer(JmsContextImpl.java:1989)\n\tat com.ibm.msg.client.jms.internal.JmsContextImpl.createConsumer(JmsContextImpl.java:407)\n\t... 15 more\n"
+        worker_id: 'dev-kafka-connect-mq-test-connect-0.dev-kafka-connect-mq-test-connect.dev-kafka.svc:8083'
+    type: source
+  observedGeneration: 1
+  tasksMax: 1
+  topics: []
