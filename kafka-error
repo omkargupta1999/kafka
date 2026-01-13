@@ -1,23 +1,194 @@
-Subject: NEFT Inbound MQ – Queue Manager & Listener Mapping Clarification
+Perfect 👍
+Below is a **clean, step-by-step test runbook** with **exact commands**, focused **only on Kafka side**.
+You can use this for **testing, UAT sign-off, KT, or audit**.
 
-Hi Team,
+---
 
-NEFT **outbound (Kafka → MQ) connectivity is working successfully** using the details shared earlier.
+# ✅ NEFT MQ ↔ Kafka – Test Steps (Kafka Side)
 
-However, **NEFT inbound (MQ → Kafka)** connection is failing with the below error:
+## 0️⃣ Pre-check (Must be READY)
 
-`MQRC_Q_MGR_NAME_ERROR (2058)`
+```bash
+oc get kafkaconnector -n dev-kafka
+```
 
-This indicates a mismatch between the **queue manager name and the listener (host/port)** for the inbound flow.
+Expected:
 
-Kindly confirm the **exact inbound MQ connection details** for **NeftInboundQueue**:
+```
+neft-mq-source    Ready
+neft-mq-sink      Ready
+```
 
-* Queue Manager name
-* Host / IP
-* Port
-* SVRCONN channel
+If both are **Ready**, proceed.
 
-Once the correct inbound QM–host–port mapping is confirmed, we will update Kafka Connect and re-test immediately.
+---
 
-Thanks,
-**Saadi**
+## 1️⃣ Verify Kafka Connect is Healthy
+
+```bash
+oc exec -it dev-kafka-connect-mq-test-connect-0 -n dev-kafka -- \
+curl http://localhost:8083/
+```
+
+Expected output (example):
+
+```json
+{"version":"3.9.0","commit":"...","kafka_cluster_id":"..."}
+```
+
+---
+
+## 2️⃣ Verify Connectors Status (Runtime)
+
+```bash
+oc exec -it dev-kafka-connect-mq-test-connect-0 -n dev-kafka -- \
+curl http://localhost:8083/connectors/neft-mq-source/status
+```
+
+```bash
+oc exec -it dev-kafka-connect-mq-test-connect-0 -n dev-kafka -- \
+curl http://localhost:8083/connectors/neft-mq-sink/status
+```
+
+Expected in both:
+
+```json
+"state": "RUNNING"
+```
+
+---
+
+## 3️⃣ Verify Kafka Topics Exist
+
+Run from **any Kafka broker pod**:
+
+```bash
+oc exec -it dev-kafka-cluster-broker-0 -n dev-kafka -- \
+bin/kafka-topics.sh \
+--bootstrap-server localhost:9093 \
+--list | grep neft
+```
+
+Expected:
+
+```
+neft.inbound.kafka.topic
+neft.outbound.kafka.topic
+```
+
+---
+
+## 4️⃣ Test MQ → Kafka (Source Connector)
+
+### Step 4.1 – Ask MQ team to put a test message into:
+
+```
+MQ Queue: NeftInboundQueue
+```
+
+### Step 4.2 – Consume from Kafka (Our Side)
+
+```bash
+oc exec -it dev-kafka-cluster-broker-0 -n dev-kafka -- \
+bin/kafka-console-consumer.sh \
+--bootstrap-server localhost:9093 \
+--topic neft.inbound.kafka.topic \
+--from-beginning
+```
+
+Expected:
+
+* Message from MQ appears in Kafka consumer
+
+✔ **MQ → Kafka verified**
+
+---
+
+## 5️⃣ Test Kafka → MQ (Sink Connector)
+
+### Step 5.1 – Produce message to Kafka
+
+```bash
+oc exec -it dev-kafka-cluster-broker-0 -n dev-kafka -- \
+bin/kafka-console-producer.sh \
+--bootstrap-server localhost:9093 \
+--topic neft.outbound.kafka.topic
+```
+
+Type:
+
+```
+TEST MESSAGE FROM KAFKA
+```
+
+Press `Ctrl+D` to exit.
+
+### Step 5.2 – MQ Team Verification
+
+Ask MQ team to confirm message received in:
+
+```
+MQ Queue: NeftOutBoundQueue
+```
+
+✔ **Kafka → MQ verified**
+
+---
+
+## 6️⃣ (Optional) Check Source Lag / Activity
+
+```bash
+oc exec -it dev-kafka-connect-mq-test-connect-0 -n dev-kafka -- \
+curl http://localhost:8083/connectors/neft-mq-source/status | jq .
+```
+
+Look for:
+
+* task state = `RUNNING`
+* no recent errors
+
+---
+
+## 7️⃣ Evidence Collection (For Closure / Audit)
+
+Save outputs of:
+
+```bash
+oc get kafkaconnector -n dev-kafka
+```
+
+```bash
+curl http://localhost:8083/connectors/neft-mq-source/status
+curl http://localhost:8083/connectors/neft-mq-sink/status
+```
+
+Plus:
+
+* Kafka consumer output (Step 4)
+* MQ confirmation (Step 5)
+
+---
+
+# 🟢 FINAL SUCCESS CRITERIA
+
+| Check            | Result            |
+| ---------------- | ----------------- |
+| Source connector | RUNNING           |
+| Sink connector   | RUNNING           |
+| MQ → Kafka       | Message received  |
+| Kafka → MQ       | Message delivered |
+| Errors           | NONE              |
+
+---
+
+## ✅ One-line Summary (You can say this confidently)
+
+> “NEFT MQ ↔ Kafka integration is tested end-to-end from Kafka side, with both source and sink connectors running and messages flowing successfully.”
+
+If you want next:
+
+* 📄 Convert this into **runbook / KT doc**
+* 🧾 Create **UAT sign-off checklist**
+* 🚀 Prepare **RTGS test steps**
+
+Just say 👍
