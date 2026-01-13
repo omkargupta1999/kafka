@@ -1,0 +1,72 @@
+"STEP 1 | CONNECTIVITY CHECK 
+
+./kafka-broker-api-versions.sh --bootstrap-server localhost:9092
+
+"STEP 2 | CONTROLLER STATUS 
+./kafka-metadata-quorum.sh --bootstrap-server localhost:9092 describe --status
+
+"STEP 3 | BROKER LIST 
+./kafka-metadata-shell.sh --bootstrap-server localhost:9092 --describe
+
+./kafka-metadata-shell.sh \
+  --bootstrap-server localhost:9092 \
+  --describe
+  
+"STEP 4 | TOPIC LIST 
+./kafka-topics.sh --bootstrap-server localhost:9092 --list
+
+"STEP 5 | TOPIC HEALTH 
+./kafka-topics.sh --bootstrap-server localhost:9092 --describe
+
+"STEP 6 | UNDER REPLICATED PARTITIONS 
+./kafka-topics.sh --bootstrap-server localhost:9092 --describe | grep -i "Under-replicated" || echo "NONE"
+
+
+"STEP 7 | CONSUMER GROUP LIST 
+./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+
+
+"STEP 8 | CONSUMER LAG 
+./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --all-groups --describe
+
+
+"STEP 9 | OFFSET SNAPSHOT 
+./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --all-topics --time -1
+
+
+"STEP 10 | PRODUCER TEST | $DATE"
+./kafka-console-producer.sh --bootstrap-server localhost:9092 --topic smm-test-topic
+
+
+Type 3–5 messages → Ctrl+C.
+
+"STEP 11 | CONSUMER TEST 
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic smm-test-topic --from-beginning --max-messages 5
+
+
+ "STEP 12 | MIRRORMAKER STATUS
+curl -s http://localhost:8083/connectors | jq
+
+```bash
+curl -s http://localhost:8083/connectors/<connector-name>/status | jq
+```
+
+"STEP 13 | ACL CHECK 
+./kafka-acls.sh --bootstrap-server localhost:9092 --list
+
+
+"STEP 14 | DISK USAGE 
+df -h | grep kafka
+du -sh /var/lib/kafka/*
+
+
+
+"STEP 15 | LOGS COLLECTION 
+{
+echo "===== TIMESTAMP ====="
+date
+echo "===== TOPICS ====="
+$KAFKA_HOME/bin/kafka-topics.sh --bootstrap-server $BOOTSTRAP_SERVER --describe
+echo "===== CONSUMER GROUPS ====="
+$KAFKA_HOME/bin/kafka-consumer-groups.sh --bootstrap-server $BOOTSTRAP_SERVER --all-groups --describe
+} > kafka-dr-drill-logs-collection.log
