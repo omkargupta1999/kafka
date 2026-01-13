@@ -1,272 +1,912 @@
-Understood. Below is a **STRICTLY SEQUENTIAL, COPY-PASTE FRIENDLY Kafka Monitoring Runbook** for **DC–DR drills**, written exactly in the order it should be executed.
-
-Assumptions:
-
-* Kafka platform: Apache Kafka
-* Broker: `localhost:9092`
-* Run from Kafka client/broker node
-* Adjust `KAFKA_HOME` if needed
-
----
-
-# Kafka DC–DR Monitoring Runbook (SEQUENTIAL)
-
----
-
-## STEP 0 — Set Environment (MANDATORY)
-
-```bash
-export KAFKA_HOME=/opt/kafka
-export BOOTSTRAP_SERVER=localhost:9092
-export DATE=$(date '+%Y-%m-%d %H:%M:%S')
-```
-
----
-
-## STEP 1 — Verify Kafka Connectivity
-
-```bash
-echo "STEP 1 | CONNECTIVITY CHECK | $DATE"
-$KAFKA_HOME/bin/kafka-broker-api-versions.sh \
-  --bootstrap-server $BOOTSTRAP_SERVER
-```
-
-Expected: No timeout or connection error.
-
----
-
-## STEP 2 — Identify Active Controller
-
-```bash
-echo "STEP 2 | CONTROLLER STATUS | $DATE"
-$KAFKA_HOME/bin/kafka-metadata-quorum.sh \
-  --bootstrap-server $BOOTSTRAP_SERVER \
-  describe --status
-```
-
-Expected: **1 active leader**
-
----
-
-## STEP 3 — List All Brokers
-
-```bash
-echo "STEP 3 | BROKER LIST | $DATE"
-$KAFKA_HOME/bin/kafka-metadata-shell.sh \
-  --bootstrap-server $BOOTSTRAP_SERVER \
+sh-5.1$ cd bin
+sh-5.1$ ./kafka-broker-api-versions.sh --bootstrap-server localhost:9092
+pre-prod-kafka-cluster-broker-2.pre-prod-kafka-cluster-kafka-brokers.pre-prod-kafka.svc:9092 (id: 2 rack: null) -> (
+        Produce(0): 0 to 11 [usable: 11],
+        Fetch(1): 0 to 17 [usable: 17],
+        ListOffsets(2): 0 to 9 [usable: 9],
+        Metadata(3): 0 to 12 [usable: 12],
+        LeaderAndIsr(4): UNSUPPORTED,
+        StopReplica(5): UNSUPPORTED,
+        UpdateMetadata(6): UNSUPPORTED,
+        ControlledShutdown(7): UNSUPPORTED,
+        OffsetCommit(8): 0 to 9 [usable: 9],
+        OffsetFetch(9): 0 to 9 [usable: 9],
+        FindCoordinator(10): 0 to 6 [usable: 6],
+        JoinGroup(11): 0 to 9 [usable: 9],
+        Heartbeat(12): 0 to 4 [usable: 4],
+        LeaveGroup(13): 0 to 5 [usable: 5],
+        SyncGroup(14): 0 to 5 [usable: 5],
+        DescribeGroups(15): 0 to 5 [usable: 5],
+        ListGroups(16): 0 to 5 [usable: 5],
+        SaslHandshake(17): 0 to 1 [usable: 1],
+        ApiVersions(18): 0 to 4 [usable: 4],
+        CreateTopics(19): 0 to 7 [usable: 7],
+        DeleteTopics(20): 0 to 6 [usable: 6],
+        DeleteRecords(21): 0 to 2 [usable: 2],
+        InitProducerId(22): 0 to 5 [usable: 5],
+        OffsetForLeaderEpoch(23): 0 to 4 [usable: 4],
+        AddPartitionsToTxn(24): 0 to 5 [usable: 5],
+        AddOffsetsToTxn(25): 0 to 4 [usable: 4],
+        EndTxn(26): 0 to 4 [usable: 4],
+        WriteTxnMarkers(27): 0 to 1 [usable: 1],
+        TxnOffsetCommit(28): 0 to 4 [usable: 4],
+        DescribeAcls(29): 0 to 3 [usable: 3],
+        CreateAcls(30): 0 to 3 [usable: 3],
+        DeleteAcls(31): 0 to 3 [usable: 3],
+        DescribeConfigs(32): 0 to 4 [usable: 4],
+        AlterConfigs(33): 0 to 2 [usable: 2],
+        AlterReplicaLogDirs(34): 0 to 2 [usable: 2],
+        DescribeLogDirs(35): 0 to 4 [usable: 4],
+        SaslAuthenticate(36): 0 to 2 [usable: 2],
+        CreatePartitions(37): 0 to 3 [usable: 3],
+        CreateDelegationToken(38): 0 to 3 [usable: 3],
+        RenewDelegationToken(39): 0 to 2 [usable: 2],
+        ExpireDelegationToken(40): 0 to 2 [usable: 2],
+        DescribeDelegationToken(41): 0 to 3 [usable: 3],
+        DeleteGroups(42): 0 to 2 [usable: 2],
+        ElectLeaders(43): 0 to 2 [usable: 2],
+        IncrementalAlterConfigs(44): 0 to 1 [usable: 1],
+        AlterPartitionReassignments(45): 0 [usable: 0],
+        ListPartitionReassignments(46): 0 [usable: 0],
+        OffsetDelete(47): 0 [usable: 0],
+        DescribeClientQuotas(48): 0 to 1 [usable: 1],
+        AlterClientQuotas(49): 0 to 1 [usable: 1],
+        DescribeUserScramCredentials(50): 0 [usable: 0],
+        AlterUserScramCredentials(51): 0 [usable: 0],
+        DescribeQuorum(55): 0 to 2 [usable: 2],
+        AlterPartition(56): UNSUPPORTED,
+        UpdateFeatures(57): 0 to 1 [usable: 1],
+        Envelope(58): UNSUPPORTED,
+        DescribeCluster(60): 0 to 1 [usable: 1],
+        DescribeProducers(61): 0 [usable: 0],
+        UnregisterBroker(64): 0 [usable: 0],
+        DescribeTransactions(65): 0 [usable: 0],
+        ListTransactions(66): 0 to 1 [usable: 1],
+        AllocateProducerIds(67): UNSUPPORTED,
+        ConsumerGroupHeartbeat(68): 0 [usable: 0],
+        ConsumerGroupDescribe(69): 0 [usable: 0],
+        GetTelemetrySubscriptions(71): UNSUPPORTED,
+        PushTelemetry(72): UNSUPPORTED,
+        ListClientMetricsResources(74): 0 [usable: 0],
+        DescribeTopicPartitions(75): 0 [usable: 0],
+        ShareGroupHeartbeat(76): UNSUPPORTED,
+        ShareGroupDescribe(77): UNSUPPORTED,
+        ShareFetch(78): UNSUPPORTED,
+        ShareAcknowledge(79): UNSUPPORTED,
+        AddRaftVoter(80): 0 [usable: 0],
+        RemoveRaftVoter(81): 0 [usable: 0],
+        InitializeShareGroupState(83): UNSUPPORTED,
+        ReadShareGroupState(84): UNSUPPORTED,
+        WriteShareGroupState(85): UNSUPPORTED,
+        DeleteShareGroupState(86): UNSUPPORTED,
+        ReadShareGroupStateSummary(87): UNSUPPORTED
+)
+pre-prod-kafka-cluster-broker-1.pre-prod-kafka-cluster-kafka-brokers.pre-prod-kafka.svc:9092 (id: 1 rack: null) -> (
+        Produce(0): 0 to 11 [usable: 11],
+        Fetch(1): 0 to 17 [usable: 17],
+        ListOffsets(2): 0 to 9 [usable: 9],
+        Metadata(3): 0 to 12 [usable: 12],
+        LeaderAndIsr(4): UNSUPPORTED,
+        StopReplica(5): UNSUPPORTED,
+        UpdateMetadata(6): UNSUPPORTED,
+        ControlledShutdown(7): UNSUPPORTED,
+        OffsetCommit(8): 0 to 9 [usable: 9],
+        OffsetFetch(9): 0 to 9 [usable: 9],
+        FindCoordinator(10): 0 to 6 [usable: 6],
+        JoinGroup(11): 0 to 9 [usable: 9],
+        Heartbeat(12): 0 to 4 [usable: 4],
+        LeaveGroup(13): 0 to 5 [usable: 5],
+        SyncGroup(14): 0 to 5 [usable: 5],
+        DescribeGroups(15): 0 to 5 [usable: 5],
+        ListGroups(16): 0 to 5 [usable: 5],
+        SaslHandshake(17): 0 to 1 [usable: 1],
+        ApiVersions(18): 0 to 4 [usable: 4],
+        CreateTopics(19): 0 to 7 [usable: 7],
+        DeleteTopics(20): 0 to 6 [usable: 6],
+        DeleteRecords(21): 0 to 2 [usable: 2],
+        InitProducerId(22): 0 to 5 [usable: 5],
+        OffsetForLeaderEpoch(23): 0 to 4 [usable: 4],
+        AddPartitionsToTxn(24): 0 to 5 [usable: 5],
+        AddOffsetsToTxn(25): 0 to 4 [usable: 4],
+        EndTxn(26): 0 to 4 [usable: 4],
+        WriteTxnMarkers(27): 0 to 1 [usable: 1],
+        TxnOffsetCommit(28): 0 to 4 [usable: 4],
+        DescribeAcls(29): 0 to 3 [usable: 3],
+        CreateAcls(30): 0 to 3 [usable: 3],
+        DeleteAcls(31): 0 to 3 [usable: 3],
+        DescribeConfigs(32): 0 to 4 [usable: 4],
+        AlterConfigs(33): 0 to 2 [usable: 2],
+        AlterReplicaLogDirs(34): 0 to 2 [usable: 2],
+        DescribeLogDirs(35): 0 to 4 [usable: 4],
+        SaslAuthenticate(36): 0 to 2 [usable: 2],
+        CreatePartitions(37): 0 to 3 [usable: 3],
+        CreateDelegationToken(38): 0 to 3 [usable: 3],
+        RenewDelegationToken(39): 0 to 2 [usable: 2],
+        ExpireDelegationToken(40): 0 to 2 [usable: 2],
+        DescribeDelegationToken(41): 0 to 3 [usable: 3],
+        DeleteGroups(42): 0 to 2 [usable: 2],
+        ElectLeaders(43): 0 to 2 [usable: 2],
+        IncrementalAlterConfigs(44): 0 to 1 [usable: 1],
+        AlterPartitionReassignments(45): 0 [usable: 0],
+        ListPartitionReassignments(46): 0 [usable: 0],
+        OffsetDelete(47): 0 [usable: 0],
+        DescribeClientQuotas(48): 0 to 1 [usable: 1],
+        AlterClientQuotas(49): 0 to 1 [usable: 1],
+        DescribeUserScramCredentials(50): 0 [usable: 0],
+        AlterUserScramCredentials(51): 0 [usable: 0],
+        DescribeQuorum(55): 0 to 2 [usable: 2],
+        AlterPartition(56): UNSUPPORTED,
+        UpdateFeatures(57): 0 to 1 [usable: 1],
+        Envelope(58): UNSUPPORTED,
+        DescribeCluster(60): 0 to 1 [usable: 1],
+        DescribeProducers(61): 0 [usable: 0],
+        UnregisterBroker(64): 0 [usable: 0],
+        DescribeTransactions(65): 0 [usable: 0],
+        ListTransactions(66): 0 to 1 [usable: 1],
+        AllocateProducerIds(67): UNSUPPORTED,
+        ConsumerGroupHeartbeat(68): 0 [usable: 0],
+        ConsumerGroupDescribe(69): 0 [usable: 0],
+        GetTelemetrySubscriptions(71): UNSUPPORTED,
+        PushTelemetry(72): UNSUPPORTED,
+        ListClientMetricsResources(74): 0 [usable: 0],
+        DescribeTopicPartitions(75): 0 [usable: 0],
+        ShareGroupHeartbeat(76): UNSUPPORTED,
+        ShareGroupDescribe(77): UNSUPPORTED,
+        ShareFetch(78): UNSUPPORTED,
+        ShareAcknowledge(79): UNSUPPORTED,
+        AddRaftVoter(80): 0 [usable: 0],
+        RemoveRaftVoter(81): 0 [usable: 0],
+        InitializeShareGroupState(83): UNSUPPORTED,
+        ReadShareGroupState(84): UNSUPPORTED,
+        WriteShareGroupState(85): UNSUPPORTED,
+        DeleteShareGroupState(86): UNSUPPORTED,
+        ReadShareGroupStateSummary(87): UNSUPPORTED
+)
+pre-prod-kafka-cluster-broker-0.pre-prod-kafka-cluster-kafka-brokers.pre-prod-kafka.svc:9092 (id: 0 rack: null) -> (
+        Produce(0): 0 to 11 [usable: 11],
+        Fetch(1): 0 to 17 [usable: 17],
+        ListOffsets(2): 0 to 9 [usable: 9],
+        Metadata(3): 0 to 12 [usable: 12],
+        LeaderAndIsr(4): UNSUPPORTED,
+        StopReplica(5): UNSUPPORTED,
+        UpdateMetadata(6): UNSUPPORTED,
+        ControlledShutdown(7): UNSUPPORTED,
+        OffsetCommit(8): 0 to 9 [usable: 9],
+        OffsetFetch(9): 0 to 9 [usable: 9],
+        FindCoordinator(10): 0 to 6 [usable: 6],
+        JoinGroup(11): 0 to 9 [usable: 9],
+        Heartbeat(12): 0 to 4 [usable: 4],
+        LeaveGroup(13): 0 to 5 [usable: 5],
+        SyncGroup(14): 0 to 5 [usable: 5],
+        DescribeGroups(15): 0 to 5 [usable: 5],
+        ListGroups(16): 0 to 5 [usable: 5],
+        SaslHandshake(17): 0 to 1 [usable: 1],
+        ApiVersions(18): 0 to 4 [usable: 4],
+        CreateTopics(19): 0 to 7 [usable: 7],
+        DeleteTopics(20): 0 to 6 [usable: 6],
+        DeleteRecords(21): 0 to 2 [usable: 2],
+        InitProducerId(22): 0 to 5 [usable: 5],
+        OffsetForLeaderEpoch(23): 0 to 4 [usable: 4],
+        AddPartitionsToTxn(24): 0 to 5 [usable: 5],
+        AddOffsetsToTxn(25): 0 to 4 [usable: 4],
+        EndTxn(26): 0 to 4 [usable: 4],
+        WriteTxnMarkers(27): 0 to 1 [usable: 1],
+        TxnOffsetCommit(28): 0 to 4 [usable: 4],
+        DescribeAcls(29): 0 to 3 [usable: 3],
+        CreateAcls(30): 0 to 3 [usable: 3],
+        DeleteAcls(31): 0 to 3 [usable: 3],
+        DescribeConfigs(32): 0 to 4 [usable: 4],
+        AlterConfigs(33): 0 to 2 [usable: 2],
+        AlterReplicaLogDirs(34): 0 to 2 [usable: 2],
+        DescribeLogDirs(35): 0 to 4 [usable: 4],
+        SaslAuthenticate(36): 0 to 2 [usable: 2],
+        CreatePartitions(37): 0 to 3 [usable: 3],
+        CreateDelegationToken(38): 0 to 3 [usable: 3],
+        RenewDelegationToken(39): 0 to 2 [usable: 2],
+        ExpireDelegationToken(40): 0 to 2 [usable: 2],
+        DescribeDelegationToken(41): 0 to 3 [usable: 3],
+        DeleteGroups(42): 0 to 2 [usable: 2],
+        ElectLeaders(43): 0 to 2 [usable: 2],
+        IncrementalAlterConfigs(44): 0 to 1 [usable: 1],
+        AlterPartitionReassignments(45): 0 [usable: 0],
+        ListPartitionReassignments(46): 0 [usable: 0],
+        OffsetDelete(47): 0 [usable: 0],
+        DescribeClientQuotas(48): 0 to 1 [usable: 1],
+        AlterClientQuotas(49): 0 to 1 [usable: 1],
+        DescribeUserScramCredentials(50): 0 [usable: 0],
+        AlterUserScramCredentials(51): 0 [usable: 0],
+        DescribeQuorum(55): 0 to 2 [usable: 2],
+        AlterPartition(56): UNSUPPORTED,
+        UpdateFeatures(57): 0 to 1 [usable: 1],
+        Envelope(58): UNSUPPORTED,
+        DescribeCluster(60): 0 to 1 [usable: 1],
+        DescribeProducers(61): 0 [usable: 0],
+        UnregisterBroker(64): 0 [usable: 0],
+        DescribeTransactions(65): 0 [usable: 0],
+        ListTransactions(66): 0 to 1 [usable: 1],
+        AllocateProducerIds(67): UNSUPPORTED,
+        ConsumerGroupHeartbeat(68): 0 [usable: 0],
+        ConsumerGroupDescribe(69): 0 [usable: 0],
+        GetTelemetrySubscriptions(71): UNSUPPORTED,
+        PushTelemetry(72): UNSUPPORTED,
+        ListClientMetricsResources(74): 0 [usable: 0],
+        DescribeTopicPartitions(75): 0 [usable: 0],
+        ShareGroupHeartbeat(76): UNSUPPORTED,
+        ShareGroupDescribe(77): UNSUPPORTED,
+        ShareFetch(78): UNSUPPORTED,
+        ShareAcknowledge(79): UNSUPPORTED,
+        AddRaftVoter(80): 0 [usable: 0],
+        RemoveRaftVoter(81): 0 [usable: 0],
+        InitializeShareGroupState(83): UNSUPPORTED,
+        ReadShareGroupState(84): UNSUPPORTED,
+        WriteShareGroupState(85): UNSUPPORTED,
+        DeleteShareGroupState(86): UNSUPPORTED,
+        ReadShareGroupStateSummary(87): UNSUPPORTED
+)
+sh-5.1$ ./kafka-metadata-quorum.sh --bootstrap-server localhost:9092 describe --status
+ClusterId:              2sXckbUvRNGmipTlg1qknw
+LeaderId:               3
+LeaderEpoch:            53093
+HighWatermark:          13734907
+MaxFollowerLag:         0
+MaxFollowerLagTimeMs:   0
+CurrentVoters:          [{"id": 3, "directoryId": null, "endpoints": ["CONTROLPLANE-9090://pre-prod-kafka-cluster-controller-3.pre-prod-kafka-cluster-kafka-brokers.pre-prod-kafka.svc.cluster.local:9090"]}, {"id": 4, "directoryId": null, "endpoints": ["CONTROLPLANE-9090://pre-prod-kafka-cluster-controller-4.pre-prod-kafka-cluster-kafka-brokers.pre-prod-kafka.svc.cluster.local:9090"]}, {"id": 5, "directoryId": null, "endpoints": ["CONTROLPLANE-9090://pre-prod-kafka-cluster-controller-5.pre-prod-kafka-cluster-kafka-brokers.pre-prod-kafka.svc.cluster.local:9090"]}]
+CurrentObservers:       [{"id": 2, "directoryId": "FFibsDRxJwiunxRfKUyteg"}, {"id": 1, "directoryId": "8mKITP78KKrvEAhs5BxQTw"}, {"id": 0, "directoryId": "gJUrOAw_sXKZvRL-zPNLaA"}]
+sh-5.1$ ./kafka-metadata-shell.sh --bootstrap-server localhost:9092 --describe
+usage: kafka-metadata-shell [-h] [--snapshot SNAPSHOT] [command [command ...]]
+kafka-metadata-shell: error: unrecognized arguments: '--bootstrap-server'
+sh-5.1$ ls
+connect-distributed.sh        kafka-client-metrics.sh    kafka-consumer-perf-test.sh  kafka-get-offsets.sh      kafka-mirror-maker.sh          kafka-server-stop.sh                kafka-verifiable-producer.sh
+connect-mirror-maker.sh       kafka-cluster.sh           kafka-delegation-tokens.sh   kafka-jmx.sh              kafka-producer-perf-test.sh    kafka-storage.sh                    trogdor.sh
+connect-plugin-path.sh        kafka-configs.sh           kafka-delete-records.sh      kafka-leader-election.sh  kafka-reassign-partitions.sh   kafka-streams-application-reset.sh  zookeeper-security-migration.sh
+connect-standalone.sh         kafka-console-consumer.sh  kafka-dump-log.sh            kafka-log-dirs.sh         kafka-replica-verification.sh  kafka-topics.sh                     zookeeper-server-start.sh
+kafka-acls.sh                 kafka-console-producer.sh  kafka-e2e-latency.sh         kafka-metadata-quorum.sh  kafka-run-class.sh             kafka-transactions.sh               zookeeper-server-stop.sh
+kafka-broker-api-versions.sh  kafka-consumer-groups.sh   kafka-features.sh            kafka-metadata-shell.sh   kafka-server-start.sh          kafka-verifiable-consumer.sh        zookeeper-shell.sh
+sh-5.1$ ls | grep -i meta
+kafka-metadata-quorum.sh
+kafka-metadata-shell.sh
+sh-5.1$ ./kafka-metadata-shell.sh --bootstrap-server localhost:9092 --describe
+usage: kafka-metadata-shell [-h] [--snapshot SNAPSHOT] [command [command ...]]
+kafka-metadata-shell: error: unrecognized arguments: '--bootstrap-server'
+sh-5.1$ ./kafka-metadata-shell.sh bootstrap-server localhost:9092 --describe
+usage: kafka-metadata-shell [-h] [--snapshot SNAPSHOT] [command [command ...]]
+kafka-metadata-shell: error: unrecognized arguments: '--describe'
+sh-5.1$ ./kafka-metadata-shell.sh bootstrap-server localhost:9092 describe
+Unexpected error: You must specify either a raft manager or a snapshot file reader.
+java.lang.RuntimeException: You must specify either a raft manager or a snapshot file reader.
+        at org.apache.kafka.shell.MetadataShell.run(MetadataShell.java:198)
+        at org.apache.kafka.shell.MetadataShell.main(MetadataShell.java:271)
+sh-5.1$ ./kafka-metadata-shell.sh \
+  --bootstrap-server localhost:9092 \
   --describe
-```
+usage: kafka-metadata-shell [-h] [--snapshot SNAPSHOT] [command [command ...]]
+kafka-metadata-shell: error: unrecognized arguments: '--bootstrap-server'
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
+__consumer_offsets
+heartbeats
+merchant-email-notification-topic
+merchant_email_notification_topic
+merchant_report_alert_topic
+merchant_report_topic
+merchant_sms_notification_topic
+mirrormaker2-cluster-configs
+mirrormaker2-cluster-offsets
+mirrormaker2-cluster-status
+mm2-offset-syncs.target.internal
+ops_payout_topic
+ops_recon_fail_ack_topic
+ops_recon_file_topic
+ops_recon_record_duplicate_topic
+ops_recon_record_matched_topic
+ops_recon_record_unmatched_topic
+ops_refund_adjust_confirmation_topic
+ops_refund_adjust_detail_topic
+ops_report_confirmation_topic
+ops_report_generation_topic
+process_bookingDetails_topic
+process_bulk_refund_topic
+recon_fail_ack_topic
+recon_record_duplicate_topic
+recon_record_matched_topic
+recon_record_unmatched_topic
+source.checkpoints.internal
+strimzi.cruisecontrol.metrics
+strimzi.cruisecontrol.modeltrainingsamples
+strimzi.cruisecontrol.partitionmetricsamples
+transaction_email_notification_topic
+transaction_push_verification_topic
+transaction_sms_notification_topic
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --describe
+Topic: mirrormaker2-cluster-offsets     TopicId: 8drKW3n0Q9y40JzO-nKL3g PartitionCount: 25      ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=compact,segment.bytes=1073741824
+        Topic: mirrormaker2-cluster-offsets     Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 1    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 2    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 3    Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 4    Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 5    Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 6    Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 7    Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 8    Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 9    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 10   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 11   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 12   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 13   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 14   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 15   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 16   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 17   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 18   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 19   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 20   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 21   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 22   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 23   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-offsets     Partition: 24   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: heartbeats       TopicId: fNiWgS7EQaKnWvfpKUzFRA PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=compact,segment.bytes=1073741824
+        Topic: heartbeats       Partition: 0    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: ops_report_confirmation_topic    TopicId: etQSGrVNTaWug7_4OAMyHA PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: ops_report_confirmation_topic    Partition: 0    Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: mm2-offset-syncs.target.internal TopicId: ZZOayG5kQcm2dU2I_soL6w PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=compact,segment.bytes=1073741824
+        Topic: mm2-offset-syncs.target.internal Partition: 0    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: strimzi.cruisecontrol.metrics    TopicId: 7SJKHnEPQVyYqBJNvSqJvg PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=1,cleanup.policy=delete,segment.bytes=1073741824,retention.ms=18000000
+        Topic: strimzi.cruisecontrol.metrics    Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: transaction_email_notification_topic     TopicId: XZy-cSX4RaOO0Triq2YhxQ PartitionCount: 4       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: transaction_email_notification_topic     Partition: 0    Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: transaction_email_notification_topic     Partition: 1    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: transaction_email_notification_topic     Partition: 2    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: transaction_email_notification_topic     Partition: 3    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: ops_recon_record_unmatched_topic TopicId: JXIRHJ0fSmWi3L-R_pEeBQ PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: ops_recon_record_unmatched_topic Partition: 0    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: process_bookingDetails_topic     TopicId: v-4gi9M3QYyXSIJUzH7KaA PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: process_bookingDetails_topic     Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: ops_recon_record_matched_topic   TopicId: CO_9iRfKTTKzsL-kO1glFQ PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: ops_recon_record_matched_topic   Partition: 0    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: source.checkpoints.internal      TopicId: GLUgFjAtS7-1H-5GVv2htQ PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=compact,segment.bytes=1073741824
+        Topic: source.checkpoints.internal      Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: recon_record_matched_topic       TopicId: 5ndfnSD0QWqw3iEA0WgzJQ PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: recon_record_matched_topic       Partition: 0    Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: recon_record_unmatched_topic     TopicId: FeRHUjGQQl-vVcdaKwvjeQ PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: recon_record_unmatched_topic     Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: merchant-email-notification-topic        TopicId: IdS2myfIRSiBP31FNtoKhQ PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: merchant-email-notification-topic        Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: merchant_report_topic    TopicId: V5jJmXeSRb6kBqKihlhAiQ PartitionCount: 4       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: merchant_report_topic    Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: merchant_report_topic    Partition: 1    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: merchant_report_topic    Partition: 2    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: merchant_report_topic    Partition: 3    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: ops_recon_file_topic     TopicId: 3BeD8AyjR0atyz-eMjHXAg PartitionCount: 4       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: ops_recon_file_topic     Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: ops_recon_file_topic     Partition: 1    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: ops_recon_file_topic     Partition: 2    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: ops_recon_file_topic     Partition: 3    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: mirrormaker2-cluster-status      TopicId: JRtA3qZPRq-05zzGxsotkQ PartitionCount: 5       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=compact,segment.bytes=1073741824
+        Topic: mirrormaker2-cluster-status      Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-status      Partition: 1    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-status      Partition: 2    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-status      Partition: 3    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: mirrormaker2-cluster-status      Partition: 4    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: recon_record_duplicate_topic     TopicId: nN0mXrWbQwqSd63chob-bQ PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: recon_record_duplicate_topic     Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: transaction_push_verification_topic      TopicId: pp4IXdrmRuy2e42WaaHQKA PartitionCount: 4       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: transaction_push_verification_topic      Partition: 0    Leader: 0       Replicas: 0,2,1 Isr: 1,2,0      Elr:    LastKnownElr: 
+        Topic: transaction_push_verification_topic      Partition: 1    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: transaction_push_verification_topic      Partition: 2    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: transaction_push_verification_topic      Partition: 3    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: ops_refund_adjust_detail_topic   TopicId: K_Rwc31XQn-FuBMDyo-vlw PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: ops_refund_adjust_detail_topic   Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: strimzi.cruisecontrol.modeltrainingsamples       TopicId: ImUlcAhTR7SW4aQ4CYyylw PartitionCount: 32      ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824,retention.ms=12000000
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 0    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 1    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 2    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 3    Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 4    Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 5    Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 6    Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 7    Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 8    Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 9    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 10   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 11   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 12   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 13   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 14   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 15   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 16   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 17   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 18   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 19   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 20   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 21   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 22   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 23   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 24   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 25   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 26   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 27   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 28   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 29   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 30   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.modeltrainingsamples       Partition: 31   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: merchant_email_notification_topic        TopicId: 6dW-cv9FRdKduWowMpbErg PartitionCount: 4       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: merchant_email_notification_topic        Partition: 0    Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: merchant_email_notification_topic        Partition: 1    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: merchant_email_notification_topic        Partition: 2    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: merchant_email_notification_topic        Partition: 3    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: recon_fail_ack_topic     TopicId: zI6Q75XXRrOYc5iPEEl95A PartitionCount: 4       ReplicationFactor: 1    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: recon_fail_ack_topic     Partition: 0    Leader: 2       Replicas: 2     Isr: 2  Elr:    LastKnownElr: 
+        Topic: recon_fail_ack_topic     Partition: 1    Leader: 0       Replicas: 0     Isr: 0  Elr:    LastKnownElr: 
+        Topic: recon_fail_ack_topic     Partition: 2    Leader: 1       Replicas: 1     Isr: 1  Elr:    LastKnownElr: 
+        Topic: recon_fail_ack_topic     Partition: 3    Leader: 1       Replicas: 1     Isr: 1  Elr:    LastKnownElr: 
+Topic: ops_recon_fail_ack_topic TopicId: K4Eml2nRQ620pXWAPG3VDA PartitionCount: 4       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: ops_recon_fail_ack_topic Partition: 0    Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: ops_recon_fail_ack_topic Partition: 1    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: ops_recon_fail_ack_topic Partition: 2    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: ops_recon_fail_ack_topic Partition: 3    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: ops_payout_topic TopicId: n5mIMIG4RSK_ruS2dJe6iA PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: ops_payout_topic Partition: 0    Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: merchant_sms_notification_topic  TopicId: cykVbrGtSISQjZcnh8xgZQ PartitionCount: 4       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: merchant_sms_notification_topic  Partition: 0    Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: merchant_sms_notification_topic  Partition: 1    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: merchant_sms_notification_topic  Partition: 2    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: merchant_sms_notification_topic  Partition: 3    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: ops_refund_adjust_confirmation_topic     TopicId: ghBLWrx9SXKXaSTloIcwMg PartitionCount: 4       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: ops_refund_adjust_confirmation_topic     Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: ops_refund_adjust_confirmation_topic     Partition: 1    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: ops_refund_adjust_confirmation_topic     Partition: 2    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: ops_refund_adjust_confirmation_topic     Partition: 3    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: strimzi.cruisecontrol.partitionmetricsamples     TopicId: u3u6qsTMTlyItya-zQmbzg PartitionCount: 32      ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824,retention.ms=3600000
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 1    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 2    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 3    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 4    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 5    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 6    Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 7    Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 8    Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 9    Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 10   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 11   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 12   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 13   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 14   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 15   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 16   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 17   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 18   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 19   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 20   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 21   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 22   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 23   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 24   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 25   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 26   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 27   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 28   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 29   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 30   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: strimzi.cruisecontrol.partitionmetricsamples     Partition: 31   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: mirrormaker2-cluster-configs     TopicId: ishRcvL-SvKgemgkMaaNVg PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=compact,segment.bytes=1073741824
+        Topic: mirrormaker2-cluster-configs     Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: ops_report_generation_topic      TopicId: xB0pqKm4Q3er5kjyPVPvXA PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: ops_report_generation_topic      Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: transaction_sms_notification_topic       TopicId: S0hZtsykRvyQlcDDqCholQ PartitionCount: 4       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: transaction_sms_notification_topic       Partition: 0    Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: transaction_sms_notification_topic       Partition: 1    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: transaction_sms_notification_topic       Partition: 2    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: transaction_sms_notification_topic       Partition: 3    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: process_bulk_refund_topic        TopicId: SZMJmAULQ0KWckuQ8YFoHA PartitionCount: 4       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: process_bulk_refund_topic        Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: process_bulk_refund_topic        Partition: 1    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: process_bulk_refund_topic        Partition: 2    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: process_bulk_refund_topic        Partition: 3    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: __consumer_offsets       TopicId: 8cGVPnl6RKa1d4lsMsB9Ww PartitionCount: 50      ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=compact,segment.bytes=104857600
+        Topic: __consumer_offsets       Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 1    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 2    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 3    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 4    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 5    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 6    Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 7    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 8    Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 9    Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 10   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 11   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 12   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 13   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 14   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 15   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 16   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 17   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 18   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 19   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 20   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 21   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 22   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 23   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 24   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 25   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 26   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 27   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 28   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 29   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 30   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 31   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 32   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 33   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 34   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 35   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 36   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 37   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 38   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 39   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 40   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 41   Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 42   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 43   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 44   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 45   Leader: 2       Replicas: 2,1,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 46   Leader: 1       Replicas: 1,0,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 47   Leader: 0       Replicas: 0,2,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 48   Leader: 0       Replicas: 0,1,2 Isr: 1,0,2      Elr:    LastKnownElr: 
+        Topic: __consumer_offsets       Partition: 49   Leader: 1       Replicas: 1,2,0 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: ops_recon_record_duplicate_topic TopicId: LHJtJi2_TvCzWOkCmIHhQQ PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: ops_recon_record_duplicate_topic Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+Topic: merchant_report_alert_topic      TopicId: IjVuBXgzT06p3ZJkI1iNqQ PartitionCount: 1       ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=delete,segment.bytes=1073741824
+        Topic: merchant_report_alert_topic      Partition: 0    Leader: 2       Replicas: 2,0,1 Isr: 1,0,2      Elr:    LastKnownElr: 
+sh-5.1$ ./kafka-topics.sh --bootstrap-server $BOOTSTRAP_SERVER --describe | grep -i "Under-replicated" || echo "NONE"
+Command must include exactly one action: --list, --describe, --create, --alter or --delete
+Option                                   Description                            
+------                                   -----------                            
+--alter                                  Alter the number of partitions and     
+                                           replica assignment. Update the       
+                                           configuration of an existing topic   
+                                           via --alter is no longer supported   
+                                           here (the kafka-configs CLI supports 
+                                           altering topic configs with a --     
+                                           bootstrap-server option).            
+--at-min-isr-partitions                  if set when describing topics, only    
+                                           show partitions whose isr count is   
+                                           equal to the configured minimum.     
+--bootstrap-server <String: server to    REQUIRED: The Kafka server to connect  
+  connect to>                              to.                                  
+--command-config <String: command        Property file containing configs to be 
+  config property file>                    passed to Admin Client. This is used 
+                                           only with --bootstrap-server option  
+                                           for describing and altering broker   
+                                           configs.                             
+--config <String: name=value>            A topic configuration override for the 
+                                           topic being created. The following   
+                                           is a list of valid configurations:   
+                                                cleanup.policy                        
+                                                compression.gzip.level                
+                                                compression.lz4.level                 
+                                                compression.type                      
+                                                compression.zstd.level                
+                                                delete.retention.ms                   
+                                                file.delete.delay.ms                  
+                                                flush.messages                        
+                                                flush.ms                              
+                                                follower.replication.throttled.       
+                                           replicas                             
+                                                index.interval.bytes                  
+                                                leader.replication.throttled.replicas 
+                                                local.retention.bytes                 
+                                                local.retention.ms                    
+                                                max.compaction.lag.ms                 
+                                                max.message.bytes                     
+                                                message.downconversion.enable         
+                                                message.format.version                
+                                                message.timestamp.after.max.ms        
+                                                message.timestamp.before.max.ms       
+                                                message.timestamp.difference.max.ms   
+                                                message.timestamp.type                
+                                                min.cleanable.dirty.ratio             
+                                                min.compaction.lag.ms                 
+                                                min.insync.replicas                   
+                                                preallocate                           
+                                                remote.log.copy.disable               
+                                                remote.log.delete.on.disable          
+                                                remote.storage.enable                 
+                                                retention.bytes                       
+                                                retention.ms                          
+                                                segment.bytes                         
+                                                segment.index.bytes                   
+                                                segment.jitter.ms                     
+                                                segment.ms                            
+                                                unclean.leader.election.enable        
+                                         See the Kafka documentation for full   
+                                           details on the topic configs. It is  
+                                           supported only in combination with --
+                                           create if --bootstrap-server option  
+                                           is used (the kafka-configs CLI       
+                                           supports altering topic configs with 
+                                           a --bootstrap-server option).        
+--create                                 Create a new topic.                    
+--delete                                 Delete a topic                         
+--delete-config <String: name>           A topic configuration override to be   
+                                           removed for an existing topic (see   
+                                           the list of configurations under the 
+                                           --config option). Not supported with 
+                                           the --bootstrap-server option.       
+--describe                               List details for the given topics.     
+--exclude-internal                       exclude internal topics when running   
+                                           list or describe command. The        
+                                           internal topics will be listed by    
+                                           default                              
+--help                                   Print usage information.               
+--if-exists                              if set when altering or deleting or    
+                                           describing topics, the action will   
+                                           only execute if the topic exists.    
+--if-not-exists                          if set when creating topics, the       
+                                           action will only execute if the      
+                                           topic does not already exist.        
+--list                                   List all available topics.             
+--partition-size-limit-per-response      the maximum partition size to be       
+  <Integer: maximum number of              included in one                      
+  partitions in one response.>             DescribeTopicPartitions response.    
+--partitions <Integer: # of partitions>  The number of partitions for the topic 
+                                           being created or altered (WARNING:   
+                                           If partitions are increased for a    
+                                           topic that has a key, the partition  
+                                           logic or ordering of the messages    
+                                           will be affected). If not supplied   
+                                           for create, defaults to the cluster  
+                                           default.                             
+--replica-assignment <String:            A list of manual partition-to-broker   
+  broker_id_for_part1_replica1 :           assignments for the topic being      
+  broker_id_for_part1_replica2 ,           created or altered.                  
+  broker_id_for_part2_replica1 :                                                
+  broker_id_for_part2_replica2 , ...>                                           
+--replication-factor <Integer:           The replication factor for each        
+  replication factor>                      partition in the topic being         
+                                           created. If not supplied, defaults   
+                                           to the cluster default.              
+--topic <String: topic>                  The topic to create, alter, describe   
+                                           or delete. It also accepts a regular 
+                                           expression, except for --create      
+                                           option. Put topic name in double     
+                                           quotes and use the '\' prefix to     
+                                           escape regular expression symbols; e.
+                                           g. "test\.topic".                    
+--topic-id <String: topic-id>            The topic-id to describe.This is used  
+                                           only with --bootstrap-server option  
+                                           for describing topics.               
+--topics-with-overrides                  if set when describing topics, only    
+                                           show topics that have overridden     
+                                           configs                              
+--unavailable-partitions                 if set when describing topics, only    
+                                           show partitions whose leader is not  
+                                           available                            
+--under-min-isr-partitions               if set when describing topics, only    
+                                           show partitions whose isr count is   
+                                           less than the configured minimum.    
+--under-replicated-partitions            if set when describing topics, only    
+                                           show under replicated partitions     
+--version                                Display Kafka version.                 
+NONE
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --describe | grep -i "Under-replicated" || echo "NONE"
+NONE
+sh-5.1$ ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+transaction-consumers
+operation-consumers
+merchant-consumers
+sh-5.1$ ./kafka-consumer-groups.sh --bootstrap-server $BOOTSTRAP_SERVER --all-groups --describe
+Option [describe] takes one of these options: [reset-offsets], [describe], [delete], [list]
+Option                                  Description                            
+------                                  -----------                            
+--all-groups                            Apply to all consumer groups.          
+--all-topics                            Consider all topics assigned to a      
+                                          group in the `reset-offsets` process.
+--bootstrap-server <String: server to   REQUIRED: The server(s) to connect to. 
+  connect to>                                                                  
+--by-duration <String: duration>        Reset offsets to offset by duration    
+                                          from current timestamp. Format:      
+                                          'PnDTnHnMnS'                         
+--command-config <String: command       Property file containing configs to be 
+  config property file>                   passed to Admin Client and Consumer. 
+--delete                                Pass in groups to delete topic         
+                                          partition offsets and ownership      
+                                          information over the entire consumer 
+                                          group. For instance --group g1 --    
+                                          group g2                             
+--delete-offsets                        Delete offsets of consumer group.      
+                                          Supports one consumer group at the   
+                                          time, and multiple topics.           
+--describe                              Describe consumer group and list       
+                                          offset lag (number of messages not   
+                                          yet processed) related to given      
+                                          group.                               
+--dry-run                               Only show results without executing    
+                                          changes on Consumer Groups.          
+                                          Supported operations: reset-offsets. 
+--execute                               Execute operation. Supported           
+                                          operations: reset-offsets.           
+--export                                Export operation execution to a CSV    
+                                          file. Supported operations: reset-   
+                                          offsets.                             
+--from-file <String: path to CSV file>  Reset offsets to values defined in CSV 
+                                          file.                                
+--group <String: consumer group>        The consumer group we wish to act on.  
+--help                                  Print usage information.               
+--list                                  List all consumer groups.              
+--members                               Describe members of the group. This    
+                                          option may be used with '--describe' 
+                                          and '--bootstrap-server' options     
+                                          only.                                
+                                        Example: --bootstrap-server localhost: 
+                                          9092 --describe --group group1 --    
+                                          members                              
+--offsets                               Describe the group and list all topic  
+                                          partitions in the group along with   
+                                          their offset lag. This is the        
+                                          default sub-action of and may be     
+                                          used with '--describe' and '--       
+                                          bootstrap-server' options only.      
+                                        Example: --bootstrap-server localhost: 
+                                          9092 --describe --group group1 --    
+                                          offsets                              
+--reset-offsets                         Reset offsets of consumer group.       
+                                          Supports one consumer group at the   
+                                          time, and instances should be        
+                                          inactive                             
+                                        Has 2 execution options: --dry-run     
+                                          (the default) to plan which offsets  
+                                          to reset, and --execute to update    
+                                          the offsets. Additionally, the --    
+                                          export option is used to export the  
+                                          results to a CSV format.             
+                                        You must choose one of the following   
+                                          reset specifications: --to-datetime, 
+                                          --by-duration, --to-earliest, --to-  
+                                          latest, --shift-by, --from-file, --  
+                                          to-current, --to-offset.             
+                                        To define the scope use --all-topics   
+                                          or --topic. One scope must be        
+                                          specified unless you use '--from-    
+                                          file'.                               
+--shift-by <Long: number-of-offsets>    Reset offsets shifting current offset  
+                                          by 'n', where 'n' can be positive or 
+                                          negative.                            
+--state [String]                        When specified with '--describe',      
+                                          includes the state of the group.     
+                                        Example: --bootstrap-server localhost: 
+                                          9092 --describe --group group1 --    
+                                          state                                
+                                        When specified with '--list', it       
+                                          displays the state of all groups. It 
+                                          can also be used to list groups with 
+                                          specific states.                     
+                                        Example: --bootstrap-server localhost: 
+                                          9092 --list --state stable,empty     
+                                        This option may be used with '--       
+                                          describe', '--list' and '--bootstrap-
+                                          server' options only.                
+--timeout <Long: timeout (ms)>          The timeout that can be set for some   
+                                          use cases. For example, it can be    
+                                          used when describing the group to    
+                                          specify the maximum amount of time   
+                                          in milliseconds to wait before the   
+                                          group stabilizes (when the group is  
+                                          just created, or is going through    
+                                          some changes). (default: 5000)       
+--to-current                            Reset offsets to current offset.       
+--to-datetime <String: datetime>        Reset offsets to offset from datetime. 
+                                          Format: 'YYYY-MM-DDTHH:mm:SS.sss'    
+--to-earliest                           Reset offsets to earliest offset.      
+--to-latest                             Reset offsets to latest offset.        
+--to-offset <Long: offset>              Reset offsets to a specific offset.    
+--topic <String: topic>                 The topic whose consumer group         
+                                          information should be deleted or     
+                                          topic whose should be included in    
+                                          the reset offset process. In `reset- 
+                                          offsets` case, partitions can be     
+                                          specified using this format: `topic1:
+                                          0,1,2`, where 0,1,2 are the          
+                                          partition to be included in the      
+                                          process. Reset-offsets also supports 
+                                          multiple topic inputs.               
+--type [String]                         When specified with '--list', it       
+                                          displays the types of all the        
+                                          groups. It can also be used to list  
+                                          groups with specific types.          
+                                        Example: --bootstrap-server localhost: 
+                                          9092 --list --type classic,consumer  
+                                        This option may be used with the '--   
+                                          list' option only.                   
+--verbose                               Provide additional information, if     
+                                          any, when describing the group. This 
+                                          option may be used with '--          
+                                          offsets'/'--members'/'--state' and   
+                                          '--bootstrap-server' options only.   
+                                        Example: --bootstrap-server localhost: 
+                                          9092 --describe --group group1 --    
+                                          members --verbose                    
+--version                               Display Kafka version.                 
+sh-5.1$ ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --all-groups --describe
 
-Expected: All brokers present.
+GROUP              TOPIC                             PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                        HOST            CLIENT-ID
+merchant-consumers merchant_sms_notification_topic   1          38              38              0               consumer-merchant-consumers-1-22fdc942-b7af-4f4f-821e-ceafeaab6566 /172.16.25.243  consumer-merchant-consumers-1
+merchant-consumers merchant_sms_notification_topic   0          154             154             0               consumer-merchant-consumers-1-22fdc942-b7af-4f4f-821e-ceafeaab6566 /172.16.25.243  consumer-merchant-consumers-1
+merchant-consumers merchant_sms_notification_topic   3          6               6               0               consumer-merchant-consumers-1-22fdc942-b7af-4f4f-821e-ceafeaab6566 /172.16.25.243  consumer-merchant-consumers-1
+merchant-consumers merchant_sms_notification_topic   2          7               7               0               consumer-merchant-consumers-1-22fdc942-b7af-4f4f-821e-ceafeaab6566 /172.16.25.243  consumer-merchant-consumers-1
+merchant-consumers merchant_email_notification_topic 2          4               4               0               consumer-merchant-consumers-2-f921aac4-bd4f-4a17-92cc-162f7c1f367e /172.16.25.243  consumer-merchant-consumers-2
+merchant-consumers merchant_email_notification_topic 1          76              76              0               consumer-merchant-consumers-2-f921aac4-bd4f-4a17-92cc-162f7c1f367e /172.16.25.243  consumer-merchant-consumers-2
+merchant-consumers merchant_email_notification_topic 0          168             168             0               consumer-merchant-consumers-2-f921aac4-bd4f-4a17-92cc-162f7c1f367e /172.16.25.243  consumer-merchant-consumers-2
+merchant-consumers merchant_email_notification_topic 3          11              11              0               consumer-merchant-consumers-2-f921aac4-bd4f-4a17-92cc-162f7c1f367e /172.16.25.243  consumer-merchant-consumers-2
+merchant-consumers merchant_report_topic             3          234             234             0               consumer-merchant-consumers-2-d3c0937c-fd9c-4cf3-a1d5-f6891f7e90d6 /172.16.61.43   consumer-merchant-consumers-2
+merchant-consumers merchant_report_topic             1          203             203             0               consumer-merchant-consumers-2-d3c0937c-fd9c-4cf3-a1d5-f6891f7e90d6 /172.16.61.43   consumer-merchant-consumers-2
+merchant-consumers merchant_report_topic             2          221             221             0               consumer-merchant-consumers-2-d3c0937c-fd9c-4cf3-a1d5-f6891f7e90d6 /172.16.61.43   consumer-merchant-consumers-2
+merchant-consumers merchant_report_topic             0          211             211             0               consumer-merchant-consumers-2-d3c0937c-fd9c-4cf3-a1d5-f6891f7e90d6 /172.16.61.43   consumer-merchant-consumers-2
+merchant-consumers ops_report_generation_topic       0          68              68              0               consumer-merchant-consumers-1-66656771-40e5-493f-bd2a-eecdea0f1da8 /172.16.61.43   consumer-merchant-consumers-1
+merchant-consumers merchant_report_alert_topic       0          473             473             0               consumer-merchant-consumers-3-8050be74-fbe7-4c71-b8c1-268bcbfadd0e /172.16.25.243  consumer-merchant-consumers-3
+GROUP               TOPIC                                PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                         HOST            CLIENT-ID
+operation-consumers ops_recon_file_topic                 3          4               4               0               consumer-operation-consumers-5-22ead46f-25ff-4980-a5fc-ca479ffe2f02 /172.16.63.17   consumer-operation-consumers-5
+operation-consumers ops_recon_file_topic                 0          14              14              0               consumer-operation-consumers-5-22ead46f-25ff-4980-a5fc-ca479ffe2f02 /172.16.63.17   consumer-operation-consumers-5
+operation-consumers ops_recon_file_topic                 2          1               1               0               consumer-operation-consumers-5-22ead46f-25ff-4980-a5fc-ca479ffe2f02 /172.16.63.17   consumer-operation-consumers-5
+operation-consumers ops_recon_file_topic                 1          6               6               0               consumer-operation-consumers-5-22ead46f-25ff-4980-a5fc-ca479ffe2f02 /172.16.63.17   consumer-operation-consumers-5
+operation-consumers ops_refund_adjust_confirmation_topic 0          1               1               0               consumer-operation-consumers-2-71bec125-c5d8-4ba2-97dd-65f584a36233 /172.16.63.17   consumer-operation-consumers-2
+operation-consumers ops_refund_adjust_confirmation_topic 1          5               5               0               consumer-operation-consumers-2-71bec125-c5d8-4ba2-97dd-65f584a36233 /172.16.63.17   consumer-operation-consumers-2
+operation-consumers ops_refund_adjust_confirmation_topic 2          1               1               0               consumer-operation-consumers-2-71bec125-c5d8-4ba2-97dd-65f584a36233 /172.16.63.17   consumer-operation-consumers-2
+operation-consumers ops_refund_adjust_confirmation_topic 3          2               2               0               consumer-operation-consumers-2-71bec125-c5d8-4ba2-97dd-65f584a36233 /172.16.63.17   consumer-operation-consumers-2
+operation-consumers ops_recon_fail_ack_topic             3          1               1               0               consumer-operation-consumers-1-3d2b6bc3-737d-48f4-bfca-e534fd89b382 /172.16.63.17   consumer-operation-consumers-1
+operation-consumers ops_recon_fail_ack_topic             2          1               1               0               consumer-operation-consumers-1-3d2b6bc3-737d-48f4-bfca-e534fd89b382 /172.16.63.17   consumer-operation-consumers-1
+operation-consumers ops_recon_fail_ack_topic             1          0               0               0               consumer-operation-consumers-1-3d2b6bc3-737d-48f4-bfca-e534fd89b382 /172.16.63.17   consumer-operation-consumers-1
+operation-consumers ops_recon_fail_ack_topic             0          0               0               0               consumer-operation-consumers-1-3d2b6bc3-737d-48f4-bfca-e534fd89b382 /172.16.63.17   consumer-operation-consumers-1
+operation-consumers ops_payout_topic                     0          16              16              0               consumer-operation-consumers-4-cc582bdd-cd15-467e-864f-0e3f19bb508e /172.16.63.17   consumer-operation-consumers-4
+operation-consumers ops_report_confirmation_topic        0          54              54              0               consumer-operation-consumers-3-2cb486c7-fb79-4de9-bfe7-c6493b142583 /172.16.63.17   consumer-operation-consumers-3
+GROUP                 TOPIC                                PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                           HOST            CLIENT-ID
+transaction-consumers transaction_email_notification_topic 0          0               0               0               consumer-transaction-consumers-9-9b2939f2-c466-492f-b04b-5dca952d3419 /172.16.54.80   consumer-transaction-consumers-9
+transaction-consumers transaction_email_notification_topic 2          0               0               0               consumer-transaction-consumers-9-9b2939f2-c466-492f-b04b-5dca952d3419 /172.16.54.80   consumer-transaction-consumers-9
+transaction-consumers transaction_email_notification_topic 1          0               0               0               consumer-transaction-consumers-9-9b2939f2-c466-492f-b04b-5dca952d3419 /172.16.54.80   consumer-transaction-consumers-9
+transaction-consumers transaction_email_notification_topic 3          0               0               0               consumer-transaction-consumers-9-9b2939f2-c466-492f-b04b-5dca952d3419 /172.16.54.80   consumer-transaction-consumers-9
+transaction-consumers transaction_sms_notification_topic   2          0               0               0               consumer-transaction-consumers-3-c9eda1b4-42c3-40b1-a6eb-3de1d128500d /172.16.54.80   consumer-transaction-consumers-3
+transaction-consumers transaction_sms_notification_topic   3          0               0               0               consumer-transaction-consumers-3-c9eda1b4-42c3-40b1-a6eb-3de1d128500d /172.16.54.80   consumer-transaction-consumers-3
+transaction-consumers transaction_sms_notification_topic   0          0               0               0               consumer-transaction-consumers-3-c9eda1b4-42c3-40b1-a6eb-3de1d128500d /172.16.54.80   consumer-transaction-consumers-3
+transaction-consumers transaction_sms_notification_topic   1          0               0               0               consumer-transaction-consumers-3-c9eda1b4-42c3-40b1-a6eb-3de1d128500d /172.16.54.80   consumer-transaction-consumers-3
+transaction-consumers transaction_push_verification_topic  1          1286421         1286421         0               consumer-transaction-consumers-4-b755dc30-e57c-474e-acea-93926ca97458 /172.16.54.80   consumer-transaction-consumers-4
+transaction-consumers transaction_push_verification_topic  2          1257470         1257470         0               consumer-transaction-consumers-4-b755dc30-e57c-474e-acea-93926ca97458 /172.16.54.80   consumer-transaction-consumers-4
+transaction-consumers transaction_push_verification_topic  3          1272795         1272795         0               consumer-transaction-consumers-4-b755dc30-e57c-474e-acea-93926ca97458 /172.16.54.80   consumer-transaction-consumers-4
+transaction-consumers transaction_push_verification_topic  0          1276437         1276437         0               consumer-transaction-consumers-4-b755dc30-e57c-474e-acea-93926ca97458 /172.16.54.80   consumer-transaction-consumers-4
+transaction-consumers process_bulk_refund_topic            1          0               0               0               consumer-transaction-consumers-8-44b9bf3f-b48d-4d02-ae08-ecc09a5bd63c /172.16.54.80   consumer-transaction-consumers-8
+transaction-consumers process_bulk_refund_topic            2          0               0               0               consumer-transaction-consumers-8-44b9bf3f-b48d-4d02-ae08-ecc09a5bd63c /172.16.54.80   consumer-transaction-consumers-8
+transaction-consumers process_bulk_refund_topic            0          1               1               0               consumer-transaction-consumers-8-44b9bf3f-b48d-4d02-ae08-ecc09a5bd63c /172.16.54.80   consumer-transaction-consumers-8
+transaction-consumers process_bulk_refund_topic            3          4               4               0               consumer-transaction-consumers-8-44b9bf3f-b48d-4d02-ae08-ecc09a5bd63c /172.16.54.80   consumer-transaction-consumers-8
+transaction-consumers ops_recon_record_unmatched_topic     0          2               2               0               consumer-transaction-consumers-7-de35a7cf-762a-4a10-bfad-c82b6c7653e0 /172.16.54.80   consumer-transaction-consumers-7
+transaction-consumers process_bookingDetails_topic         0          20              20              0               consumer-transaction-consumers-2-fbd2c9d1-5cce-4087-b370-70bca6d78731 /172.16.54.80   consumer-transaction-consumers-2
+transaction-consumers ops_recon_record_matched_topic       0          23              23              0               consumer-transaction-consumers-6-afed857b-8e77-42b9-b423-67b8cc85db54 /172.16.54.80   consumer-transaction-consumers-6
+transaction-consumers ops_recon_record_duplicate_topic     0          0               0               0               consumer-transaction-consumers-5-0b84297a-ad89-4467-84ab-7f01454485b3 /172.16.54.80   consumer-transaction-consumers-5
+transaction-consumers ops_refund_adjust_detail_topic       0          9               9               0               consumer-transaction-consumers-1-0bdb37ed-d6fb-4f7b-90e3-24650ffae40a /172.16.54.80   consumer-transaction-consumersh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --all-topics --time -1 -1
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --all-topics --time -1
+Error: Could not find or load main class kafka.tools.GetOffsetShell
+Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
+sh-5.1$ ./kafka-console-producer.sh --bootstrap-server localhost:9092 --topic dr-test-topic
+>saadi
+[2026-01-13 10:00:00,697] WARN [Producer clientId=console-producer] The metadata response from the cluster reported a recoverable issue with correlation id 5 : {dr-test-topic=UNKNOWN_TOPIC_OR_PARTITION} (org.apache.kafka.clients.NetworkClient)
+[2026-01-13 10:00:00,806] WARN [Producer clientId=console-producer] The metadata response from the cluster reported a recoverable issue with correlation id 6 : {dr-test-topic=UNKNOWN_TOPIC_OR_PARTITION} (org.apache.kafka.clients.NetworkClient)
+>^Z
+[1]+  Stopped(SIGTSTP)        ./kafka-console-producer.sh --bootstrap-server localhost:9092 --topic dr-test-topic
+sh-5.1$ ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic smm-test-topic --from-beginning --max-messages 5
+[2026-01-13 10:01:31,582] WARN [Consumer clientId=console-consumer, groupId=console-consumer-69845] The metadata response from the cluster reported a recoverable issue with correlation id 2 : {smm-test-topic=UNKNOWN_TOPIC_OR_PARTITION} (org.apache.kafka.clients.NetworkClient)
+[2026-01-13 10:01:31,694] WARN [Consumer clientId=console-consumer, groupId=console-consumer-69845] The metadata response from the cluster reported a recoverable issue with correlation id 8 : {smm-test-topic=UNKNOWN_TOPIC_OR_PARTITION} (org.apache.kafka.clients.NetworkClient)
+^X^CProcessed a total of 0 messages
+sh-5.1$ ./kafka-acls.sh --bootstrap-server localhost:9092 --listst
+Error while executing ACL command: org.apache.kafka.common.errors.SecurityDisabledException: No Authorizer is configured on the broker
+java.util.concurrent.ExecutionException: org.apache.kafka.common.errors.SecurityDisabledException: No Authorizer is configured on the broker
+        at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:396)
+        at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2073)
+        at org.apache.kafka.common.internals.KafkaFutureImpl.get(KafkaFutureImpl.java:165)
+        at kafka.admin.AclCommand$AdminClientService.getAcls(AclCommand.scala:177)
+        at kafka.admin.AclCommand$AdminClientService.listAcls(AclCommand.scala:146)
+        at kafka.admin.AclCommand$AdminClientService.$anonfun$listAcls$1(AclCommand.scala:139)
+        at kafka.admin.AclCommand$AdminClientService.listAcls(AclCommand.scala:138)
+        at kafka.admin.AclCommand$.main(AclCommand.scala:78)
+        at kafka.admin.AclCommand.main(AclCommand.scala)
+Caused by: org.apache.kafka.common.errors.SecurityDisabledException: No Authorizer is configured on the broker
 
----
-
-## STEP 4 — List All Topics
-
-```bash
-echo "STEP 4 | TOPIC LIST | $DATE"
-$KAFKA_HOME/bin/kafka-topics.sh \
-  --bootstrap-server $BOOTSTRAP_SERVER \
-  --list
-```
-
----
-
-## STEP 5 — Validate Topic Health (ISR / Leaders)
-
-```bash
-echo "STEP 5 | TOPIC HEALTH | $DATE"
-$KAFKA_HOME/bin/kafka-topics.sh \
-  --bootstrap-server $BOOTSTRAP_SERVER \
-  --describe
-```
-
-Expected:
-
-* No `Offline` partitions
-* ISR count == replication factor
-
----
-
-## STEP 6 — Check Under-Replicated Partitions
-
-```bash
-echo "STEP 6 | UNDER REPLICATED PARTITIONS | $DATE"
-$KAFKA_HOME/bin/kafka-topics.sh \
-  --bootstrap-server $BOOTSTRAP_SERVER \
-  --describe | grep -i "Under-replicated" || echo "NONE"
-```
-
-Expected: `NONE`
-
----
-
-## STEP 7 — List Consumer Groups
-
-```bash
-echo "STEP 7 | CONSUMER GROUP LIST | $DATE"
-$KAFKA_HOME/bin/kafka-consumer-groups.sh \
-  --bootstrap-server $BOOTSTRAP_SERVER \
-  --list
-```
-
----
-
-## STEP 8 — Consumer Lag (ALL GROUPS)
-
-```bash
-echo "STEP 8 | CONSUMER LAG | $DATE"
-$KAFKA_HOME/bin/kafka-consumer-groups.sh \
-  --bootstrap-server $BOOTSTRAP_SERVER \
-  --all-groups \
-  --describe
-```
-
-Expected: Lag trending to **0**
-
----
-
-## STEP 9 — Capture Latest Offsets (Pre-Failover Baseline)
-
-```bash
-echo "STEP 9 | OFFSET SNAPSHOT | $DATE"
-$KAFKA_HOME/bin/kafka-run-class.sh kafka.tools.GetOffsetShell \
-  --broker-list $BOOTSTRAP_SERVER \
-  --all-topics --time -1
-```
-
-Save output for DC vs DR comparison.
-
----
-
-## STEP 10 — Produce Test Messages
-
-```bash
-echo "STEP 10 | PRODUCER TEST | $DATE"
-$KAFKA_HOME/bin/kafka-console-producer.sh \
-  --bootstrap-server $BOOTSTRAP_SERVER \
-  --topic dr-test-topic
-```
-
-Type 3–5 messages → Ctrl+C.
-
----
-
-## STEP 11 — Consume Test Messages
-
-```bash
-echo "STEP 11 | CONSUMER TEST | $DATE"
-$KAFKA_HOME/bin/kafka-console-consumer.sh \
-  --bootstrap-server $BOOTSTRAP_SERVER \
-  --topic dr-test-topic \
-  --from-beginning \
-  --max-messages 5
-```
-
-Expected: Messages received correctly.
-
----
-
-## STEP 12 — Replication / MirrorMaker 2 (IF APPLICABLE)
-
-```bash
-echo "STEP 12 | MIRRORMAKER STATUS | $DATE"
-curl -s http://localhost:8083/connectors | jq
-```
-
-```bash
-curl -s http://localhost:8083/connectors/<connector-name>/status | jq
-```
-
-Expected: `RUNNING`
-
----
-
-## STEP 13 — ACL / Security Validation (IF ENABLED)
-
-```bash
-echo "STEP 13 | ACL CHECK | $DATE"
-$KAFKA_HOME/bin/kafka-acls.sh \
-  --bootstrap-server $BOOTSTRAP_SERVER \
-  --list
-```
-
----
-
-## STEP 14 — Disk Usage Check
-
-```bash
-echo "STEP 14 | DISK USAGE | $DATE"
-df -h | grep kafka
-du -sh /var/lib/kafka/*
-```
-
-Expected: No disk pressure.
-
----
-
-## STEP 15 — Log Error Scan (During Drill)
-
-```bash
-echo "STEP 15 | LOG SCAN | $DATE"
-grep -iE "ERROR|FATAL|Offline|UnderReplicated" \
-  /var/log/kafka/server.log | tail -50
-```
-
----
-
-## STEP 16 — Post-Failover Validation (DR SIDE)
-
-```bash
-echo "STEP 16 | POST FAILOVER CHECK | $DATE"
-$KAFKA_HOME/bin/kafka-topics.sh \
-  --bootstrap-server $BOOTSTRAP_SERVER \
-  --describe
-```
-
-```bash
-$KAFKA_HOME/bin/kafka-consumer-groups.sh \
-  --bootstrap-server $BOOTSTRAP_SERVER \
-  --all-groups --describe
-```
-
-Expected:
-
-* No offline partitions
-* Consumer lag reducing
-
----
-
-## STEP 17 — Evidence Collection (MANDATORY)
-
-```bash
-echo "STEP 17 | EVIDENCE COLLECTION | $DATE"
-{
-echo "===== TIMESTAMP ====="
-date
-echo "===== TOPICS ====="
-$KAFKA_HOME/bin/kafka-topics.sh --bootstrap-server $BOOTSTRAP_SERVER --describe
-echo "===== CONSUMER GROUPS ====="
-$KAFKA_HOME/bin/kafka-consumer-groups.sh --bootstrap-server $BOOTSTRAP_SERVER --all-groups --describe
-} > kafka-dr-drill-evidence.log
-```
-
----
-
-## STEP 18 — Final Sign-Off Check
-
-✔ No under-replicated partitions
-✔ No offline partitions
-✔ Consumer lag ≈ 0
-✔ Producer/Consumer functional
-✔ Data present in DR
-
----
-
-### If you want next
-
-* **Single bash script** (one command execution)
-* **OpenShift / Strimzi specific version**
-* **Audit-ready SOP PDF**
-
-Tell me and I will deliver it in the same copy-paste format.
+sh-5.1$ 
