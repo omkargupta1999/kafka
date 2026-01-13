@@ -92,4 +92,41 @@ neft-mq-source-point   dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.
 [osuser@bastion ~]$
 
 
+NAME                   CLUSTER                     CONNECTOR CLASS                                           MAX TASKS   READY
+neft-mq-sink           dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-sink-dest      dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-source         dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1           True
+neft-mq-source-point   dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1
+[osuser@bastion ~]$ oc exec -it dev-kafka-connect-mq-test-connect-0 -n dev-kafka -- curl http://localhost:8083/connectors/neft-mq-source/status
+{"name":"neft-mq-source","connector":{"state":"RUNNING","worker_id":"dev-kafka-connect-mq-test-connect-2.dev-kafka-connect-mq-test-connect.dev-kafka.svc:8083"},"tasks":[{"id":0,"state":"RUNNING","worker_id":"dev-kafka-connect-mq-test-connect-2.dev-kafka-conoc get kafkaconnector -n dev-kafka
+NAME                   CLUSTER                     CONNECTOR CLASS                                           MAX TASKS   READY
+neft-mq-sink           dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-sink-dest      dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-source         dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1           True
+neft-mq-source-point   dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1           True
+[osuser@bastion ~]$ oc get kafkaconnector -n dev-kafka
+NAME                   CLUSTER                     CONNECTOR CLASS                                           MAX TASKS   READY
+neft-mq-sink           dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-sink-dest      dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-source         dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1           True
+neft-mq-source-point   dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1
+[osuser@bastion ~]$ oc get kafkaconnector -n dev-kafka
+NAME                   CLUSTER                     CONNECTOR CLASS                                           MAX TASKS   READY
+neft-mq-sink           dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-sink-dest      dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-source         dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1           True
+neft-mq-source-point   dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1
+[osuser@bastion ~]$ oc get kafkaconnector -n dev-kafka
+NAME                   CLUSTER                     CONNECTOR CLASS                                           MAX TASKS   READY
+neft-mq-sink           dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-sink-dest      dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-source         dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1           True
+neft-mq-source-point   dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1
+[osuser@bastion ~]$ oc get kafkaconnector -n dev-kafka
+NAME                   CLUSTER                     CONNECTOR CLASS                                           MAX TASKS   READY
+neft-mq-sink           dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-sink-dest      dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsink.MQSinkConnector       1           True
+neft-mq-source         dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1           True
+neft-mq-source-point   dev-kafka-connect-mq-test   com.ibm.eventstreams.connect.mqsource.MQSourceConnector   1           True
+[osuser@bastion ~]$
 
