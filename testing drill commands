@@ -1,0 +1,272 @@
+Understood. Below is a **STRICTLY SEQUENTIAL, COPY-PASTE FRIENDLY Kafka Monitoring Runbook** for **DC–DR drills**, written exactly in the order it should be executed.
+
+Assumptions:
+
+* Kafka platform: Apache Kafka
+* Broker: `localhost:9092`
+* Run from Kafka client/broker node
+* Adjust `KAFKA_HOME` if needed
+
+---
+
+# Kafka DC–DR Monitoring Runbook (SEQUENTIAL)
+
+---
+
+## STEP 0 — Set Environment (MANDATORY)
+
+```bash
+export KAFKA_HOME=/opt/kafka
+export BOOTSTRAP_SERVER=localhost:9092
+export DATE=$(date '+%Y-%m-%d %H:%M:%S')
+```
+
+---
+
+## STEP 1 — Verify Kafka Connectivity
+
+```bash
+echo "STEP 1 | CONNECTIVITY CHECK | $DATE"
+$KAFKA_HOME/bin/kafka-broker-api-versions.sh \
+  --bootstrap-server $BOOTSTRAP_SERVER
+```
+
+Expected: No timeout or connection error.
+
+---
+
+## STEP 2 — Identify Active Controller
+
+```bash
+echo "STEP 2 | CONTROLLER STATUS | $DATE"
+$KAFKA_HOME/bin/kafka-metadata-quorum.sh \
+  --bootstrap-server $BOOTSTRAP_SERVER \
+  describe --status
+```
+
+Expected: **1 active leader**
+
+---
+
+## STEP 3 — List All Brokers
+
+```bash
+echo "STEP 3 | BROKER LIST | $DATE"
+$KAFKA_HOME/bin/kafka-metadata-shell.sh \
+  --bootstrap-server $BOOTSTRAP_SERVER \
+  --describe
+```
+
+Expected: All brokers present.
+
+---
+
+## STEP 4 — List All Topics
+
+```bash
+echo "STEP 4 | TOPIC LIST | $DATE"
+$KAFKA_HOME/bin/kafka-topics.sh \
+  --bootstrap-server $BOOTSTRAP_SERVER \
+  --list
+```
+
+---
+
+## STEP 5 — Validate Topic Health (ISR / Leaders)
+
+```bash
+echo "STEP 5 | TOPIC HEALTH | $DATE"
+$KAFKA_HOME/bin/kafka-topics.sh \
+  --bootstrap-server $BOOTSTRAP_SERVER \
+  --describe
+```
+
+Expected:
+
+* No `Offline` partitions
+* ISR count == replication factor
+
+---
+
+## STEP 6 — Check Under-Replicated Partitions
+
+```bash
+echo "STEP 6 | UNDER REPLICATED PARTITIONS | $DATE"
+$KAFKA_HOME/bin/kafka-topics.sh \
+  --bootstrap-server $BOOTSTRAP_SERVER \
+  --describe | grep -i "Under-replicated" || echo "NONE"
+```
+
+Expected: `NONE`
+
+---
+
+## STEP 7 — List Consumer Groups
+
+```bash
+echo "STEP 7 | CONSUMER GROUP LIST | $DATE"
+$KAFKA_HOME/bin/kafka-consumer-groups.sh \
+  --bootstrap-server $BOOTSTRAP_SERVER \
+  --list
+```
+
+---
+
+## STEP 8 — Consumer Lag (ALL GROUPS)
+
+```bash
+echo "STEP 8 | CONSUMER LAG | $DATE"
+$KAFKA_HOME/bin/kafka-consumer-groups.sh \
+  --bootstrap-server $BOOTSTRAP_SERVER \
+  --all-groups \
+  --describe
+```
+
+Expected: Lag trending to **0**
+
+---
+
+## STEP 9 — Capture Latest Offsets (Pre-Failover Baseline)
+
+```bash
+echo "STEP 9 | OFFSET SNAPSHOT | $DATE"
+$KAFKA_HOME/bin/kafka-run-class.sh kafka.tools.GetOffsetShell \
+  --broker-list $BOOTSTRAP_SERVER \
+  --all-topics --time -1
+```
+
+Save output for DC vs DR comparison.
+
+---
+
+## STEP 10 — Produce Test Messages
+
+```bash
+echo "STEP 10 | PRODUCER TEST | $DATE"
+$KAFKA_HOME/bin/kafka-console-producer.sh \
+  --bootstrap-server $BOOTSTRAP_SERVER \
+  --topic dr-test-topic
+```
+
+Type 3–5 messages → Ctrl+C.
+
+---
+
+## STEP 11 — Consume Test Messages
+
+```bash
+echo "STEP 11 | CONSUMER TEST | $DATE"
+$KAFKA_HOME/bin/kafka-console-consumer.sh \
+  --bootstrap-server $BOOTSTRAP_SERVER \
+  --topic dr-test-topic \
+  --from-beginning \
+  --max-messages 5
+```
+
+Expected: Messages received correctly.
+
+---
+
+## STEP 12 — Replication / MirrorMaker 2 (IF APPLICABLE)
+
+```bash
+echo "STEP 12 | MIRRORMAKER STATUS | $DATE"
+curl -s http://localhost:8083/connectors | jq
+```
+
+```bash
+curl -s http://localhost:8083/connectors/<connector-name>/status | jq
+```
+
+Expected: `RUNNING`
+
+---
+
+## STEP 13 — ACL / Security Validation (IF ENABLED)
+
+```bash
+echo "STEP 13 | ACL CHECK | $DATE"
+$KAFKA_HOME/bin/kafka-acls.sh \
+  --bootstrap-server $BOOTSTRAP_SERVER \
+  --list
+```
+
+---
+
+## STEP 14 — Disk Usage Check
+
+```bash
+echo "STEP 14 | DISK USAGE | $DATE"
+df -h | grep kafka
+du -sh /var/lib/kafka/*
+```
+
+Expected: No disk pressure.
+
+---
+
+## STEP 15 — Log Error Scan (During Drill)
+
+```bash
+echo "STEP 15 | LOG SCAN | $DATE"
+grep -iE "ERROR|FATAL|Offline|UnderReplicated" \
+  /var/log/kafka/server.log | tail -50
+```
+
+---
+
+## STEP 16 — Post-Failover Validation (DR SIDE)
+
+```bash
+echo "STEP 16 | POST FAILOVER CHECK | $DATE"
+$KAFKA_HOME/bin/kafka-topics.sh \
+  --bootstrap-server $BOOTSTRAP_SERVER \
+  --describe
+```
+
+```bash
+$KAFKA_HOME/bin/kafka-consumer-groups.sh \
+  --bootstrap-server $BOOTSTRAP_SERVER \
+  --all-groups --describe
+```
+
+Expected:
+
+* No offline partitions
+* Consumer lag reducing
+
+---
+
+## STEP 17 — Evidence Collection (MANDATORY)
+
+```bash
+echo "STEP 17 | EVIDENCE COLLECTION | $DATE"
+{
+echo "===== TIMESTAMP ====="
+date
+echo "===== TOPICS ====="
+$KAFKA_HOME/bin/kafka-topics.sh --bootstrap-server $BOOTSTRAP_SERVER --describe
+echo "===== CONSUMER GROUPS ====="
+$KAFKA_HOME/bin/kafka-consumer-groups.sh --bootstrap-server $BOOTSTRAP_SERVER --all-groups --describe
+} > kafka-dr-drill-evidence.log
+```
+
+---
+
+## STEP 18 — Final Sign-Off Check
+
+✔ No under-replicated partitions
+✔ No offline partitions
+✔ Consumer lag ≈ 0
+✔ Producer/Consumer functional
+✔ Data present in DR
+
+---
+
+### If you want next
+
+* **Single bash script** (one command execution)
+* **OpenShift / Strimzi specific version**
+* **Audit-ready SOP PDF**
+
+Tell me and I will deliver it in the same copy-paste format.
