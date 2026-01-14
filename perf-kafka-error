@@ -28,3 +28,46 @@ Topic: merchant_email_notification_topic        TopicId: p7pSsp37Rv2KbKA9XjtH1Q 
         Topic: merchant_email_notification_topic        Partition: 2    Leader: 0       Replicas: 0,1,2 Isr: 0,2,1      Elr:    LastKnownElr: 
         Topic: merchant_email_notification_topic        Partition: 3    Leader: 1       Replicas: 1,2,0 Isr: 0,2,1      Elr:    LastKnownElr: 
 sh-5.1$ 
+sh-5.1$ ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+transaction-consumers
+merchant-consumers
+
+sh-5.1$ ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --all-groups
+
+GROUP              TOPIC                             PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                        HOST            CLIENT-ID
+merchant-consumers merchant_report_topic             1          1225            1225            0               consumer-merchant-consumers-2-075e6c8e-d556-4169-b2fd-631836b57041 /172.16.56.147  consumer-merchant-consumers-2
+merchant-consumers merchant_report_topic             0          1194            1194            0               consumer-merchant-consumers-2-075e6c8e-d556-4169-b2fd-631836b57041 /172.16.56.147  consumer-merchant-consumers-2
+merchant-consumers merchant_sms_notification_topic   3          4773            4773            0               consumer-merchant-consumers-1-acfca406-afcb-48ec-b8b0-46d7cae838c2 /172.16.25.147  consumer-merchant-consumers-1
+merchant-consumers merchant_email_notification_topic 2          3990            3990            0               consumer-merchant-consumers-2-bd759fec-a502-4ca8-ac3d-e37dfbea5994 /172.16.25.147  consumer-merchant-consumers-2
+merchant-consumers merchant_sms_notification_topic   2          3282            3282            0               consumer-merchant-consumers-1-8260354c-3663-4569-be76-90a6fe50ac2c /172.16.17.69   consumer-merchant-consumers-1
+merchant-consumers merchant_report_topic             3          1156            1156            0               consumer-merchant-consumers-2-c7a56eab-fb5f-4b2c-9047-6be31fe95c34 /172.16.25.148  consumer-merchant-consumers-2
+merchant-consumers merchant_report_topic             2          1131            1131            0               consumer-merchant-consumers-2-91ebca5f-c833-47aa-b877-cfa25bbbf0dc /172.16.63.150  consumer-merchant-consumers-2
+merchant-consumers merchant_email_notification_topic 1          4095            4095            0               consumer-merchant-consumers-2-79b7a592-3e03-4d66-93bc-df711515fb55 /172.16.17.69   consumer-merchant-consumers-2
+merchant-consumers merchant_sms_notification_topic   1          3705            3705            0               consumer-merchant-consumers-1-72dd0cbb-9f25-4762-85d8-6d95a07a8678 /172.16.59.70   consumer-merchant-consumers-1
+merchant-consumers merchant_email_notification_topic 3          3749            3749            0               consumer-merchant-consumers-2-d640f330-82cd-4117-b04e-dcb06e61375c /172.16.56.146  consumer-merchant-consumers-2
+merchant-consumers merchant_report_alert_topic       0          3952            3952            0               consumer-merchant-consumers-3-4c2f5fd7-347d-4fa1-ae33-289da95eccc0 /172.16.19.102  consumer-merchant-consumers-3
+merchant-consumers merchant_sms_notification_topic   0          4092            4092            0               consumer-merchant-consumers-1-5f193859-e9dc-4c22-bca5-e75395d318b7 /172.16.56.146  consumer-merchant-consumers-1
+merchant-consumers merchant_email_notification_topic 0          4479            4479            0               consumer-merchant-consumers-2-2e8574e6-20e7-4c40-b901-e5df1217d00e /172.16.59.70   consumer-merchant-consumers-2
+merchant-consumers ops_report_generation_topic       0          0               0               0               consumer-merchant-consumers-1-5006d2f2-1faf-4c6d-b399-7d172cd306c4 /172.16.63.150  consumer-merchant-consumers-1
+GROUP                 TOPIC                                PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                           HOST            CLIENT-ID
+transaction-consumers transaction_sms_notification_topic   1          0               0               0               consumer-transaction-consumers-4-07c5c842-5db3-4c9d-89b7-5a0dc7ab0798 /172.16.20.191  consumer-transaction-consumers-4
+transaction-consumers transaction_push_verification_topic  1          0               0               0               consumer-transaction-consumers-1-1f291e6f-5ec0-4e27-924f-6db622f67e72 /172.16.27.72   consumer-transaction-consumers-1
+transaction-consumers transaction_email_notification_topic 3          0               0               0               consumer-transaction-consumers-6-351a1c42-e049-44bd-a0ae-758a88e985a0 /172.16.23.234  consumer-transaction-consumers-6
+transaction-consumers transaction_push_verification_topic  2          0               0               0               consumer-transaction-consumers-1-2212654a-0645-4eee-9984-589743e7a6c0 /172.16.62.119  consumer-transaction-consumers-1
+transaction-consumers process_bulk_refund_topic            2          7               7               0               consumer-transaction-consumers-5-4d698f43-8a7f-4b0f-b82f-2ebaf4c0c207 /172.16.20.191  consumer-transaction-consumers-5
+transaction-consumers transaction_sms_notification_topic   3          0               0               0               consumer-transaction-consumers-4-13ab07fd-ba74-4a92-9dc5-558218cb9cfd /172.16.61.42   consumer-transaction-consumers-4
+transaction-consumers process_bookingDetails_topic         0          11578           11578           0               consumer-transaction-consumers-3-05773284-cf4d-45e8-91cd-c5a16933d7c3 /172.16.16.245  consumer-transaction-consumers-3
+transaction-consumers process_bulk_refund_topic            3          3               3               0               consumer-transaction-consumers-5-744b78f4-735a-4e5e-9e04-8ee2cdb44e47 /172.16.56.145  consumer-transaction-consumers-5
+transaction-consumers transaction_sms_notification_topic   2          0               0               0               consumer-transaction-consumers-4-10c6df26-8d88-4912-8a70-4a19cdfc4f78 /172.16.62.119  consumer-transaction-consumers-4
+transaction-consumers transaction_sms_notification_topic   0          0               0               0               consumer-transaction-consumers-4-01a98e13-b3f4-43f3-b1a1-c5ff501aa87f /172.16.27.72   consumer-transaction-consumers-4
+transaction-consumers process_bulk_refund_topic            0          5               5               0               consumer-transaction-consumers-5-056c02a9-3136-4302-a0a6-129e1900b9f2 /172.16.59.69   consumer-transaction-consumers-5
+transaction-consumers process_bookingDetails_topic         1          11623           11623           0               consumer-transaction-consumers-3-09f7fb4f-5149-4f4e-b1ca-26d97deca0e2 /172.16.27.72   consumer-transaction-consumers-3
+transaction-consumers transaction_push_verification_topic  3          0               0               0               consumer-transaction-consumers-1-5ea8b677-2f80-4a16-904b-f2a350630c71 /172.16.20.190  consumer-transaction-consumers-1
+transaction-consumers recon_update_settlement_status_topic 0          0               0               0               consumer-transaction-consumers-2-00fb6fee-a48b-448f-95c7-e222fa5132da /172.16.61.42   consumer-transaction-consumers-2
+transaction-consumers transaction_push_verification_topic  0          0               0               0               consumer-transaction-consumers-1-16014793-8be6-4349-8f1b-b22fac89726b /172.16.27.73   consumer-transaction-consumers-1
+transaction-consumers process_bookingDetails_topic         2          11488           11488           0               consumer-transaction-consumers-3-409889fa-b5be-41be-a81a-5d8ff2f458b8 /172.16.54.28   consumer-transaction-consumers-3
+transaction-consumers transaction_email_notification_topic 2          0               0               0               consumer-transaction-consumers-6-2ff80767-5c48-48b4-94aa-cefe22519eea /172.16.59.69   consumer-transaction-consumers-6
+transaction-consumers process_bulk_refund_topic            1          4               4               0               consumer-transaction-consumers-5-1f8a2711-f751-41c1-ae9f-824e9facb35f /172.16.27.72   consumer-transaction-consumers-5
+transaction-consumers transaction_email_notification_topic 1          0               0               0               consumer-transaction-consumers-6-24ba7937-4f0a-4f0d-b005-e3af9d97881f /172.16.27.73   consumer-transaction-consumers-6
+transaction-consumers process_bookingDetails_topic         3          11338           11338           0               consumer-transaction-consumers-3-5d47eda8-fada-447d-b27f-82db2e1c54f0 /172.16.19.103  consumer-transaction-consumers-3
+transaction-consumers transaction_email_notification_topic 0          0               0               0               consumer-transaction-consumers-6-1b6d3dbb-bd09-4995-b6ee-c3dac9b988ec /17sh-5.1$ 
