@@ -1,47 +1,15 @@
-sh-5.1$ ./kafka-topics.sh --bootstrap-server --localhost:9093 --list
-[2026-01-17 06:54:48,998] WARN Couldn't resolve server --localhost:9093 from bootstrap.servers as DNS resolution failed for --localhost (org.apache.kafka.clients.ClientUtils)
-Failed to create new KafkaAdminClient
-org.apache.kafka.common.KafkaException: Failed to create new KafkaAdminClient
-        at org.apache.kafka.clients.admin.KafkaAdminClient.createInternal(KafkaAdminClient.java:561)
-        at org.apache.kafka.clients.admin.KafkaAdminClient.createInternal(KafkaAdminClient.java:512)
-        at org.apache.kafka.clients.admin.Admin.create(Admin.java:137)
-        at org.apache.kafka.tools.TopicCommand$TopicService.createAdminClient(TopicCommand.java:456)
-        at org.apache.kafka.tools.TopicCommand$TopicService.<init>(TopicCommand.java:445)
-        at org.apache.kafka.tools.TopicCommand.execute(TopicCommand.java:101)
-        at org.apache.kafka.tools.TopicCommand.mainNoExit(TopicCommand.java:90)
-        at org.apache.kafka.tools.TopicCommand.main(TopicCommand.java:85)
-Caused by: org.apache.kafka.common.config.ConfigException: No resolvable bootstrap urls given in bootstrap.servers
-        at org.apache.kafka.clients.ClientUtils.parseAndValidateAddresses(ClientUtils.java:104)
-        at org.apache.kafka.clients.ClientUtils.parseAndValidateAddresses(ClientUtils.java:63)
-        at org.apache.kafka.clients.admin.internals.AdminBootstrapAddresses.fromConfig(AdminBootstrapAddresses.java:72)
-        at org.apache.kafka.clients.admin.KafkaAdminClient.createInternal(KafkaAdminClient.java:530)
-        ... 7 more
+bin/kafka-topics.sh \
+--bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
+--list
 
-sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
-[2026-01-17 06:56:08,456] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
-[2026-01-17 06:56:08,563] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
-[2026-01-17 06:56:08,766] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
-[2026-01-17 06:56:08,969] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
-[2026-01-17 06:56:09,373] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
-[2026-01-17 06:56:10,281] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
-[2026-01-17 06:56:11,289] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
-sh-5.1$ ./kafka-topics.sh --bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:909393 --list
-Error while executing topic command : The AdminClient thread has exited. Call: listTopics
-[2026-01-17 06:56:25,727] ERROR org.apache.kafka.common.errors.TimeoutException: The AdminClient thread has exited. Call: listTopics
- (org.apache.kafka.tools.TopicCommand)
-[2026-01-17 06:56:25,737] ERROR Uncaught exception in thread 'kafka-admin-client-thread | adminclient-1': (org.apache.kafka.common.utils.KafkaThread)
-java.lang.OutOfMemoryError: Java heap space
-        at java.base/java.nio.HeapByteBuffer.<init>(HeapByteBuffer.java:64)
-        at java.base/java.nio.ByteBuffer.allocate(ByteBuffer.java:363)
-        at org.apache.kafka.common.memory.MemoryPool$1.tryAllocate(MemoryPool.java:30)
-        at org.apache.kafka.common.network.NetworkReceive.readFrom(NetworkReceive.java:103)
-        at org.apache.kafka.common.network.KafkaChannel.receive(KafkaChannel.java:462)
-        at org.apache.kafka.common.network.KafkaChannel.read(KafkaChannel.java:412)
-        at org.apache.kafka.common.network.Selector.attemptRead(Selector.java:694)
-        at org.apache.kafka.common.network.Selector.pollSelectionKeys(Selector.java:596)
-        at org.apache.kafka.common.network.Selector.poll(Selector.java:501)
-        at org.apache.kafka.clients.NetworkClient.poll(NetworkClient.java:596)
-        at org.apache.kafka.clients.admin.KafkaAdminClient$AdminClientRunnable.processRequests(KafkaAdminClient.java:1542)
-        at org.apache.kafka.clients.admin.KafkaAdminClient$AdminClientRunnable.run(KafkaAdminClient.java:1473)
-        at java.base/java.lang.Thread.run(Thread.java:840)
-sh-5.1$ 
+
+
+bin/kafka-console-producer.sh \
+--bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
+--topic neft.outbound.kafka.topic
+
+
+bin/kafka-console-consumer.sh \
+--bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
+--topic neft.outbound.kafka.topic \
+--from-beginning
