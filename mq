@@ -2,6 +2,8 @@
 --bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
 --list
 
+bin/kafka-console-producer.sh --bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 --producer.config /tmp/strimzi-connect.properties --topic neft.outbound.kafka.topic
+
 
 
 ./kafka-console-producer.sh \
