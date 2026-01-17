@@ -1,3 +1,14 @@
-./kafka-console-producer.sh \
+sh-5.1$ pwd
+/opt/kafka/bin
+sh-5.1$ ./kafka-console-producer.sh \
 --bootstrap-server localhost:9092 \
 --topic neft.outbound.kafka.topic
+>Saadi
+>message 1
+>testing 2
+>message from kafka 
+>[2026-01-17 09:16:15,289] WARN [Producer clientId=console-producer] Got error produce response with correlation id 9 on topic-partition neft.outbound.kafka.topic-0, retrying (2 attempts left). Error: REQUEST_TIMED_OUT (org.apache.kafka.clients.producer.internals.Sender)
+[2026-01-17 09:16:16,908] WARN [Producer clientId=console-producer] Got error produce response with correlation id 10 on topic-partition neft.outbound.kafka.topic-0, retrying (1 attempts left). Error: REQUEST_TIMED_OUT (org.apache.kafka.clients.producer.internals.Sender)
+[2026-01-17 09:16:18,641] WARN [Producer clientId=console-producer] Got error produce response with correlation id 11 on topic-partition neft.outbound.kafka.topic-0, retrying (0 attempts left). Error: REQUEST_TIMED_OUT. Error Message: Disconnected from node 1 due to timeout (org.apache.kafka.clients.producer.internals.Sender)
+[2026-01-17 09:16:20,625] ERROR Error when sending message to topic neft.outbound.kafka.topic with key: null, value: 19 bytes with error: (org.apache.kafka.clients.producer.internals.ErrorLoggingCallback)
+org.apache.kafka.common.errors.TimeoutException: The request timed out.
