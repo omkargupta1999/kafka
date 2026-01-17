@@ -14,6 +14,11 @@ bin/kafka-console-consumer.sh \
 --topic neft.outbound.kafka.topic \
 --from-beginning
 
+bin/kafka-console-producer.sh \
+--bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
+--command-config /opt/kafka/custom-config/kafka-connect.properties \
+--topic neft.outbound.kafka.topic
+
 
 ==========================================
 
