@@ -1,1 +1,7 @@
 ls -lh /tmp/kafka/cluster.truststore.p12
+
+sh-5.1$ cd bin
+sh-5.1$ ls -lh /tmp/kafka/cluster.truststore.p12
+-rw-r--r--. 1 1000950000 1000950000 1.8K Jan 17 09:46 /tmp/kafka/cluster.truststore.p12
+sh-5.1$ 
+
