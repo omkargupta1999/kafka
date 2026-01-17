@@ -1,3 +1,13 @@
 ./kafka-console-producer.sh \
 --bootstrap-server localhost:9092 \
 --topic neft.outbound.kafka.topic
+
+pod : dev-kafka-cluster-broker-1
+sh-5.1$ cd bin
+sh-5.1$ ./kafka-console-producer.sh \
+--bootstrap-server localhost:9092 \
+--topic neft.outbound.kafka.topic
+>Saadi
+>message from kafka
+>17jan2026
+>
