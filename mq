@@ -26,51 +26,27 @@ EOF
 
 
 ==============
-sh-5.1$ cd bin
-sh-5.1$ export CERTS_STORE_PASSWORD=pbUnnCLwMfNm
-sh-5.1$ echo $CERTS_STORE_PASSWORD
-pbU5.1$ cat <<EOF > /tmp/producer.properties
+export CERTS_STORE_PASSWORD=pbUnnCLwMfNm
+echo $CERTS_STORE_PASSWORD
+
+
+rm -f /tmp/producer.properties
+
+
+cat <<EOF > /tmp/producer.properties
 bootstrap.servers=dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093
-security.protocol=SSL-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9
+security.protocol=SSL
 ssl.truststore.location=/tmp/kafka/cluster.truststore.p12
-ssl.truststore.password=${CERTS_STORE_PASSWORD}tstore.p12
-ssl.truststore.type=PKCS12CERTS_STORE_PASSWORD}
-sh-5.1$ /opt/kafka/bin/kafka-console-producer.sh \
+ssl.truststore.password=pbUnnCLwMfNm
+ssl.truststore.type=PKCS12
+EOF
+
+
+cat /tmp/producer.properties
+
+
+./kafka-console-producer.sh \
 --bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
---producer.config /tmp/producer.properties \ootstrap.dev-kafka.svc.cluster.local:
---topic neft.outbound.kafka.topicroperties \
-org.apache.kafka.common.KafkaException: Failed to construct kafka producer
-        at org.apache.kafka.clients.producer.KafkaProducer.<init>(KafkaProducer.java:476)
-        at org.apache.kafka.clients.producer.KafkaProducer.<init>(KafkaProducer.java:297)
-        at org.apache.kafka.clients.producer.KafkaProducer.<init>(KafkaProducer.java:324)
-        at org.apache.kafka.clients.producer.KafkaProducer.<init>(KafkaProducer.java:309)
-        at kafka.tools.ConsoleProducer$.main(ConsoleProducer.scala:99)
-        at kafka.tools.ConsoleProducer.main(ConsoleProducer.scala)
-Caused by: org.apache.kafka.common.KafkaException: Failed to create new NetworkClient
-        at org.apache.kafka.clients.ClientUtils.createNetworkClient(ClientUtils.java:255)
-        at org.apache.kafka.clients.ClientUtils.createNetworkClient(ClientUtils.java:163)
-        at org.apache.kafka.clients.producer.KafkaProducer.newSender(KafkaProducer.java:526)
-        at org.apache.kafka.clients.producer.KafkaProducer.<init>(KafkaProducer.java:465)
-        ... 5 more
-Caused by: org.apache.kafka.common.KafkaException: Failed to load SSL keystore /tmp/kafka/cluster.truststore.p12 of type PKCS12
-        at org.apache.kafka.common.security.ssl.DefaultSslEngineFactory$FileBasedStore.load(DefaultSslEngineFactory.java:380)
-        at org.apache.kafka.common.security.ssl.DefaultSslEngineFactory$FileBasedStore.<init>(DefaultSslEngineFactory.java:352)
-        at org.apache.kafka.common.security.ssl.DefaultSslEngineFactory.createTruststore(DefaultSslEngineFactory.java:325)
-        at org.apache.kafka.common.security.ssl.DefaultSslEngineFactory.configure(DefaultSslEngineFactory.java:169)
-        at org.apache.kafka.common.security.ssl.SslFactory.instantiateSslEngineFactory(SslFactory.java:147)
-        at org.apache.kafka.common.security.ssl.SslFactory.configure(SslFactory.java:100)
-        at org.apache.kafka.common.network.SslChannelBuilder.configure(SslChannelBuilder.java:70)
-        at org.apache.kafka.common.network.ChannelBuilders.create(ChannelBuilders.java:193)
-        at org.apache.kafka.common.network.ChannelBuilders.clientChannelBuilder(ChannelBuilders.java:82)
-        at org.apache.kafka.clients.ClientUtils.createChannelBuilder(ClientUtils.java:120)
-        at org.apache.kafka.clients.ClientUtils.createNetworkClient(ClientUtils.java:224)
-        ... 8 more
-Caused by: java.io.IOException: keystore password was incorrect
-        at java.base/sun.security.pkcs12.PKCS12KeyStore.engineLoad(PKCS12KeyStore.java:2159)
-        at java.base/sun.security.util.KeyStoreDelegator.engineLoad(KeyStoreDelegator.java:221)
-        at java.base/java.security.KeyStore.load(KeyStore.java:1473)
-        at org.apache.kafka.common.security.ssl.DefaultSslEngineFactory$FileBasedStore.load(DefaultSslEngineFactory.java:377)
-        ... 18 more
-Caused by: java.security.UnrecoverableKeyException: failed to decrypt safe contents entry: javax.crypto.BadPaddingException: Given final block not properly padded. Such issues can arise if a bad key is used during decryption.
-        ... 22 more
-sh-5.1$ 
+--producer.config /tmp/producer.properties \
+--topic neft.outbound.kafka.topic
+
