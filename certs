@@ -1,0 +1,63 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  annotations:
+    strimzi.io/ca-cert-generation: '0'
+  resourceVersion: '496830120'
+  name: dev-kafka-cluster-cluster-ca-cert
+  uid: 31e854a7-1668-45e3-8c9f-960edbbed0fd
+  creationTimestamp: '2025-11-11T09:58:38Z'
+  managedFields:
+    - manager: strimzi-cluster-operator
+      operation: Update
+      apiVersion: v1
+      time: '2025-11-11T09:58:38Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:data':
+          .: {}
+          'f:ca.crt': {}
+          'f:ca.p12': {}
+          'f:ca.password': {}
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:strimzi.io/ca-cert-generation': {}
+          'f:labels':
+            'f:app.kubernetes.io/managed-by': {}
+            'f:app.kubernetes.io/name': {}
+            .: {}
+            'f:strimzi.io/cluster': {}
+            'f:app.kubernetes.io/part-of': {}
+            'f:strimzi.io/component-type': {}
+            'f:strimzi.io/name': {}
+            'f:app.kubernetes.io/instance': {}
+            'f:strimzi.io/kind': {}
+            'f:environment': {}
+          'f:ownerReferences':
+            .: {}
+            'k:{"uid":"ab8cf8f2-7a71-4b49-8c7e-5b469a8dec8a"}': {}
+        'f:type': {}
+  namespace: dev-kafka
+  ownerReferences:
+    - apiVersion: kafka.strimzi.io/v1beta2
+      kind: Kafka
+      name: dev-kafka-cluster
+      uid: ab8cf8f2-7a71-4b49-8c7e-5b469a8dec8a
+      controller: false
+      blockOwnerDeletion: false
+  labels:
+    app.kubernetes.io/part-of: strimzi-dev-kafka-cluster
+    app.kubernetes.io/instance: dev-kafka-cluster
+    strimzi.io/component-type: certificate-authority
+    strimzi.io/name: strimzi
+    app.kubernetes.io/managed-by: strimzi-cluster-operator
+    environment: dev
+    strimzi.io/kind: Kafka
+    app.kubernetes.io/name: certificate-authority
+    strimzi.io/cluster: dev-kafka-cluster
+data:
+  ca.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUZMVENDQXhXZ0F3SUJBZ0lVRy9BUW5HUkVPWXRNWFBUWmRKc3hXL3JCUlFzd0RRWUpLb1pJaHZjTkFRRU4KQlFBd0xURVRNQkVHQTFVRUNnd0thVzh1YzNSeWFXMTZhVEVXTUJRR0ExVUVBd3dOWTJ4MWMzUmxjaTFqWVNCMgpNREFlRncweU5URXhNVEV3T1RVNE16WmFGdzB5TmpFeE1URXdPVFU0TXpaYU1DMHhFekFSQmdOVkJBb01DbWx2CkxuTjBjbWx0ZW1reEZqQVVCZ05WQkFNTURXTnNkWE4wWlhJdFkyRWdkakF3Z2dJaU1BMEdDU3FHU0liM0RRRUIKQVFVQUE0SUNEd0F3Z2dJS0FvSUNBUUNwLzM5TEFaajdHdFZmeEhRdTZseUwvOEE4cFZ5dGNDTDF0UlZtM28wUApUdG9ENzBzb3FOckl2R1RocGxrRzRSRVNlTHF4eVNNbHMxcnI5cU5PZFBuVUFvWDNXSmJkbTlyM2RPdTV2TjJ0ClF1bnkzb1d1OUkwL2NrR01rbkkrUE51NU55RFFzNUNFaTEzTHBvdVBDQndVeDFZQld0ZE9VcXY4eEdIaGM5dlUKVldRZE5VZXRRTE9rM3B6S3F6alFIUWRENkxPakhJZEZxT1liU1V4MmV2TGpsSWhUeUxJL0xSelJrS29jY0ZEVgpaRUkwekdieEVtdzRhN0FmQk40dFJZbEh3UFhWU3pvckdnM21qaS9DWUQ3aEIySjdnYkxFbmM3d0tuUVlpNTN0CmFoV2dDRWRqUFFJbkZSMktvUWt0Z1pBT1lJUStWR2tXUW1Vc09oYW1TWENheDR2T2VoVFloUTIyVzc5TExFbmQKWFZPTUVVNWZOc2ZFU1NRczZVSVorTi9GQXREMTZOK2RvL3VrWnV0MUxHREdnL3c4Z0xzNEllNmpSZGp6UUovZQpHNytneGZnc3BhUHNYalVuOHJIdmVpNitqMkNMQ2JyaGpyUndGdU9BbUxERnUrcFBubkF4RkxVNTIwQWNIMDFHCkYySHRtMVp6c21LYXNyME5BdEJoWnFwa1hkREIvOGsxbFEzUjFPSm5kcTI1bE11VXhFd0IrWEpHUmJnbEVxU0QKakVGVHNlSGZVT082Vnlsb2M4eG9JdUhMaVpCNjNDUFpnTmt1T0RqYWtnZjRhQTdwNnozUHhNSUM2VnhRUWpPdwpTeDRsSnp0NHlNMDZ3dXVJR0RSc2FSOGQ5VG8yNk1PdUdzZkNiTzVHREY4a1BrTE5wRktoLzl5a0hBVlBVMnNrCkl3SURBUUFCbzBVd1F6QWRCZ05WSFE0RUZnUVVqZDdXL21sM3NYQkx1ZUdjZ0dmNnIvOEU1UjR3RWdZRFZSMFQKQVFIL0JBZ3dCZ0VCL3dJQkFEQU9CZ05WSFE4QkFmOEVCQU1DQVFZd0RRWUpLb1pJaHZjTkFRRU5CUUFEZ2dJQgpBRUlZenEyc01NcEdaSWRNL1ZJaGd5aGlwUitmSjJjUzd4SVlIVVlzNERFb0c4WUtPNi9TYzZlSUtsSXY4YXFkCmRDQnhLYW91ZDFJeHBnRGhQbHNVMVNQVGNpU0JoeENyQnQyc2NYY3B3YmxuZVlXczRNUTZKWFNjTGZoUFUyUnUKZTdJazJZSGxLdC81UXJBWlNOb0ViTDA5b0VtVHZNTHUrdmNMb1ByYTBJOU9XTWdkWVVVS0kxNGsrWlBpM0xwMQpOZXEwZnlKRUxCV2N3UG9LdUVHN29WbFdEZXlHamtTQVJUczBvZ3RoRGFCMVVZY1g4SlFtdXFydUNZcktEYkxMCklBSitqM3VFNHhmWVBDU2hvVUdPb1Vkc2NINHZEeVJpUkxvUXhQbjMxVUtEVnUwbHlIQ1NkSExRRVNpMFpiMWIKQWZVSDhuVW1Iano0T2xTVHRuU1lLYjE4VldndjlJMGwrV2Fhemc3R0dQWWp4SXcvbk5Xd2xSZzl6eHI1c3NzeApJS0c1U1BxYVRielhWYS9QS1c1MTg4NDdsdllQTjk3b1k2R0ZDc0M4NjFYMTVZTk5CY243djdjcVllNkpzcHdJClZTNVpxUWlhY2UrZFhtc0tRaGtOcU1KK1hMWUxra3lMNjlNOTkxTEhnV01OYjluRmVsMktWZXlLcHNsVTAxQnUKZEFwWitBTk5Ya2MwbkFFS2xaUDM1Zm5yWGFHdlNsdEQvcllzSWJlRTRjejg0U1ErU0dzM2FGRzRZNGRxekFkVQp4aGpwZ2FyT3dVLzI0SWxGNVlIV2o1RmZVa0ZUVVhpMHpBUVJza1FWQ3YxSVBKTC9CcCtUcytnMkZCV2VhTlhqCjgyVmh2Y0NZSlBZdDhreDh3eHJjMWQzRU5kd1V5WVZMYWpWVGNuY1Z2RmsyCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+  ca.p12: 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
+  ca.password: cGJVbm5DTHdNZk5t
+type: Opaque
