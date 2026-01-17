@@ -1,4 +1,48 @@
-sh-5.1$ printenv | grep CERTS
-KAFKA_CONNECT_TRUSTED_CERTS=dev-kafka-cluster-cluster-ca-cert/*.crt
+pod : dev-kafka-connect-mq-test-connect-0
+
+AFKA_CONNECT_TRUSTED_CERTS=dev-kafka-cluster-cluster-ca-cert/*.crt
 CERTS_STORE_PASSWORD=
+sh-5.1$  ./kafka-topics.sh --bootstrap-server localhost:9092 --list | grep neft
+[2026-01-17 09:12:47,833] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 09:12:47,941] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 09:12:48,044] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 09:12:48,348] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 09:12:48,754] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 09:12:49,663] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 09:12:50,671] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 09:12:51,679] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 09:12:52,687] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 09:12:53,697] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 09:12:54,705] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 09:12:55,713] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 09:12:56,722] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+^C
+sh-5.1$ 
+
+
+
+pod : dev-kafka-cluster-broker-1
+
+sh-5.1$ cd bin
+sh-5.1$ printenv | grep CERTS
+sh-5.1$ ./kafka-console-producer.sh \
+--bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
+--producer.config /tmp/producer.properties \
+--topic neft.outbound.kafka.topic
+java.nio.file.NoSuchFileException: /tmp/producer.properties
+        at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+        at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+        at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+        at java.base/sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:218)
+        at java.base/java.nio.file.Files.newByteChannel(Files.java:380)
+        at java.base/java.nio.file.Files.newByteChannel(Files.java:432)
+        at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:422)
+        at java.base/java.nio.file.Files.newInputStream(Files.java:160)
+        at org.apache.kafka.common.utils.Utils.loadProps(Utils.java:655)
+        at kafka.tools.ConsoleProducer$.producerProps(ConsoleProducer.scala:134)
+        at kafka.tools.ConsoleProducer$.main(ConsoleProducer.scala:99)
+        at kafka.tools.ConsoleProducer.main(ConsoleProducer.scala)
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list | grep neftneft.outbound.kafka.topic
+neft.processed.kafka.topic
+neft.raw.kafka.topic
 sh-5.1$ 
