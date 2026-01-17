@@ -1,163 +1,47 @@
-apiVersion: kafka.strimzi.io/v1beta2
-kind: KafkaConnect
-metadata:
-  annotations:
-    argocd.argoproj.io/sync-wave: '9'
-    meta.helm.sh/release-name: epay-common
-    meta.helm.sh/release-namespace: dev-epay-common
-    strimzi.io/use-connector-resources: 'true'
-  resourceVersion: '572883767'
-  name: dev-kafka-connect-mq-test
-  uid: 63cf5ed6-029d-4d41-a66c-1f7b2702a8aa
-  creationTimestamp: '2025-12-22T09:17:22Z'
-  generation: 13
-  managedFields:
-    - apiVersion: kafka.strimzi.io/v1beta2
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            .: {}
-            'f:argocd.argoproj.io/sync-wave': {}
-            'f:meta.helm.sh/release-name': {}
-            'f:meta.helm.sh/release-namespace': {}
-            'f:strimzi.io/use-connector-resources': {}
-          'f:labels':
-            .: {}
-            'f:app.kubernetes.io/component': {}
-            'f:app.kubernetes.io/instance': {}
-            'f:app.kubernetes.io/managed-by': {}
-            'f:app.kubernetes.io/name': {}
-            'f:environment': {}
-        'f:spec':
-          'f:version': {}
-          'f:image': {}
-          'f:tls':
-            .: {}
-            'f:trustedCertificates': {}
-          .: {}
-          'f:template':
-            .: {}
-            'f:pod':
-              .: {}
-              'f:affinity':
-                .: {}
-                'f:nodeAffinity':
-                  .: {}
-                  'f:requiredDuringSchedulingIgnoredDuringExecution':
-                    .: {}
-                    'f:nodeSelectorTerms': {}
-          'f:replicas': {}
-          'f:resources':
-            .: {}
-            'f:limits':
-              .: {}
-              'f:cpu': {}
-              'f:memory': {}
-            'f:requests':
-              .: {}
-              'f:cpu': {}
-              'f:memory': {}
-          'f:config':
-            'f:config.storage.topic': {}
-            'f:offset.flush.timeout.ms': {}
-            'f:offset.storage.replication.factor': {}
-            'f:status.storage.replication.factor': {}
-            .: {}
-            'f:value.converter': {}
-            'f:status.storage.topic': {}
-            'f:offset.storage.topic': {}
-            'f:config.storage.replication.factor': {}
-            'f:key.converter': {}
-            'f:value.converter.schemas.enable': {}
-            'f:offset.flush.interval.ms': {}
-            'f:group.id': {}
-          'f:bootstrapServers': {}
-      manager: Mozilla
-      operation: Update
-      time: '2025-12-24T09:03:47Z'
-    - apiVersion: kafka.strimzi.io/v1beta2
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:status':
-          .: {}
-          'f:conditions': {}
-          'f:connectorPlugins': {}
-          'f:labelSelector': {}
-          'f:observedGeneration': {}
-          'f:replicas': {}
-          'f:url': {}
-      manager: strimzi-cluster-operator
-      operation: Update
-      subresource: status
-      time: '2026-01-16T05:21:27Z'
-  namespace: dev-kafka
-  labels:
-    app.kubernetes.io/component: kafka-connect
-    app.kubernetes.io/instance: epay-common
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: dev-kafka-connect-mq-test
-    environment: dev
-spec:
-  bootstrapServers: 'dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093'
-  config:
-    status.storage.topic: dev-connect-cluster-status
-    status.storage.replication.factor: -1
-    offset.storage.topic: dev-connect-cluster-offsets
-    value.converter: org.apache.kafka.connect.converters.ByteArrayConverter
-    offset.flush.interval.ms: 10000
-    group.id: dev-connect-cluster
-    value.converter.schemas.enable: 'false'
-    config.storage.replication.factor: -1
-    config.storage.topic: dev-connect-cluster-configs
-    key.converter: org.apache.kafka.connect.storage.StringConverter
-    offset.flush.timeout.ms: 5000
-    offset.storage.replication.factor: -1
-  image: 'registry.dev.sbiepay.sbi:8443/library/kafka-connect-mq:v3'
-  replicas: 3
-  resources:
-    limits:
-      cpu: 4
-      memory: 8Gi
-    requests:
-      cpu: 2
-      memory: 4Gi
-  template:
-    pod:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node-role.kubernetes.io/worker
-                    operator: Exists
-  tls:
-    trustedCertificates:
-      - pattern: '*.crt'
-        secretName: dev-kafka-cluster-cluster-ca-cert
-  version: 3.9.0
-status:
-  conditions:
-    - lastTransitionTime: '2026-01-16T05:21:27.063479429Z'
-      status: 'True'
-      type: Ready
-  connectorPlugins:
-    - class: com.ibm.eventstreams.connect.mqsink.MQSinkConnector
-      type: sink
-      version: 2.2.1
-    - class: com.ibm.eventstreams.connect.mqsource.MQSourceConnector
-      type: source
-      version: 2.6.0
-    - class: org.apache.kafka.connect.mirror.MirrorCheckpointConnector
-      type: source
-      version: 3.9.0
-    - class: org.apache.kafka.connect.mirror.MirrorHeartbeatConnector
-      type: source
-      version: 3.9.0
-    - class: org.apache.kafka.connect.mirror.MirrorSourceConnector
-      type: source
-      version: 3.9.0
-  labelSelector: 'strimzi.io/cluster=dev-kafka-connect-mq-test,strimzi.io/name=dev-kafka-connect-mq-test-connect,strimzi.io/kind=KafkaConnect'
-  observedGeneration: 13
-  replicas: 3
-  url: 'http://dev-kafka-connect-mq-test-connect-api.dev-kafka.svc:8083'
+sh-5.1$ ./kafka-topics.sh --bootstrap-server --localhost:9093 --list
+[2026-01-17 06:54:48,998] WARN Couldn't resolve server --localhost:9093 from bootstrap.servers as DNS resolution failed for --localhost (org.apache.kafka.clients.ClientUtils)
+Failed to create new KafkaAdminClient
+org.apache.kafka.common.KafkaException: Failed to create new KafkaAdminClient
+        at org.apache.kafka.clients.admin.KafkaAdminClient.createInternal(KafkaAdminClient.java:561)
+        at org.apache.kafka.clients.admin.KafkaAdminClient.createInternal(KafkaAdminClient.java:512)
+        at org.apache.kafka.clients.admin.Admin.create(Admin.java:137)
+        at org.apache.kafka.tools.TopicCommand$TopicService.createAdminClient(TopicCommand.java:456)
+        at org.apache.kafka.tools.TopicCommand$TopicService.<init>(TopicCommand.java:445)
+        at org.apache.kafka.tools.TopicCommand.execute(TopicCommand.java:101)
+        at org.apache.kafka.tools.TopicCommand.mainNoExit(TopicCommand.java:90)
+        at org.apache.kafka.tools.TopicCommand.main(TopicCommand.java:85)
+Caused by: org.apache.kafka.common.config.ConfigException: No resolvable bootstrap urls given in bootstrap.servers
+        at org.apache.kafka.clients.ClientUtils.parseAndValidateAddresses(ClientUtils.java:104)
+        at org.apache.kafka.clients.ClientUtils.parseAndValidateAddresses(ClientUtils.java:63)
+        at org.apache.kafka.clients.admin.internals.AdminBootstrapAddresses.fromConfig(AdminBootstrapAddresses.java:72)
+        at org.apache.kafka.clients.admin.KafkaAdminClient.createInternal(KafkaAdminClient.java:530)
+        ... 7 more
+
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
+[2026-01-17 06:56:08,456] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:56:08,563] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:56:08,766] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:56:08,969] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:56:09,373] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:56:10,281] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:56:11,289] WARN [AdminClient clientId=adminclient-1] Connection to node -1 (localhost/127.0.0.1:9092) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+sh-5.1$ ./kafka-topics.sh --bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:909393 --list
+Error while executing topic command : The AdminClient thread has exited. Call: listTopics
+[2026-01-17 06:56:25,727] ERROR org.apache.kafka.common.errors.TimeoutException: The AdminClient thread has exited. Call: listTopics
+ (org.apache.kafka.tools.TopicCommand)
+[2026-01-17 06:56:25,737] ERROR Uncaught exception in thread 'kafka-admin-client-thread | adminclient-1': (org.apache.kafka.common.utils.KafkaThread)
+java.lang.OutOfMemoryError: Java heap space
+        at java.base/java.nio.HeapByteBuffer.<init>(HeapByteBuffer.java:64)
+        at java.base/java.nio.ByteBuffer.allocate(ByteBuffer.java:363)
+        at org.apache.kafka.common.memory.MemoryPool$1.tryAllocate(MemoryPool.java:30)
+        at org.apache.kafka.common.network.NetworkReceive.readFrom(NetworkReceive.java:103)
+        at org.apache.kafka.common.network.KafkaChannel.receive(KafkaChannel.java:462)
+        at org.apache.kafka.common.network.KafkaChannel.read(KafkaChannel.java:412)
+        at org.apache.kafka.common.network.Selector.attemptRead(Selector.java:694)
+        at org.apache.kafka.common.network.Selector.pollSelectionKeys(Selector.java:596)
+        at org.apache.kafka.common.network.Selector.poll(Selector.java:501)
+        at org.apache.kafka.clients.NetworkClient.poll(NetworkClient.java:596)
+        at org.apache.kafka.clients.admin.KafkaAdminClient$AdminClientRunnable.processRequests(KafkaAdminClient.java:1542)
+        at org.apache.kafka.clients.admin.KafkaAdminClient$AdminClientRunnable.run(KafkaAdminClient.java:1473)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+sh-5.1$ 
