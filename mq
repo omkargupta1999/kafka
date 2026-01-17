@@ -19,6 +19,11 @@ bin/kafka-console-producer.sh \
 --command-config /opt/kafka/custom-config/kafka-connect.properties \
 --topic neft.outbound.kafka.topic
 
+bin/kafka-console-producer.sh \
+--bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
+--producer.config /tmp/strimzi-connect.properties \
+--topic neft.outbound.kafka.topic
+
 
 ==========================================
 
