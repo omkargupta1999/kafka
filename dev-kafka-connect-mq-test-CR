@@ -167,10 +167,54 @@ status:
 
 ++++++++++++++++++++++++++++++++++++
 
-pdate your KafkaConnect CR
+updated CR
 
-Add this block under spec.template.pod
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnect
+metadata:
+  name: dev-kafka-connect-mq-test
+  namespace: dev-kafka
+  annotations:
+    strimzi.io/use-connector-resources: "true"
 spec:
+  version: 3.9.0
+  replicas: 3
+  bootstrapServers: dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093
+
+  image: registry.dev.sbiepay.sbi:8443/library/kafka-connect-mq:v3
+
+  tls:
+    trustedCertificates:
+      - secretName: dev-kafka-cluster-cluster-ca-cert
+        pattern: "*.crt"
+
+  config:
+    group.id: dev-connect-cluster
+
+    config.storage.topic: dev-connect-cluster-configs
+    offset.storage.topic: dev-connect-cluster-offsets
+    status.storage.topic: dev-connect-cluster-status
+
+    config.storage.replication.factor: -1
+    offset.storage.replication.factor: -1
+    status.storage.replication.factor: -1
+
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.converters.ByteArrayConverter
+    value.converter.schemas.enable: "false"
+
+    offset.flush.interval.ms: 10000
+    offset.flush.timeout.ms: 5000
+
+  resources:
+    requests:
+      cpu: "2"
+      memory: 4Gi
+    limits:
+      cpu: "4"
+      memory: 8Gi
+
   template:
     pod:
       env:
@@ -179,4 +223,10 @@ spec:
             secretKeyRef:
               name: dev-kafka-cluster-cluster-ca-cert
               key: ca.password
-
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/worker
+                    operator: Exists
