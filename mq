@@ -1,10 +1,10 @@
-bin/kafka-topics.sh \
+./kafka-topics.sh \
 --bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
 --list
 
 
 
-bin/kafka-console-producer.sh \
+./kafka-console-producer.sh \
 --bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
 --topic neft.outbound.kafka.topic
 
@@ -13,3 +13,63 @@ bin/kafka-console-consumer.sh \
 --bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
 --topic neft.outbound.kafka.topic \
 --from-beginning
+
+
+==========================================
+
+using the pod dev-kafka-connect-mq-test-connect-0
+
+sh-5.1$ ./kafka-topics.sh \
+--bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
+--list
+Error while executing topic command : The AdminClient thread has exited. Call: listTopics
+[2026-01-17 06:58:50,298] ERROR org.apache.kafka.common.errors.TimeoutException: The AdminClient thread has exited. Call: listTopics
+ (org.apache.kafka.tools.TopicCommand)
+[2026-01-17 06:58:50,311] ERROR Uncaught exception in thread 'kafka-admin-client-thread | adminclient-1': (org.apache.kafka.common.utils.KafkaThread)
+java.lang.OutOfMemoryError: Java heap space
+        at java.base/java.nio.HeapByteBuffer.<init>(HeapByteBuffer.java:64)
+        at java.base/java.nio.ByteBuffer.allocate(ByteBuffer.java:363)
+        at org.apache.kafka.common.memory.MemoryPool$1.tryAllocate(MemoryPool.java:30)
+        at org.apache.kafka.common.network.NetworkReceive.readFrom(NetworkReceive.java:103)
+        at org.apache.kafka.common.network.KafkaChannel.receive(KafkaChannel.java:462)
+        at org.apache.kafka.common.network.KafkaChannel.read(KafkaChannel.java:412)
+        at org.apache.kafka.common.network.Selector.attemptRead(Selector.java:694)
+        at org.apache.kafka.common.network.Selector.pollSelectionKeys(Selector.java:596)
+        at org.apache.kafka.common.network.Selector.poll(Selector.java:501)
+        at org.apache.kafka.clients.NetworkClient.poll(NetworkClient.java:596)
+        at org.apache.kafka.clients.admin.KafkaAdminClient$AdminClientRunnable.processRequests(KafkaAdminClient.java:1542)
+        at org.apache.kafka.clients.admin.KafkaAdminClient$AdminClientRunnable.run(KafkaAdminClient.java:1473)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+sh-5.1$ ./kafka-console-producer.sh \
+--bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
+--topic neft.outbound.kafka.topic
+>[2026-01-17 06:59:15,398] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:59:15,592] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:59:15,867] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:59:16,196] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:59:16,627] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:59:17,454] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+sh-5.1$ ./kafka-topics.sh \
+--bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
+--list
+Error while executing topic command : The AdminClient thread has exited. Call: listTopics
+[2026-01-17 06:59:34,809] ERROR org.apache.kafka.common.errors.TimeoutException: The AdminClient thread has exited. Call: listTopics
+ (org.apache.kafka.tools.TopicCommand)
+[2026-01-17 06:59:34,819] ERROR Uncaught exception in thread 'kafka-admin-client-thread | adminclient-1': (org.apache.kafka.common.utils.KafkaThread)
+java.lang.OutOfMemoryError: Java heap space
+        at java.base/java.nio.HeapByteBuffer.<init>(HeapByteBuffer.java:64)
+        at java.base/java.nio.ByteBuffer.allocate(ByteBuffer.java:363)
+        at org.apache.kafka.common.memory.MemoryPool$1.tryAllocate(MemoryPool.java:30)
+        at org.apache.kafka.common.network.NetworkReceive.readFrom(NetworkReceive.java:103)
+        at org.apache.kafka.common.network.KafkaChannel.receive(KafkaChannel.java:462)
+        at org.apache.kafka.common.network.KafkaChannel.read(KafkaChannel.java:412)
+        at org.apache.kafka.common.network.Selector.attemptRead(Selector.java:694)
+        at org.apache.kafka.common.network.Selector.pollSelectionKeys(Selector.java:596)
+        at org.apache.kafka.common.network.Selector.poll(Selector.java:501)
+        at org.apache.kafka.clients.NetworkClient.poll(NetworkClient.java:596)
+        at org.apache.kafka.clients.admin.KafkaAdminClient$AdminClientRunnable.processRequests(KafkaAdminClient.java:1542)
+        at org.apache.kafka.clients.admin.KafkaAdminClient$AdminClientRunnable.run(KafkaAdminClient.java:1473)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+sh-5.1$ pwd
+/opt/kafka/bin
+sh-5.1$ 
