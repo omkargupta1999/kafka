@@ -161,3 +161,22 @@ status:
   observedGeneration: 13
   replicas: 3
   url: 'http://dev-kafka-connect-mq-test-connect-api.dev-kafka.svc:8083'
+
+
+
+
+++++++++++++++++++++++++++++++++++++
+
+pdate your KafkaConnect CR
+
+Add this block under spec.template.pod
+spec:
+  template:
+    pod:
+      env:
+        - name: CERTS_STORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: dev-kafka-cluster-cluster-ca-cert
+              key: ca.password
+
