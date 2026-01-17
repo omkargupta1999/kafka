@@ -4,3 +4,21 @@ oc get secret dev-kafka-cluster-cluster-ca-cert -n dev-kafka \
 
 
 export CERTS_STORE_PASSWORD=pbUnnCLwMfNm
+
+
+echo $CERTS_STORE_PASSWORD
+
+
+cat <<EOF > /tmp/producer.properties
+bootstrap.servers=dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093
+security.protocol=SSL
+ssl.truststore.location=/tmp/kafka/cluster.truststore.p12
+ssl.truststore.password=${CERTS_STORE_PASSWORD}
+ssl.truststore.type=PKCS12
+EOF
+
+
+/opt/kafka/bin/kafka-console-producer.sh \
+--bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
+--producer.config /tmp/producer.properties \
+--topic neft.outbound.kafka.topic
