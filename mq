@@ -1,3 +1,7 @@
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list | grep -i neft
+neft.outbound.kafka.topic
+neft.processed.kafka.topic
+neft.raw.kafka.topic
 sh-5.1$ ./kafka-console-producer.sh --bootstrap-server localhost:9092 --topic neft.outbound.kafka.topic
 >Hello from Kafka
 >Saad[2026-01-17 06:32:34,066] WARN [Producer clientId=console-producer] Got error produce response with correlation id 9 on topic-partition neft.outbound.kafka.topic-0, retrying (2 attempts left). Error: REQUEST_TIMED_OUT (org.apache.kafka.clients.producer.internals.Sender)
@@ -13,3 +17,28 @@ ge[2026-01-17 06:33:09,077] WARN [Producer clientId=console-producer] Got error 
 [2026-01-17 06:33:10,779] WARN [Producer clientId=console-producer] Got error produce response with correlation id 10 on topic-partition neft.outbound.kafka.topic-0, retrying (0 attempts left). Error: REQUEST_TIMED_OUT (org.apache.kafka.clients.producer.internals.Sender)
 [2026-01-17 06:33:12,747] ERROR Error when sending message to topic neft.outbound.kafka.topic with key: null, value: 8 bytes with error: (org.apache.kafka.clients.producer.internals.ErrorLoggingCallback)
 org.apache.kafka.common.errors.TimeoutException: The request timed out.
+^[[C^Z
+[1]+  Stopped(SIGTSTP)        ./kafka-console-producer.sh --bootstrap-server localhost:9092 --topic neft.outbound.kafka.topic
+sh-5.1$ ./kafka-console-producer.sh --bootstrap-server localhost:9093 --topic neft.outbound.kafka.topic
+>[2026-01-17 06:34:32,832] WARN [Producer clientId=console-producer] Bootstrap broker localhost:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:34:33,022] WARN [Producer clientId=console-producer] Bootstrap broker localhost:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:34:33,516] WARN [Producer clientId=console-producer] Bootstrap broker localhost:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:34:33,856] WARN [Producer clientId=console-producer] Bootstrap broker localhost:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:34:34,284] WARN [Producer clientId=console-producer] Bootstrap broker localhost:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:34:35,187] WARN [Producer clientId=console-producer] Bootstrap broker localhost:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:34:36,238] WARN [Producer clientId=console-producer] Bootstrap broker localhost:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:34:37,292] WARN [Producer clientId=console-producer] Bootstrap broker localhost:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:34:38,374] WARN [Producer clientId=console-producer] Bootstrap broker localhost:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:34:39,364] WARN [Producer clientId=console-producer] Bootstrap broker localhost:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:34:40,347] WARN [Producer clientId=console-producer] Bootstrap broker localhost:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:34:41,321] WARN [Producer clientId=console-producer] Bootstrap broker localhost:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+sh-5.1$ ./kafka-console-producer.sh --bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:909393 --topic neft.outbound.kafka.topic
+>[2026-01-17 06:36:41,910] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:36:42,088] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:36:42,288] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:36:42,613] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:36:43,053] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:36:43,808] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:36:44,913] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+[2026-01-17 06:36:45,995] WARN [Producer clientId=console-producer] Bootstrap broker dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 (id: -1 rack: null) disconnected (org.apache.kafka.clients.NetworkClient)
+sh-5.1$ 
