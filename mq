@@ -34,3 +34,17 @@ Caused by: java.io.IOException: keystore password was incorrect
 Caused by: java.security.UnrecoverableKeyException: failed to decrypt safe contents entry: javax.crypto.BadPaddingException: Given final block not properly padded. Such issues can arise if a bad key is used during decryption.
         ... 22 more
 sh-5.1$ 
+
+
+
+echo $CERTS_STORE_PASSWORD
+cat <<EOF > /tmp/producer.properties
+security.protocol=SSL
+ssl.truststore.location=/tmp/kafka/cluster.truststore.p12
+ssl.truststore.password=${CERTS_STORE_PASSWORD}
+EOF
+
+./kafka-console-producer.sh \
+--bootstrap-server dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093 \
+--producer.config /tmp/producer.properties \
+--topic neft.outbound.kafka.topic
