@@ -11,3 +11,39 @@ sh-5.1$ ./kafka-console-producer.sh \
 >message from kafka
 >17jan2026
 >
+
+
+
+sh-5.1$ cd bin 
+sh-5.1$ ./kafka-console-producer.sh \
+--bootstrap-server localhost:9092 \
+--topic neft.outbound.kafka.topic
+>Omkar Gupta
+>Saadi M 
+>Suraj
+>Devendra
+>Omkar
+>Anuj 
+>Omkar
+>sh-5.1$
+
+
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list | grep -i neft
+neft.inbound.kafka.topic
+neft.outbound.kafka.topic
+neft.processed.kafka.topic
+neft.raw.kafka.topic
+sh-5.1$ ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic neft.inbound.kafka.topic                 
+^CProcessed a total of 0 messages
+sh-5.1$ ./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic neft.inbound.kafka.topic --from-beginning
+Test Message from IPH 1
+Test Merssage from IPH 2
+Test Message from IPH 3
+Test Message from IPH 4
+HI FROM IPH
+HI IPH 2
+ghjgjklgjk
+fdgdfgdfsgfdsg
+fgdsfgdsfgsdfg
+cgagdsdg
+3452346egyertgetg
