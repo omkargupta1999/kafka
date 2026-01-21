@@ -172,3 +172,40 @@ error: unknown flag: --cat
 See 'oc exec --help' for usage.
 [osuser@bastion ~]$
 
+
+
+
+[osuser@bastion ~]$ oc exec -it dev-console-console-deployment-6bf885486b-k2g9m -c console-api -- cat /deployments/config/console-config.yaml
+---
+kubernetes:
+  enabled: true
+security:
+  subjects: []
+  roles: []
+  audit: []
+  oidc: null
+metricsSources:
+- name: "k8s"
+  type: "openshift-monitoring"
+  url: "https://thanos-querier-openshift-monitoring.apps.dev.sbiepay.sbi"
+schemaRegistries: []
+kafka:
+  clusters:
+  - name: "dev-kafka-cluster"
+    namespace: "dev-kafka"
+    listener: "plain"
+    security:
+      subjects: []
+      roles: []
+      audit: []
+    properties:
+      security.protocol: "PLAINTEXT"
+      bootstrap.servers: "dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc:9092"
+      sasl.jaas.config: "org.apache.kafka.common.security.scram.ScramLoginModule required\
+        \ username=\"epay-user\" password=\"tKPGcWn0MxrMCCDvVA1lWiLMXkW4wYHa\";"
+    adminProperties: {}
+    consumerProperties: {}
+    producerProperties: {}
+[osuser@bastion ~]$
+
+
