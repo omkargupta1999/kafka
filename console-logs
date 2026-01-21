@@ -159,3 +159,16 @@ grafana-route                       grafana-route-dev-kafka.apps.dev.sbiepay.sbi
 NAME                READY   METADATA STATE   WARNINGS
 dev-kafka-cluster   True    KRaft
 [osuser@bastion ~]$
+
+[osuser@bastion ~]$ oc exec it dev-console-console-deployment-6bf885486b-k2g9m -c console-api --cat /deployments/conifg/console-config.yaml
+error: unknown flag: --cat
+See 'oc exec --help' for usage.
+[osuser@bastion ~]$ oc exec it dev-console-console-deployment-6bf885486b-k2g9m \-c console-api --cat /deployments/conifg/console-config.yaml
+error: unknown flag: --cat
+See 'oc exec --help' for usage.
+[osuser@bastion ~]$ oc exec -it dev-console-console-deployment-6bf885486b-k2g9m \
+> -c console-api --cat /deployments/conifg/console-config.yaml
+error: unknown flag: --cat
+See 'oc exec --help' for usage.
+[osuser@bastion ~]$
+
