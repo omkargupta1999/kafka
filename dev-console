@@ -112,3 +112,26 @@ spec:
     - name: k8s
       type: openshift-monitoring
 {{- end }}
+
+
+
+------------------------------------------------------------------------------------------
+
+[osuser@bastion ~]$ oc get pods -n dev-kafka
+NAME                                                 READY   STATUS    RESTARTS       AGE
+dev-console-console-deployment-db587bc95-87nmw       2/2     Running   0              5m11s
+dev-kafka-cluster-broker-0                           1/1     Running   0              28d
+dev-kafka-cluster-broker-1                           1/1     Running   0              28d
+dev-kafka-cluster-broker-2                           1/1     Running   0              28d
+dev-kafka-cluster-controller-3                       1/1     Running   0              28d
+dev-kafka-cluster-controller-4                       1/1     Running   0              28d
+dev-kafka-cluster-controller-5                       1/1     Running   0              28d
+dev-kafka-cluster-cruise-control-7678c88585-8jm5p    1/1     Running   5 (14h ago)    4d
+dev-kafka-cluster-entity-operator-656dcf5cdd-b6qxp   2/2     Running   0              28d
+dev-kafka-connect-mq-test-connect-0                  0/1     Running   9 (36s ago)    3h8m
+dev-kafka-connect-mq-test-connect-1                  0/1     Running   12 (36s ago)   3h8m
+dev-kafka-connect-mq-test-connect-2                  0/1     Running   11 (36s ago)   3h8m
+dev-kafka-mirror-maker-mirrormaker2-0                0/1     Pending   0              20d
+[osuser@bastion ~]$ oc logs -f dev-console-console-deployment-db587bc95-87nmw -n dev-kafka | grep ERROR
+Defaulted container "console-api" out of: console-api, console-ui
+
