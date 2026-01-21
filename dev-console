@@ -1,1153 +1,204 @@
-gitlab
-main>>>
-deployment
-dev
-charts
-epay_common
-templates
-kafka
-kafka-console.yaml
+[osuser@bastion ~]$ oc logs -f dev-console-console-deployment-77b79d7f49-rjh2z -n dev-kafka
+Defaulted container "console-api" out of: console-api, console-ui
+INFO exec -a "java" java -Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -cp "." -jar /deployments/quarkus-run.jar
+INFO running in /deployments
+__  ____  __  _____   ___  __ ____  ______
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/
+2026-01-21 08:56:17,125 INFO  [com.git.str.con.api.sup.fac.ConsoleConfigFactory] (main) Loading console configuration from file:/deployments/config/console-config.yaml
+2026-01-21 08:56:17,408 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (main) The client is using resource type 'kafkas' with unstable version 'v1beta2'
+2026-01-21 08:56:18,329 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (main) The client is using resource type 'kafkanodepools' with unstable version 'v1beta2'
+2026-01-21 08:56:18,424 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (main) The client is using resource type 'kafkatopics' with unstable version 'v1beta2'
+2026-01-21 08:56:18,486 INFO  [com.git.str.con.LoggingConfigWatcher] (main) No log config files set to monitor
+2026-01-21 08:56:18,559 INFO  [io.quarkus] (main) console-api 0.8.6.redhat-00002 on JVM (powered by Quarkus 3.20.2.redhat-00004) started in 4.903s. Listening on: http://0.0.0.0:8080
+2026-01-21 08:56:18,560 INFO  [io.quarkus] (main) Profile prod activated.
+2026-01-21 08:56:18,560 INFO  [io.quarkus] (main) Installed features: [cdi, hibernate-validator, kubernetes-client, micrometer, oidc, oidc-client, rest, rest-client, rest-jackson, security, smallrye-context-propagation, smallrye-health, smallrye-openapi, swagger-ui, vertx]
+2026-01-21 08:57:48,774 ERROR [com.git.str.con.api.ClientFactory] (vert.x-eventloop-thread-1) Missing configuration detected for connection to cluster dev-kafka/dev-kafka-cluster, no connection will be setup; Consumer client is missing required properties: [sasl.mechanism]; Admin client is missing required properties: [sasl.mechanism]; Producer client is missing required properties: [sasl.mechanism]
+2026-01-21 08:57:48,911 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 188ms 395
+2026-01-21 08:58:12,313 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 19ms 210
+2026-01-21 08:58:12,314 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 20ms 210
+2026-01-21 08:58:12,314 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 19ms 210
+2026-01-21 08:58:12,314 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 20ms 210
+2026-01-21 08:58:12,362 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 08:58:12,392 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion&page%5Bsize%5D=1000 HTTP/1.1" 200 17ms 395
+2026-01-21 08:58:19,674 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 08:58:19,674 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 08:58:19,674 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-01-21 08:58:19,674 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 3ms 210
+2026-01-21 08:58:19,703 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 4ms 210
+2026-01-21 08:59:20,533 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 20ms 395
+2026-01-21 09:00:30,184 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 12ms 395
+2026-01-21 09:02:20,534 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 7ms 395
+2026-01-21 09:03:20,582 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 8ms 395
+2026-01-21 09:05:20,558 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 7ms 395
+2026-01-21 09:06:21,547 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 8ms 395
+2026-01-21 09:07:22,535 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 11ms 395
+2026-01-21 09:08:23,532 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 9ms 395
+2026-01-21 09:09:24,530 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 12ms 395
+2026-01-21 09:10:25,531 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 9ms 395
+2026-01-21 09:11:26,549 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 10ms 395
+2026-01-21 09:12:27,537 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 7ms 395
+2026-01-21 09:13:28,557 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 15ms 395
+2026-01-21 09:14:29,547 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 13ms 395
+2026-01-21 09:15:30,540 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 9ms 395
+2026-01-21 09:16:22,636 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion&page%5Bsize%5D=1000 HTTP/1.1" 200 8ms 395
+2026-01-21 09:18:10,830 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 9ms 395
+2026-01-21 09:18:10,852 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion&page%5Bsize%5D=20&sort=name HTTP/1.1" 200 9ms 431
+2026-01-21 09:18:11,049 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion&page%5Bsize%5D=1000 HTTP/1.1" 200 7ms 395
+2026-01-21 09:18:13,277 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:18:13,289 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:18:13,289 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-01-21 09:18:13,289 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-01-21 09:18:13,304 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 4ms 210
+2026-01-21 09:19:13,590 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 8ms 395
+2026-01-21 09:20:13,629 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 7ms 395
+2026-01-21 09:20:52,984 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:20:52,984 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 3ms 210
+2026-01-21 09:20:52,984 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 3ms 210
+2026-01-21 09:20:52,984 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 3ms 210
+2026-01-21 09:20:53,002 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 4ms 210
+2026-01-21 09:20:53,025 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion&page%5Bsize%5D=1000 HTTP/1.1" 200 12ms 395
+2026-01-21 09:20:53,664 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:20:53,664 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-01-21 09:20:53,666 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 1ms 210
+2026-01-21 09:20:53,667 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 3ms 210
+2026-01-21 09:20:53,689 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:20:53,918 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:20:53,918 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-01-21 09:20:53,920 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-01-21 09:20:53,920 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 1ms 210
+2026-01-21 09:20:53,943 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:20:54,103 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-01-21 09:20:54,103 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:20:54,104 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-01-21 09:20:54,104 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:20:54,123 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:20:54,299 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 1ms 210
+2026-01-21 09:20:54,299 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:20:54,299 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 1ms 210
+2026-01-21 09:20:54,299 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:20:54,318 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:21:13,840 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 8ms 395
+2026-01-21 09:21:13,859 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion&page%5Bsize%5D=20&sort=name HTTP/1.1" 200 10ms 431
+2026-01-21 09:21:16,090 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 3ms 210
+2026-01-21 09:21:16,090 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 7ms 210
+2026-01-21 09:21:16,101 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-01-21 09:21:16,102 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 3ms 210
+2026-01-21 09:21:16,115 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 4ms 210
 
 
 
 
-
-{{- if and .Values.kafka.enabled .Values.kafka.console.enabled }}
-apiVersion: console.streamshub.github.com/v1alpha1
-kind: Console
-metadata:
-  name: {{ .Values.kafka.console.name }}
-  namespace: {{ .Values.kafka.console.namespace }}
-spec:
-  hostname: {{ .Values.kafka.console.hostname }}
-  kafkaClusters:
-    - adminProperties:
-        values: []
-        valuesFrom: []
-      consumerProperties:
-        values: []
-        valuesFrom: []
-      credentials:
-        kafkaUser:
-          name: {{ .Values.kafka.console.credentials.kafkaUser.name }}
-      listener: {{ .Values.kafka.console.listener }}
-      name: {{ .Values.kafka.console.kafkaClusters.name }}
-      namespace: {{ .Values.kafka.console.kafkaClusters.namespace }}
-      producerProperties:
-        values: []
-        valuesFrom: []
-      properties:
-        values: []
-        valuesFrom: []
-  metricsSources:
-  - name: k8s
-    type: openshift-monitoring       
-{{- end }}
+2026-01-21 09:21:40,270 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:21:40,270 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 3ms 210
+2026-01-21 09:21:40,270 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-01-21 09:21:40,270 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:21:40,301 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
 
 
 
-+++++++++++++++++++++++++++++++++++++++++
 
-main>>>>
-deployment
-dev
-charts
-epay_common
-values.yaml
-
-
-# ================================================================
-# EPay Common Chart - dev Environment Configuration
-# =======================================================================
-# Global values for all charts 
-global:
-  environment: dev
-  clusterDomain: dev.epay.sbi
-  imageRegistry: registry.dev.epay.sbi:8443
-  imagePullSecrets: microservices-dev-pull-secret
-  storageClass: trident-csi
-# ================================================================
-# Service Mesh 3.0 Configuration (dev Instance) 
-# ================================================================#
-serviceMesh:
-  enabled: true
-  # Core Istio Control Plane
-  controlPlane:
-    name: "dev-istio"
-    namespace: "dev-istio-system"
-    version: "v1.24-latest"
-    updateStrategy: "InPlace"
-    meshId: "dev-mesh"
-    network: "dev-network"
-    # Discovery selector for namespace scoping
-    discoverySelector:
-      key: "istio-discovery"
-      value: "dev-istio"
-  # CNI Configuration
-  cni:
-    enabled: true
-    createResource: true
-    name: "default"
-    namespace: "istio-cni"
-    excludeNamespaces:
-      - dev-istio-system
-      - dev-istio-cni
-      - kube-system
-      - openshift-system
-      - openshift-operators
-      - openshift-monitoring
-      - openshift-user-workload-monitoring
-  # Gateway Configuration (One-time mesh-wide)
-  gateway:
-    # Istio Gateway resource
-    istioGateway:
-      name: "dev-gateway"
-      namespace: "dev-istio-system"
-      hosts:
-        - "dev.epay.sbi"
-      port: 8080
-    # Gateway Deployment and Service
-    deployment:
-      name: "dev-istio-gateway"
-      namespace: "dev-istio-system"
-      replicas: 1
-      selector: "dev-istio-gateway"
-      revision: "dev-istio"
-      resources:
-        requests:
-          cpu: "100m"
-          memory: "128Mi"
-        limits:
-          cpu: "2000m"
-          memory: "1024Mi"
-    # Gateway Service
-    service:
-      name: "dev-istio-gateway-service"
-      type: ClusterIP
-      ports:
-        status: 15021
-        http: 8080
-        https: 8443
-    # OpenShift Route
-    route:
-      name: "dev-istio-gateway-route"
-      enabled: true
-      host: "dev.epay.sbi"
-      tls:
-        termination: "edge"
-        insecureEdgeTerminationPolicy: "None"
-  # Service Mesh HPA Configuration (Environment-level)
-  hpa:
-    enabled: true
-    # Istio Control Plane HPA
-    istiod:
-      enabled: true
-      minReplicas: 2
-      maxReplicas: 5
-      targetCPUUtilizationPercentage: 70
-      targetMemoryUtilizationPercentage: 80
-      behavior:
-        scaleUp:
-          stabilizationWindowSeconds: 60
-          policies:
-            - type: "Percent"
-              value: 50
-              periodSeconds: 30
-        scaleDown:
-          stabilizationWindowSeconds: 300
-          policies:
-            - type: "Percent"
-              value: 10
-              periodSeconds: 60
-    # Istio Gateway HPA
-    gateway:
-      enabled: true
-      minReplicas: 2
-      maxReplicas: 6
-      targetCPUUtilizationPercentage: 70
-      targetMemoryUtilizationPercentage: 80
-      behavior:
-        scaleUp:
-          stabilizationWindowSeconds: 60
-          policies:
-            - type: "Percent"
-              value: 100
-              periodSeconds: 15
-        scaleDown:
-          stabilizationWindowSeconds: 300
-          policies:
-            - type: "Percent"
-              value: 10
-              periodSeconds: 60
-
-# ================================================================
-# Infrastructure Services (One-time mesh-wide)
-# ================================================================
-
-
-  # Traffic Management Configuration (Infrastructure level only)#
-  trafficManagement:
-    virtualServices:
-      enabled: true
-    destinationRules:
-      enabled: true
-  # Security Configuration (Infrastructure level only)
-  security:
-    authorizationPolicies:
-      enabled: true
-infrastructure:
-  # Infrastructure peer authentication (mesh-wide)
-  peerAuthentication:
-    # Disable mTLS for infrastructure components in dev
-    kafka:
-      enabled: false
-      mtlsMode: "DISABLE"
-    gemfire:
-      enabled: true
-      mtlsMode: "DISABLE"
-    managementConsoles:
-      enabled: true
-      mtlsMode: "DISABLE"
-
-# ================================================================
-# Security Configuration
-# ================================================================
-security:
-  enabled: true
-  scc:
-    enabled: false
-    name: "epay-restricted-scc"
-    runAsUser:
-      uidRangeMin: 1000
-      uidRangeMax: 2000
-    seLinux:
-      level: "s0"
-    fsGroup:
-      min: 1000
-      max: 2000
-    supplementalGroups:
-      min: 1000
-      max: 2000
-    users: []
-    groups: []
-  # Security contexts for containers
-  podSecurityContext:
-    runAsNonRoot: true
-    runAsUser: 1001
-    runAsGroup: 1001
-    fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
-    runAsNonRoot: true
-    runAsUser: 1001
-    runAsGroup: 1001
-    readOnlyRootFilesystem: false
-    capabilities:
-      drop:
-        - ALL
-  # Network policies for infrastructure
-  networkPolicies:
-    enabled: false
-  # Service accounts for infrastructure components
-  serviceAccounts:
-    enabled: false
-#
-# ================================================================#
-# GemFire Configuration (Simplified to match reference)
-# ================================================================
-gemfire:
-  enabled: false
-  namespace: "dev-gemfire"
-
-  cluster:
-    name: "gemfire-dev-system"
-    image: "registry.dev.epay.sbi:8443/ubi9/pivotal-gemfire/vmware-gemfire:10.1.2"
-
-    locators:
-      terminationGracePeriodSeconds: 120
-      replicas: 3
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node-role.kubernetes.io/worker
-                    operator: Exists
-                  - key: workload-type
-                    operator: In
-                    values:
-                      - gemfire
-      tolerations:
-        - key: "workload-type"
-          operator: "Equal"
-          value: "gemfire"
-          effect: "NoSchedule"
-        - key: "node.kubernetes.io/disk-pressure"
-          operator: "Exists"
-          effect: "NoExecute"
-          tolerationSeconds: 300  
-
-    servers:
-      terminationGracePeriodSeconds: 120
-      replicas: 3
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node-role.kubernetes.io/worker
-                    operator: Exists
-                  - key: workload-type
-                    operator: In
-                    values:
-                      - gemfire
-      tolerations:
-        - key: "workload-type"
-          operator: "Equal"
-          value: "gemfire"
-          effect: "NoSchedule"
-        - key: "node.kubernetes.io/disk-pressure"
-          operator: "Exists"
-          effect: "NoExecute"
-          tolerationSeconds: 300
-
-  managementConsole:
-    route:
-      enabled: true
-      host: "gemfire-management-console.apps.dev.epay.sbi"
-      tls:
-        termination: "edge"
-        insecureEdgeTerminationPolicy: "Redirect"
-
-    enabled: true
-    name: dev-gmc
-    image: registry.dev.epay.sbi:8443/ubi9/gemfire-management-console/gemfire-management-console:latest
-    replicas: 1
-    port: 8080
-    pvcName: gemfire-data-dev-gmc-0
-  env:
-    - name: server.port
-      value: "8080"
-    - name: GMC_WEBSOCKET_SENDBUFFERSIZELIMIT
-      value: "5120000"
-    - name: PROMETHEUS_SCRAPE_INTERVAL
-      value: "2s"
-  resources:
-    requests:
-      storage: 4Gi
-  volume:
-    name: gemfire-data
-    mountPath: /opt/gemfire/VMware_GemFire_Management_Console
-    storageClassName: trident-csi-retain
-    terminationGracePeriodSeconds: 120
-
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: node-role.kubernetes.io/worker
-                  operator: Exists
-                - key: workload-type
-                  operator: In
-                  values:
-                    - gemfire
-
-    tolerations:
-      - key: "workload-type"
-        operator: "Equal"
-        value: "gemfire"
-        effect: "NoSchedule"
-      - key: "node.kubernetes.io/disk-pressure"
-        operator: "Exists"
-        effect: "NoExecute"
-        tolerationSeconds: 300
-    # Route configuration
-    #route:
-    #  enabled: true
-    #  host: "gemfire-management-console.apps.dev.epay.sbi"
-    #  tls:
-    #    termination: "edge"
-    #    insecureEdgeTerminationPolicy: "Redirect"
-
-# ================================================================#
-# Kafka Configuration (AMQ Streams - KRaft JBOD)
-# ================================================================
-kafka:
-  enabled: true
-  namespace: "dev-kafka"
-  # Kafka Cluster Configuration (KRaft mode)
-  cluster:
-    name: "dev-kafka-cluster"
-    version: "3.9.0"
-    metadataVersion: "3.9-IV0"
-    # Annotations
-    annotations:
-      strimzi.io/node-pools: "enabled"
-      strimzi.io/kraft: "enabled"
-    # Kafka configuration
-    kafka:
-      listeners:
-      - name: plain
-        port: 9092
-        type: internal
-        tls: false
-      - name: tls
-        port: 9093
-        type: internal
-        tls: true
-      - name: external
-        port: 9094
-        type: route
-        tls: true   
-      config:
-        offsets.topic.replication.factor: 3
-        transaction.state.log.replication.factor: 3
-        transaction.state.log.min.isr: 2
-        default.replication.factor: 3
-        min.insync.replicas: 2
-        # PDF Recommendations - Additional config
-        acks: "all"
-        # Performance tuning
-        num.network.threads: 8
-        num.io.threads: 8
-        socket.send.buffer.bytes: 102400
-        socket.receive.buffer.bytes: 102400
-        socket.request.max.bytes: 104857600
-        log.retention.hours: 168
-        log.segment.bytes: 1073741824
-        log.retention.check.interval.ms: 300000
-        log.cleanup.policy: "delete"
-        compression.type: "producer"
-    # Controller node pool (PDF: At least 3, 4+ vCPU, 8GB+ RAM, 64GB+ disk)
-    controller:
-      name: "controller"
-      replicas: 3
-      roles:
-        - controller
-      # PDF Recommendation: Resource specifications for controllers
-      resources:
-        requests:
-          memory: "8Gi"
-          cpu: "4"
-        limits:
-          memory: "16Gi"
-          cpu: "8"
-      storage:
-        type: jbod
-        volumes:
-          - id: 0
-            type: persistent-claim
-            size: 100Gi  # Keep existing size to avoid warning
-            kraftMetadata: shared
-            deleteClaim: false
-      # PDF Recommendation: terminationGracePeriodSeconds >60s
-      terminationGracePeriodSeconds: 120
-      # Node affinity for controllers
-      # affinity:
-      #   nodeAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #       nodeSelectorTerms:
-      #       - matchExpressions:
-      #         - key: node-role.kubernetes.io/worker
-      #           operator: Exists
-      #         - key: workload-type
-      #           operator: In
-      #           values: ["kafka"]
-      # # Tolerations for controllers
-      # tolerations:
-      #   - key: "workload-type"
-      #     operator: "Equal"
-      #     value: "kafka"
-      #     effect: "NoSchedule"
-      #   - key: "node.kubernetes.io/disk-pressure"
-      #     operator: "Exists"
-      #     effect: "NoExecute"
-      #     tolerationSeconds: 300
-    # Broker node pool (PDF: At least 3, 12+ vCPU, 64GB+ RAM, 1TB+ disk)
-    broker:
-      name: "broker"
-      replicas: 3
-      roles:
-        - broker
-      # PDF Recommendation: Resource specifications for brokers
-      resources:
-        requests:
-          memory: "64Gi"
-          cpu: "12"
-        limits:
-          memory: "128Gi"
-          cpu: "24"
-      storage:
-        type: jbod
-        volumes:
-          - id: 0
-            type: persistent-claim
-            size: 100Gi  # Keep existing size to avoid warning
-            kraftMetadata: shared
-            deleteClaim: false
-          - id: 1
-            type: persistent-claim
-            size: 100Gi  # Keep existing size to avoid warning
-            deleteClaim: false
-      # PDF Recommendation: terminationGracePeriodSeconds >60s
-      terminationGracePeriodSeconds: 120
-      # Node affinity for brokers
-      # affinity:
-      #   nodeAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #       nodeSelectorTerms:
-      #       - matchExpressions:
-      #         - key: node-role.kubernetes.io/worker
-      #           operator: Exists
-      #         - key: workload-type
-      #           operator: In
-      #           values: ["kafka"]
-      # # Tolerations for brokers
-      # tolerations:
-      #   - key: "workload-type"
-      #     operator: "Equal"
-      #     value: "kafka"
-      #     effect: "NoSchedule"
-      #   - key: "node.kubernetes.io/disk-pressure"
-      #     operator: "Exists"
-      #     effect: "NoExecute"
-      #     tolerationSeconds: 300
-      #   - key: "node.kubernetes.io/memory-pressure"
-      #     operator: "Exists"
-      #     effect: "NoExecute"
-      #     tolerationSeconds: 300
-  ###     
-  metricsConfig:
-    enabled: true 
-    key: kafka-metrics-config.yml
-    name: kafka-metrics 
-    clusterOperator:
-      path: /metrics
-      port: http
-    entityOperator:
-      path: /metrics
-      port: healthcheck
-    kafkaBridge:
-      path: /metrics
-      port: rest-api
-    kafkaResources:
-      path: /metrics
-      port: tcp-prometheus
-      
-  relabelings:
-    enabled: true
-    rules:
-      - sourceLabels: [__meta_kubernetes_pod_label_strimzi_io_.*]
-        separator: ;
-        regex: (.+)
-        replacement: $1
-        action: labelmap
-      - sourceLabels: [__meta_kubernetes_namespace]
-        separator: ;
-        regex: (.*)
-        targetLabel: namespace
-        replacement: $1
-        action: replace
-      - sourceLabels: [__meta_kubernetes_pod_name]
-        separator: ;
-        regex: (.*)
-        targetLabel: kubernetes_pod_name
-        replacement: $1
-        action: replace
-      - sourceLabels: [__meta_kubernetes_pod_node_name]
-        separator: ;
-        regex: (.*)
-        targetLabel: node_name
-        replacement: $1
-        action: replace
-      - sourceLabels: [__meta_kubernetes_pod_host_ip]
-        separator: ;
-        regex: (.*)
-        targetLabel: node_ip
-        replacement: $1
-        action: replace
+2026-01-21 09:21:45,190 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-01-21 09:21:45,190 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:21:45,190 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:21:45,190 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-01-21 09:21:45,216 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
 
 
 
-  # PDF Recommendation: Cruise Control for cluster rebalancing
-  cruiseControl:
-    enabled: true
-    name: "dev-kafka-cruise-control"
-    resources:
-      requests:
-        memory: "2Gi"
-        cpu: "1"
-      limits:
-        memory: "4Gi"
-        cpu: "2"
-    config:
-      # Cruise Control configuration
-      default.goals: >
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.RackAwareGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.ReplicaCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.DiskCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkInboundCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.CpuCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.ReplicaDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.PotentialNwOutGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.DiskUsageDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkInboundUsageDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundUsageDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.CpuUsageDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.TopicReplicaDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.LeaderReplicaDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.LeaderBytesInDistributionGoal
-      cpu.balance.threshold: "1.1"
-      disk.balance.threshold: "1.1"
-      network.inbound.balance.threshold: "1.1"
-      network.outbound.balance.threshold: "1.1"
 
-  # PDF Recommendation: Kafka Connect for database integration
-  kafkaConnect:
-    enabled: false
-    name: "dev-kafka-connect"
-    replicas: 3
-    bootstrapServers: "dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093"
-    image: "epaynonprod-registry-quay-quay-enterprise.apps.dev.epay.sbi/redhatdefultimage/debeziumconnect:01"
-    imagePullSecrets: 
-       - microservices-dev-pull-secret
-    resources:
-      requests:
-        memory: "4Gi"
-        cpu: "2"
-      limits:
-        memory: "8Gi"
-        cpu: "4"
-    config:
-      group:
-        id: "dev-connect-cluster"
-      offset:
-        storage:
-          topic: "dev-connect-cluster-offsets"
-        flush:
-          interval:
-            ms: 10000
-          timeout:
-            ms: 5000
-      config:
-        storage:
-          topic: "dev-connect-cluster-configs"
-      status:
-        storage:
-          topic: "dev-connect-cluster-status"
-    # Connectors configuration
-
-    connectors:
-      - name: "epay-oracle-source"
-        config:
-          connector:
-            class: "io.debezium.connector.oracle.OracleConnector"
-          table:
-            include:
-              list: "PAYAGGADMIN.BANKBRANCHES,PAYAGGADMIN.AGGMERCHGTWFEESTRUCTURE,PAYAGGADMIN.SERVICETAXSTRUCTURE,PAYAGGADMIN.AGGMERCHANTSERVICETAXMAPPING,PAYAGGADMIN.AGGMERCHANTHYBRIDFEESTRUCTURE"
-          database:
-            hostname: "EPAYDNSDEVNEW.sbiepay.sbi"
-            port: "1524"
-            user: "PAYAGGADMIN"
-            password: "April_2025"
-            dbname: "epaydbpp"
-            server:
-              name: "epay-dev-db"
-          decimal.handling.mode: string
-          schema.history.internal.skip.unparseable.ddl: "false"
-          schema.history.internal.kafka.topic: schema-changes.inventory
-          topic:
-             prefix: cdc-oracle-gemfire     
-          datetime:
-            handling.mode: string      
-          schema:
-            include:
-              list: PAYAGGADMIN
-            history:
-              internal:
-                kafka:
-                  bootstrap:
-                    servers: "dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093"  
-                topic: "epay-db-history"
-          include:
-            schema:
-              changes: true
-
-  # PDF Recommendation: MirrorMaker 2 for disaster recovery
-  mirrorMaker2:
-    enabled: true
-    name: "dev-kafka-mirror-maker"
-    # Active/Passive setup for DR
-    clusters:
-      - alias: "source"
-        bootstrapServers: "dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9092"
-      - alias: "target"
-        bootstrapServers: "dr-kafka-cluster-kafka-bootstrap.dr-kafka.svc.cluster.local:9092"
-    mirrors:
-      - sourceCluster: "source"
-        targetCluster: "target"
-        sourceConnector:
-          config:
-            replication.factor: 3
-            offset-syncs.topic.replication.factor: 3
-            sync.topic.acls.enabled: true
-            replication.policy.class: "org.apache.kafka.connect.mirror.IdentityReplicationPolicy"
-        heartbeatConnector:
-          config:
-            heartbeats.topic.replication.factor: 3
-        checkpointConnector:
-          config:
-            checkpoints.topic.replication.factor: 3
-        topicsPattern: ".*"
-        groupsPattern: ".*"
-    resources:
-      requests:
-        memory: "2Gi"
-        cpu: "1"
-      limits:
-        memory: "4Gi"
-        cpu: "2"
-
-  # Kafka Users for ePay application    
-  kafkaUser:
-    enabled: true
-    name: epay-user
-    namespace: dev-kafka
-    cluster: dev-kafka-cluster
-    authentication:
-      type: scram-sha-512  # Kafka Users for ePay application
-       
-  
-  console:
-    enabled: true
-    name: dev-console
-    namespace: dev-kafka
-    hostname: dev-kafkaconsole.apps.dev.sbiepay.sbi
-    credentials:
-      kafkaUser:
-        name: epay-user
-    listener: plain
-    kafkaClusters:
-      name: dev-kafka-cluster 
-      namespace: dev-kafka
+2026-01-21 09:21:49,991 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:21:49,991 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 3ms 210
+2026-01-21 09:21:49,991 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 3ms 210
+2026-01-21 09:21:49,991 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:21:50,011 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 4ms 210
 
 
-# Kafka Topics for ePay application
-topics:
-  - name: "dev-connect-cluster-offsets"
-    partitions: 25
-    replicas: 3
-  - name: "dev-connect-cluster-configs"
-    partitions: 1
-    replicas: 3
-  - name: "dev-connect-cluster-status"
-    partitions: 5
-    replicas: 3
-  - name: "epay-db-history"
-    partitions: 1
-    replicas: 3
-   
+^[[A2026-01-21 09:22:50,568 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 10ms 395
+2026-01-21 09:23:51,929 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 8ms 395
+2026-01-21 09:23:51,961 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:51,961 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:51,961 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:51,961 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:51,972 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:51,993 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion&page%5Bsize%5D=1000 HTTP/1.1" 200 8ms 395
+2026-01-21 09:23:53,266 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:53,266 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:53,266 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:53,268 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:53,290 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:53,683 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:53,683 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:53,685 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:53,686 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:53,705 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:53,901 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:53,901 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:53,903 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:53,904 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:53,924 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:54,096 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,096 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,097 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:54,099 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,118 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,279 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,279 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:54,279 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:54,281 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,303 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,456 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,456 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:54,458 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,460 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:54,482 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:54,627 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:54,627 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,628 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:54,630 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,655 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 4ms 210
+2026-01-21 09:23:54,810 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,810 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:54,815 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,816 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,841 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,981 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:54,981 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:54,981 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:54,984 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:55,006 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 5ms 210
+2026-01-21 09:23:55,172 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:55,173 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:55,173 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:55,175 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:55,201 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:55,346 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:55,346 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:55,347 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:55,350 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:55,372 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:55,514 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:55,514 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:55,515 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:55,519 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:55,543 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:55,735 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:55,735 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:55,736 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:55,738 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:55,758 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:56,487 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:23:56,489 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:56,489 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 1ms 210
+2026-01-21 09:23:56,491 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 3ms 210
+2026-01-21 09:23:56,505 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 2ms 210
+2026-01-21 09:24:57,575 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 6ms 395
+2026-01-21 09:25:12,677 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion&page%5Bsize%5D=20&sort=name HTTP/1.1" 200 10ms 431
+2026-01-21 09:25:12,888 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion&page%5Bsize%5D=1000 HTTP/1.1" 200 8ms 395
+2026-01-21 09:25:13,936 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-01-21 09:25:13,947 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-01-21 09:25:13,947 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 2ms 210
+2026-01-21 09:25:13,947 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-01-21 09:25:13,958 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
 
-# PDF Recommendation: Distributed tracing for environment
-tracing:
-  enabled: false
-  type: "tempo"
-  # Create our own Tempo instance for dev environment
-  tempo:
-    enabled: false
-    name: "dev-tempo"
-    namespace: "dev-tempo"
-    tenants:
-       tenantName: dev
-       tenantId: "1610b0c3-c509-4592-a256-a1871353dbfa"
-
-    # Tempo instance configuration for latest operator
-    spec:
-      # Storage configuration
-      storage:
-        secret:
-          name: "tempo-s3-storage-secret"
-          type: "s3"
-      # Retention policy
-      retention:
-        global:
-          traces: "168h"  # 7 days
-      # Resource configuration
-      resources:
-        total:
-          limits:
-            memory: "2Gi"
-            cpu: "1000m"
-          requests:
-            memory: "1Gi" 
-            cpu: "500m"
-      # Service configuration for dev
-      services:
-        distributor:
-          replicas: 1
-        ingester:
-          replicas: 1
-        querier:
-          replicas: 1
-        query_frontend:
-          replicas: 1
-        compactor:
-          replicas: 1
-    # Persistence for our Tempo instance
-    persistence:
-      enabled: true
-      size: "50Gi"
-      storageClass: "trident-csi-retain"
-# Environment-level monitoring infrastructure
-monitoring:
-  enabled: false
-  
-  # Use OpenShift User Workload Monitoring (built-in Prometheus)
-  userWorkloadMonitoring:
-    enabled: true
-    namespace: "openshift-user-workload-monitoring"
-    
-  # Disable separate Prometheus deployment - use OpenShift built-in
-  prometheus:
-    enabled: true
-    retention: "30d"
-    
-  # Grafana for enhanced dashboards (optional - OpenShift Console has basic monitoring)
-  grafana:
-    enabled: true
-    persistence:
-      enabled: true
-      size: "20Gi"
-      storageClass: "trident-csi-retain"
-    resources:
-      requests:
-        memory: "1Gi"
-        cpu: "500m"
-      limits:
-        memory: "2Gi"
-        cpu: "1"
-    
-  # ServiceMonitor for infrastructure components (required for OpenShift monitoring)
-  serviceMonitor:
-    enabled: true
-    labels:
-      app: "epay-infrastructure-monitoring"
-    endpoints:
-      - port: "metrics"
-        interval: "30s"
-        path: "/metrics"
-    
-  # PrometheusRule for infrastructure alerting (works with OpenShift monitoring)
-  prometheusRule:
-    enabled: true
-    rules:
-      - alert: "KafkaClusterDown"
-        expr: "kafka_server_replicamanager_leadercount == 0"
-        for: "5m"
-        labels:
-          severity: "critical"
-        annotations:
-          summary: "Kafka cluster is down"
-          description: "Kafka cluster has no active leaders"
-      
-      - alert: "TempoDown"
-        expr: "up{job='tempo'} == 0"
-        for: "5m"
-        labels:
-          severity: "critical"
-        annotations:
-          summary: "Tempo tracing is down"
-          description: "Tempo distributed tracing service is unavailable"
-        
-
-  kiali:
-    serviceAccount:
-      name: dev-kiali-service-account
-      namespace: dev-istio-system
-
-    # Horizontal Pod Autoscaler configuration
-    hpa:
-      enabled: true
-      minReplicas: 1
-      maxReplicas: 2
-      targetDeploymentName: kiali
-      cpu:
-        averageUtilization: 80
-      memory:
-        averageUtilization: 80
-
-    deployment:
-      cluster_wide_access: true
-      instance_name: kiali
-      logger:
-        log_level: info
-      view_only_mode: false
-
-    external_services:
-      tracing:
-        auth:
-          insecure_skip_verify: false
-          type: "none"
-          use_kiali_token: false
-        enabled: false
-        in_cluster_url: ""
-        namespace_selector: false
-        provider: ""
-        query_timeout: 30s
-        url: ""
-        use_grpc: false
-        
-      grafana:
-        enabled: false
-      prometheus:
-        auth:
-          type: "none"
-          use_kiali_token: false
-        thanos_proxy:
-          enabled: false
-        url: ""    
-
-    # RBAC configuration
-    rbac:
-      # General Kiali labels
-      labels:
-        app: kiali
-        app.kubernetes.io/instance: dev-kiali
-        app.kubernetes.io/name: kiali
-        app.kubernetes.io/part-of: kiali
-
-      # Annotations for the ClusterRoleBindings
-      annotations:
-        operator-sdk/primary-resource: dev-istio-system/dev-kiali
-        operator-sdk/primary-resource-type: Kiali.kiali.io
-
-      clusterRoleBindings:
-        # ClusterRoleBinding for 'cluster-monitoring-view'
-        monitoring:
-          name: dev-kiali-cluster-monitoring-view
-          roleName: cluster-monitoring-view
-
-        # ClusterRoleBinding for OAuth
-        oauth:
-          name: dev-kiali-dev-istio-system-oauth
-          roleName: dev-kiali-dev-istio-system-oauth
-
-        # ClusterRoleBinding for Kiali Viewer
-        viewer:
-          name: dev-kiali
-          roleName: dev-kiali-viewer
-
-
-# Environment-level persistent storage
-persistentStorage:
-  enabled: true
-  
-  # Storage classes configuration
-  storageClasses:
-    default: "trident-csi-retain"
-  
-  # Persistent volumes for infrastructure components
-  volumes:
-    # Tempo storage
-    tempo:
-      enabled: true
-      size: "50Gi"
-      storageClass: "trident-csi-retain"
-      accessMode: "ReadWriteOnce"
-      
-    # Prometheus storage (disabled - using OpenShift User Workload Monitoring)
-    prometheus:
-      enabled: true
-      size: "200Gi"
-      storageClass: "trident-csi-retain"
-      accessMode: "ReadWriteOnce"      
-    # Grafana storage
-    grafana:
-      enabled: true
-      size: "20Gi"
-      storageClass: "trident-csi-retain"
-      accessMode: "ReadWriteOnce"
-      
-    # Kafka storage
-    kafka:
-      enabled: true
-      size: "100Gi"
-      storageClass: "trident-csi-retain"
-      accessMode: "ReadWriteOnce"
-      
-    # Environment logs storage
-    environment-logs:
-      enabled: true
-      size: "50Gi"
-      storageClass: "trident-csi-retain"
-      accessMode: "ReadWriteMany"
-      
-    # Backup storage
-    backup:
-      enabled: true
-      size: "500Gi"
-      storageClass: "trident-csi-retain"
-      accessMode: "ReadWriteOnce"
-      
-
-
-# OpenTelemetry configuration for environment
-opentelemetry:
-  enabled: false
-  
-  # OpenTelemetry Collector
-  collector:
-    enabled: true
-    replicas: 2
-    resources:
-      requests:
-        memory: "1Gi"
-        cpu: "500m"
-      limits:
-        memory: "2Gi"
-        cpu: "1"
-    
-    # Collector configuration
-    config:
-      receivers:
-        otlp:
-          protocols:
-            grpc:
-              endpoint: "0.0.0.0:4317"
-            http:
-              endpoint: "0.0.0.0:4318"
-        jaeger:
-          protocols:
-            grpc:
-              endpoint: "0.0.0.0:14250"
-            thrift_http:
-              endpoint: "0.0.0.0:14268"
-      
-      processors:
-        batch:
-          timeout: "1s"
-          send_batch_size: 1024
-        memory_limiter:
-          limit_mib: 1024
-      
-      exporters:
-        tempo:
-          endpoint: "tempo-distributor.dev-tempo.svc.cluster.local:4317"
-          tls:
-            insecure: true
-      
-      service:
-        pipelines:
-          traces:
-            receivers: ["otlp", "jaeger"]
-            processors: ["memory_limiter", "batch"]
-            exporters: ["tempo"]
-
-# TempoStack Configuration
-tempo:
-  name: simplest
-  namespace: perf-tempo
-  storage:
-    secretName: tempo-s3-storage-secret
-    type: s3
-  storageSize: 100Gi
-  resources:
-    total:
-      limits:
-        memory: 10Gi
-        cpu: 6000m
-  tenants:
-    mode: openshift
-    authentication:
-      - tenantName: dev
-        tenantId: "1610b0c3-c509-4592-a256-a1871353dbfa"
-  template:
-    gateway:
-      enabled: true
-    queryFrontend:
-      jaegerQuery:
-        enabled: true
-#
-# OpenTelemetry Collector Configuration
-otelCollector:
-  name: dev
-  namespace: tracing-system
-  image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.92.0
-  serviceAccountName: dev-collector
-  tempoGateway:
-    host: tempo-simplest-gateway
-    grpcPort: 8090
-    httpPort: 8080
-
-
-################################################################
-# Istio Configuration
-istio:
-  namespace: dev-istio-system
-  meshConfig:
-    enableTracing: true
-    extensionProviders:
-      - name: otel
-        opentelemetry:
-          port: 4317
-          service: dev-collector.perf-istio-system.svc.cluster.local
-
-# Kiali Configuration
-kiali:
-  namespace: dev-kiali
-  deployment:
-    cluster_wide_access: true
-    instance_name: kiali
-    logger:
-      log_level: info
-    view_only_mode: false
-  external_services:
-    tracing:
-      enabled: true
-      in_cluster_url: 'https://simplest-gateway.perf-tempo.svc.cluster.local:8080/api/traces/v1/dev'
-      url: 'https://tempo-simplest-gateway-perf-tempo.apps.dev.epay.sbi/api/traces/v1/dev/search'
-      auth:
-        type: bearer
-        use_kiali_token: true
-        insecure_skip_verify: true
-      provider: jaeger
-      query_timeout: 30
-      namespace_selector: true
-    grafana:
-      enabled: false
-    prometheus:
-      thanos_proxy:
-        enabled: true
-      url: 'https://thanos-querier.openshift-monitoring.svc.cluster.local:9091'
-      auth:
-        type: bearer
-        use_kiali_token: true
-
-# Telemetry Generation Jobs
-telemetrygen:
-  image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.92.0
-  namespace: perf-istio-system
-  grpc:
-    enabled: true
-    count: 10
-  http:
-    enabled: true
-    count: 10
-
-####
-Security:
-  serviceAccounts:
-    create: true
-    list:
-      - name: "kiali-service-account"
-        annotations:
-          "my-annotation-key": "kiali monitoring"
-#      - name: "my-second-serviceaccount"
-#        annotations:
-#          "description": "Service Account for my application's backend"
-#      - name: "my-third-serviceaccount"
-####
