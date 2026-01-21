@@ -1,7 +1,32 @@
-      properties:
-        values:
-          - name: security.protocol
-            value: SASL_PLAINTEXT
-          - name: sasl.mechanism
-            value: SCRAM-SHA-512
+{{- if and .Values.kafka.enabled .Values.kafka.console.enabled }}
+apiVersion: console.streamshub.github.com/v1alpha1
+kind: Console
+metadata:
+  name: {{ .Values.kafka.console.name }}
+  namespace: {{ .Values.kafka.console.namespace }}
+spec:
+  hostname: {{ .Values.kafka.console.hostname }}
+  kafkaClusters:
+    - adminProperties:
+        values: []
         valuesFrom: []
+      consumerProperties:
+        values: []
+        valuesFrom: []
+      credentials:
+        kafkaUser:
+          name: {{ .Values.kafka.console.credentials.kafkaUser.name }}
+      listener: {{ .Values.kafka.console.listener }}
+      name: {{ .Values.kafka.console.kafkaClusters.name }}
+      namespace: {{ .Values.kafka.console.kafkaClusters.namespace }}
+      producerProperties:
+        values: []
+        valuesFrom: []
+      properties:
+        values: []
+        valuesFrom: []
+  metricsSources:
+  - name: k8s
+    type: openshift-monitoring       
+{{- end }}
+
