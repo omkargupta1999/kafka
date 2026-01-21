@@ -1,0 +1,48 @@
+Subject
+
+Hi Team,
+
+As discussed, below are the Kafka topic and IBM MQ queue details configured for NEFT integration, which can be used for testing from the application side.
+
+Kafka Topics
+
+Inbound Topic (MQ → Kafka)
+
+neft.inbound.kafka.topic
+
+Used for consuming messages coming from IBM MQ into Kafka.
+
+Outbound Topic (Kafka → MQ)
+
+neft.outbound.kafka.topic
+
+Used for producing messages from Kafka to IBM MQ.
+
+IBM MQ Details
+
+Queue Manager: SBI_NEFT
+
+Inbound Queue (MQ → Kafka)
+
+Queue Name: NeftInboundQueue
+
+Messages put on this queue will be consumed into Kafka topic neft.inbound.kafka.topic.
+
+Outbound Queue (Kafka → MQ)
+
+Queue Name: NeftOutBoundQueue
+
+Messages produced to Kafka topic neft.outbound.kafka.topic will be delivered to this queue.
+
+Current Status
+
+Kafka cluster and Kafka Connect are stable and running
+
+MQ Source and Sink connectors are up and active
+
+End-to-end flow is ready for application-side testing
+
+Please proceed with testing from your side and let us know if any support is required.
+
+Thanks & Regards,
+Saadi
