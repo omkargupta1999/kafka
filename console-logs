@@ -135,3 +135,27 @@ dev-kafka-cluster-broker-2          dev-kafka-cluster-broker-2-dev-kafka.apps.de
 dev-kafka-cluster-kafka-bootstrap   dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi          dev-kafka-cluster-kafka-external-bootstrap   9094      passthrough     None
 grafana-route                       grafana-route-dev-kafka.apps.dev.sbiepay.sbi                              grafana                                      grafana   edge            None
 [osuser@bastion ~]$
+
+
+
+
+
+
+[osuser@bastion ~]$ oc get kafka dev-kafka-cluster -n dev-kafka -o yaml | grep -A5 listeners
+    listeners:
+    - name: plain
+      port: 9092
+      tls: false
+      type: internal
+    - name: tls
+--
+  listeners:
+  - addresses:
+    - host: dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc
+      port: 9092
+    bootstrapServers: dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc:9092
+    name: plain
+[osuser@bastion ~]$ oc get kafka dev-kafka-cluster -n dev-kafka
+NAME                READY   METADATA STATE   WARNINGS
+dev-kafka-cluster   True    KRaft
+[osuser@bastion ~]$
