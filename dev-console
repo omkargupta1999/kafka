@@ -1,3 +1,14 @@
+      properties:
+        values:
+          - name: security.protocol
+            value: SASL_PLAINTEXT
+          - name: sasl.mechanism
+            value: SCRAM-SHA-512
+        valuesFrom: []
+
+
+===================
+
 {{- if and .Values.kafka.enabled .Values.kafka.console.enabled }}
 apiVersion: console.streamshub.github.com/v1alpha1
 kind: Console
@@ -7,26 +18,47 @@ metadata:
 spec:
   hostname: {{ .Values.kafka.console.hostname }}
   kafkaClusters:
-    - adminProperties:
-        values: []
-        valuesFrom: []
-      consumerProperties:
-        values: []
-        valuesFrom: []
+    - name: {{ .Values.kafka.console.kafkaClusters.name }}
+      namespace: {{ .Values.kafka.console.kafkaClusters.namespace }}
+      listener: {{ .Values.kafka.console.listener }}
+
       credentials:
         kafkaUser:
           name: {{ .Values.kafka.console.credentials.kafkaUser.name }}
-      listener: {{ .Values.kafka.console.listener }}
-      name: {{ .Values.kafka.console.kafkaClusters.name }}
-      namespace: {{ .Values.kafka.console.kafkaClusters.namespace }}
-      producerProperties:
-        values: []
-        valuesFrom: []
-      properties:
-        values: []
-        valuesFrom: []
-  metricsSources:
-  - name: k8s
-    type: openshift-monitoring       
-{{- end }}
 
+      adminProperties:
+        values:
+          - name: security.protocol
+            value: SASL_PLAINTEXT
+          - name: sasl.mechanism
+            value: SCRAM-SHA-512
+        valuesFrom: []
+
+      consumerProperties:
+        values:
+          - name: security.protocol
+            value: SASL_PLAINTEXT
+          - name: sasl.mechanism
+            value: SCRAM-SHA-512
+        valuesFrom: []
+
+      producerProperties:
+        values:
+          - name: security.protocol
+            value: SASL_PLAINTEXT
+          - name: sasl.mechanism
+            value: SCRAM-SHA-512
+        valuesFrom: []
+
+      properties:
+        values:
+          - name: security.protocol
+            value: SASL_PLAINTEXT
+          - name: sasl.mechanism
+            value: SCRAM-SHA-512
+        valuesFrom: []
+
+  metricsSources:
+    - name: k8s
+      type: openshift-monitoring
+{{- end }}
