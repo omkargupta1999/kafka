@@ -209,3 +209,94 @@ kafka:
 [osuser@bastion ~]$
 
 
+
+
+
+
+
+
+
+
+
+
+[osuser@bastion ~]$ oc get pods
+NAME                                                 READY   STATUS    RESTARTS      AGE
+dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running   0             45h
+dev-kafka-cluster-broker-0                           1/1     Running   0             28d
+dev-kafka-cluster-broker-1                           1/1     Running   0             28d
+dev-kafka-cluster-broker-2                           1/1     Running   0             28d
+dev-kafka-cluster-controller-3                       1/1     Running   0             28d
+dev-kafka-cluster-controller-4                       1/1     Running   0             28d
+dev-kafka-cluster-controller-5                       1/1     Running   0             28d
+dev-kafka-cluster-cruise-control-7678c88585-8jm5p    1/1     Running   5 (13h ago)   3d23h
+dev-kafka-cluster-entity-operator-656dcf5cdd-b6qxp   2/2     Running   0             28d
+dev-kafka-connect-mq-test-connect-0                  1/1     Running   5 (48m ago)   129m
+dev-kafka-connect-mq-test-connect-1                  1/1     Running   8 (45m ago)   129m
+dev-kafka-connect-mq-test-connect-2                  1/1     Running   6 (45m ago)   129m
+dev-kafka-mirror-maker-mirrormaker2-0                0/1     Pending   0             20d
+[osuser@bastion ~]$ oc rollout restart deployment dev-console-console-deployment -n dev-kafka
+deployment.apps/dev-console-console-deployment restarted
+[osuser@bastion ~]$ oc get pods
+NAME                                                 READY   STATUS              RESTARTS      AGE
+dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
+dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             11s
+dev-kafka-cluster-broker-0                           1/1     Running             0             28d
+dev-kafka-cluster-broker-1                           1/1     Running             0             28d
+dev-kafka-cluster-broker-2                           1/1     Running             0             28d
+dev-kafka-cluster-controller-3                       1/1     Running             0             28d
+dev-kafka-cluster-controller-4                       1/1     Running             0             28d
+dev-kafka-cluster-controller-5                       1/1     Running             0             28d
+dev-kafka-cluster-cruise-control-7678c88585-8jm5p    1/1     Running             5 (13h ago)   3d23h
+dev-kafka-cluster-entity-operator-656dcf5cdd-b6qxp   2/2     Running             0             28d
+dev-kafka-connect-mq-test-connect-0                  1/1     Running             5 (49m ago)   129m
+dev-kafka-connect-mq-test-connect-1                  1/1     Running             8 (46m ago)   129m
+dev-kafka-connect-mq-test-connect-2                  1/1     Running             6 (46m ago)   129m
+dev-kafka-mirror-maker-mirrormaker2-0                0/1     Pending             0             20d
+[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
+dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
+dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             24s
+[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
+dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
+dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             31s
+[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
+dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
+dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             40s
+[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
+dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
+dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             42s
+[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
+dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
+dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             49s
+[osuser@bastion ~]$ oc logs -f dev-console-console-deployment-77b79d7f49-rjh2z
+Error from server (NotFound): pods "dev-console-console-deployment-77b79d7f49-rjh2z" not found
+[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
+dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
+dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             69s
+[osuser@bastion ~]$ oc describe pod dev-console-console-deployment-77b79d7f49-rjh2z
+Error from server (NotFound): pods "dev-console-console-deployment-77b79d7f49-rjh2z" not found
+[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
+dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
+dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             84s
+[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
+dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
+dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             93s
+[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
+dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
+dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             106s
+[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
+dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
+dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             2m4s
+[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
+dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
+dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             2m13s
+[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
+dev-console-console-deployment-77b79d7f49-rjh2z      2/2     Running   0             2m35s
+[osuser@bastion ~]$
+
+
+
+
+webui error
+
+Resource not found
+Resource not found: Requested Kafka cluster 3aEx1xmUSTWs8xSplBnYtA does not exist or is not configured (4041)
