@@ -62,3 +62,53 @@ spec:
     - name: k8s
       type: openshift-monitoring
 {{- end }}
+
+
++++++++++++++++++++++++++++++++++++++++++++++
+
+{{- if and .Values.kafka.enabled .Values.kafka.console.enabled }}
+apiVersion: console.streamshub.github.com/v1alpha1
+kind: Console
+metadata:
+  name: {{ .Values.kafka.console.name }}
+  namespace: {{ .Values.kafka.console.namespace }}
+spec:
+  hostname: {{ .Values.kafka.console.hostname }}
+  kafkaClusters:
+    - name: {{ .Values.kafka.console.kafkaClusters.name }}
+      namespace: {{ .Values.kafka.console.kafkaClusters.namespace }}
+      listener: {{ .Values.kafka.console.listener }}
+
+      # ❌ REMOVE kafkaUser – not valid for PLAINTEXT
+      # credentials:
+      #   kafkaUser:
+      #     name: {{ .Values.kafka.console.credentials.kafkaUser.name }}
+
+      adminProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+        valuesFrom: []
+
+      consumerProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+        valuesFrom: []
+
+      producerProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+        valuesFrom: []
+
+      properties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+        valuesFrom: []
+
+  metricsSources:
+    - name: k8s
+      type: openshift-monitoring
+{{- end }}
