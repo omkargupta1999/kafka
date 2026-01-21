@@ -200,3 +200,83 @@ status:
   observedGeneration: 1
   replicas: 3
   url: 'http://dev-kafka-connect-mq-test-connect-api.dev-kafka.svc:8083'
+
+
++++++++++++++++++++fixed------------------------------
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnect
+metadata:
+  name: dev-kafka-connect-mq-test
+  namespace: dev-kafka
+  annotations:
+    strimzi.io/use-connector-resources: "true"
+
+spec:
+  version: 3.9.0
+  replicas: 3
+
+  image: registry.dev.sbiepay.sbi:8443/library/kafka-connect-mq:v3
+
+  bootstrapServers: dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093
+
+  # =========================
+  # Kafka Connect Worker Config
+  # =========================
+  config:
+    group.id: dev-connect-cluster
+
+    config.storage.topic: dev-connect-cluster-configs
+    offset.storage.topic: dev-connect-cluster-offsets
+    status.storage.topic: dev-connect-cluster-status
+
+    config.storage.replication.factor: -1
+    offset.storage.replication.factor: -1
+    status.storage.replication.factor: -1
+
+    offset.flush.interval.ms: 10000
+    offset.flush.timeout.ms: 5000
+
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.converters.ByteArrayConverter
+    value.converter.schemas.enable: "false"
+
+  # =========================
+  # TLS Configuration (Kafka SSL)
+  # =========================
+  tls:
+    trustedCertificates:
+      - secretName: dev-kafka-cluster-cluster-ca-cert
+        pattern: "*.crt"
+
+  # =========================
+  # Resources
+  # =========================
+  resources:
+    requests:
+      cpu: "2"
+      memory: 4Gi
+    limits:
+      cpu: "4"
+      memory: 8Gi
+
+  # =========================
+  # Pod Template (IMPORTANT FIX HERE)
+  # =========================
+  template:
+    pod:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/worker
+                    operator: Exists
+
+      env:
+        # 🔥 MANDATORY FOR SSL (ROOT CAUSE FIX)
+        - name: CERTS_STORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: dev-kafka-cluster-cluster-ca-cert
+              key: ca.password
