@@ -8,3 +8,52 @@ oc label namespace pre-prod-dc-kafka istio-injection=disabled --overwrite
 
 Then restart console:
 oc rollout restart deployment pre-prod-dc-console-console-deployment -n pre-prod-dc-kafka
+----------------------------------------------------------------------
+
+
+
+Not Working namespace describe output ---
+
+[osuser@bastion ~]$ oc describe ns pre-prod-dc-kafka
+Name:         pre-prod-dc-kafka
+Labels:       dynakube.internal.dynatrace.com/instance=epay-dcpreprod
+              kubernetes.io/metadata.name=pre-prod-dc-kafka
+              pod-security.kubernetes.io/audit=restricted
+              pod-security.kubernetes.io/audit-version=latest
+              pod-security.kubernetes.io/warn=restricted
+              pod-security.kubernetes.io/warn-version=latest
+Annotations:  openshift.io/sa.scc.mcs: s0:c28,c27
+              openshift.io/sa.scc.supplemental-groups: 1000810000/10000
+              openshift.io/sa.scc.uid-range: 1000810000/10000
+Status:       Active
+
+No resource quota.
+
+No LimitRange resource.
+
+
+
+
+Working namespace describe output ---
+
+
+[osuser@bastion ~]$ oc describe ns  pre-prod-kafka
+Name:         pre-prod-kafka
+Labels:       dynakube.internal.dynatrace.com/instance=epay-preprod
+              dynatrace.com/inject=true
+              kubernetes.io/metadata.name=pre-prod-kafka
+              pod-security.kubernetes.io/audit=restricted
+              pod-security.kubernetes.io/audit-version=latest
+              pod-security.kubernetes.io/warn=restricted
+              pod-security.kubernetes.io/warn-version=latest
+Annotations:  openshift.io/description:
+              openshift.io/display-name:
+              openshift.io/requester: 6692435
+              openshift.io/sa.scc.mcs: s0:c36,c0
+              openshift.io/sa.scc.supplemental-groups: 1001260000/10000
+              openshift.io/sa.scc.uid-range: 1001260000/10000
+Status:       Active
+
+No resource quota.
+
+No LimitRange resource.
