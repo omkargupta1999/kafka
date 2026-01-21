@@ -280,3 +280,99 @@ spec:
             secretKeyRef:
               name: dev-kafka-cluster-cluster-ca-cert
               key: ca.password
+
+
+
+----------------------------------------------------
+
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnect
+metadata:
+  name: dev-kafka-connect-mq-test
+  namespace: dev-kafka
+  annotations:
+    strimzi.io/use-connector-resources: "true"
+
+spec:
+  version: 3.9.0
+  replicas: 3
+
+  image: registry.dev.sbiepay.sbi:8443/library/kafka-connect-mq:v3
+
+  bootstrapServers: dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc.cluster.local:9093
+
+  # =========================
+  # Kafka Connect Worker Config
+  # =========================
+  config:
+    group.id: dev-connect-cluster
+
+    config.storage.topic: dev-connect-cluster-configs
+    offset.storage.topic: dev-connect-cluster-offsets
+    status.storage.topic: dev-connect-cluster-status
+
+    config.storage.replication.factor: -1
+    offset.storage.replication.factor: -1
+    status.storage.replication.factor: -1
+
+    offset.flush.interval.ms: 10000
+    offset.flush.timeout.ms: 5000
+
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.converters.ByteArrayConverter
+    value.converter.schemas.enable: "false"
+
+    # 🔒 Explicit SSL safety (important)
+    security.protocol: SSL
+    ssl.endpoint.identification.algorithm: HTTPS
+
+    # 🔌 Plugin discovery (important for custom image)
+    plugin.path: /opt/kafka/plugins
+
+  # =========================
+  # TLS Configuration
+  # =========================
+  tls:
+    trustedCertificates:
+      - secretName: dev-kafka-cluster-cluster-ca-cert
+        pattern: "*.crt"
+
+  # =========================
+  # Resource Management
+  # =========================
+  resources:
+    requests:
+      cpu: "2"
+      memory: 4Gi
+    limits:
+      cpu: "4"
+      memory: 8Gi
+
+  # =========================
+  # Pod Template (ROOT CAUSE FIX + HARDENING)
+  # =========================
+  template:
+    pod:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/worker
+                    operator: Exists
+
+      env:
+        # 🔥 REQUIRED for Strimzi SSL
+        - name: CERTS_STORE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: dev-kafka-cluster-cluster-ca-cert
+              key: ca.password
+
+        # 🧠 JVM stability
+        - name: KAFKA_HEAP_OPTS
+          value: "-Xms2G -Xmx4G"
+
+      # Optional but recommended
+      terminationGracePeriodSeconds: 60
+
