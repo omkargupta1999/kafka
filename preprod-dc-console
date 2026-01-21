@@ -1,1 +1,13 @@
 oc get endpoints pre-prod-dc-console-console-service -n pre-prod-dc-kafka
+
+
+oc run curl-test -it --rm --image=curlimages/curl -n pre-prod-dc-kafka -- sh
+
+
+inside
+curl -I http://pre-prod-dc-console-console-service:80
+
+
+
+Step 3: Router side check (optional but strong proof)
+oc describe route pre-prod-dc-console-console-ingress-8hds5 -n pre-prod-dc-kafka
