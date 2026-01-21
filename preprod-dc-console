@@ -11,3 +11,69 @@ curl -I http://pre-prod-dc-console-console-service:80
 
 Step 3: Router side check (optional but strong proof)
 oc describe route pre-prod-dc-console-console-ingress-8hds5 -n pre-prod-dc-kafka
+
+===================================================================================
+
+
+[osuser@bastion ~]$ oc get ep  -n pre-prod-dc-kafka
+NAME                                                 ENDPOINTS                                                               AGE
+pre-prod-dc-console-console-service                  172.16.15.134:3000                                                      20d
+pre-prod-dc-kafka-cluster-broker-0                   172.16.14.223:9094                                                      20d
+pre-prod-dc-kafka-cluster-broker-1                   172.16.13.176:9094                                                      20d
+pre-prod-dc-kafka-cluster-broker-2                   172.16.14.222:9094                                                      20d
+pre-prod-dc-kafka-cluster-cruise-control             172.16.13.177:9090                                                      20d
+pre-prod-dc-kafka-cluster-kafka-bootstrap            172.16.13.176:9093,172.16.14.222:9093,172.16.14.223:9093 + 6 more...    20d
+pre-prod-dc-kafka-cluster-kafka-brokers              172.16.13.175:8443,172.16.13.176:8443,172.16.14.222:8443 + 27 more...   20d
+pre-prod-dc-kafka-cluster-kafka-external-bootstrap   172.16.13.176:9094,172.16.14.222:9094,172.16.14.223:9094                20d
+pre-prod-dc-kafka-mirror-maker-mirrormaker2          172.16.13.216:8083                                                      8d
+pre-prod-dc-kafka-mirror-maker-mirrormaker2-api      172.16.13.216:8083                                                      8d
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc get endpoints pre-prod-dc-console-console-service -n pre-prod-dc-kafka
+NAME                                  ENDPOINTS            AGE
+pre-prod-dc-console-console-service   172.16.15.134:3000   20d
+[osuser@bastion ~]$ oc run curl-test -it --rm --image=curlimages/curl -n pre-prod-dc-kafka -- sh
+pod "curl-test" deleted
+error: timed out waiting for the condition
+
+------------------------------
+
+sh-5.1$ curl -I http://pre-prod-dc-console-console-service:80
+HTTP/1.1 200 OK
+set-cookie: NEXT_LOCALE=en; Path=/; SameSite=lax
+x-middleware-rewrite: /en
+Vary: RSC, Next-Router-State-Tree, Next-Router-Prefetch, Accept-Encoding
+X-Powered-By: Next.js
+Cache-Control: private, no-cache, no-store, max-age=0, must-revalidate
+Content-Type: text/html; charset=utf-8
+Date: Wed, 21 Jan 2026 10:39:57 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+sh-5.1$ Hostname
+sh: Hostname: command not found
+sh-5.1$ hostname
+pre-prod-dc-kafka-cluster-broker-0
+sh-5.1$ 
+sh-5.1$ 
+sh-5.1$ 
+
+
+--------------------------
+
+[osuser@bastion ~]$ oc logs -f pre-prod-dc-console-console-deployment-54b5f68bfc-8z4x5 -n pre-prod-dc-kafka
+Defaulted container "console-api" out of: console-api, console-ui
+INFO exec -a "java" java -Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -cp "." -jar /deployments/quarkus-run.jar
+INFO running in /deployments
+__  ____  __  _____   ___  __ ____  ______
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/
+2026-01-21 10:36:25,991 INFO  [com.git.str.con.api.sup.fac.ConsoleConfigFactory] (main) Loading console configuration from file:/deployments/config/console-config.yaml
+2026-01-21 10:36:26,226 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (main) The client is using resource type 'kafkas' with unstable version 'v1beta2'
+2026-01-21 10:36:26,966 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (main) The client is using resource type 'kafkanodepools' with unstable version 'v1beta2'
+2026-01-21 10:36:27,030 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (main) The client is using resource type 'kafkatopics' with unstable version 'v1beta2'
+2026-01-21 10:36:27,073 INFO  [com.git.str.con.LoggingConfigWatcher] (main) No log config files set to monitor
+2026-01-21 10:36:27,138 INFO  [io.quarkus] (main) console-api 0.8.6.redhat-00002 on JVM (powered by Quarkus 3.20.2.redhat-00004) started in 4.273s. Listening on: http://0.0.0.0:8080
+2026-01-21 10:36:27,138 INFO  [io.quarkus] (main) Profile prod activated.
+2026-01-21 10:36:27,138 INFO  [io.quarkus] (main) Installed features: [cdi, hibernate-validator, kubernetes-client, micrometer, oidc, oidc-client, rest, rest-client, rest-jackson, security, smallrye-context-propagation, smallrye-health, smallrye-openapi, swagger-ui, vertx]
+
