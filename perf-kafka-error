@@ -1,95 +1,10 @@
-{{- if and .Values.kafka.enabled .Values.kafka.console.enabled }}
-apiVersion: console.streamshub.github.com/v1alpha1
-kind: Console
-metadata:
-  name: {{ .Values.kafka.console.name }}
-  namespace: {{ .Values.kafka.console.namespace }}
-spec:
-  hostname: {{ .Values.kafka.console.hostname }}
-  kafkaClusters:
-    - adminProperties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
-        valuesFrom: []
-      consumerProperties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
-        valuesFrom: []
-      # credentials:
-      #   kafkaUser:
-      #     name: {{ .Values.kafka.console.credentials.kafkaUser.name }}
-      listener: {{ .Values.kafka.console.listener }}
-      name: {{ .Values.kafka.console.kafkaClusters.name }}
-      namespace: {{ .Values.kafka.console.kafkaClusters.namespace }}
-      producerProperties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT       
-        valuesFrom: []
-      properties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
-        valuesFrom: []
-  metricsSources:
-  - name: k8s
-    type: openshift-monitoring       
-{{- end }}
-
-
-
-++++++++++++++++++++++++++++++++++++++++++
-
-
-Running with gitlab-runner 17.8.0 (e4f782b3)
-  on DC-Gitlab-Runner rMTQxLq3, system ID: s_948d0ccb739a
-Resolving secrets
-Preparing the "docker" executor
-00:04
-Using Docker executor with image registry.dev.sbiepay.sbi:8443/ubi9/ochelm:03122024 ...
-Using helper image:  registry.dev.sbiepay.sbi:8443/library/gitlab-runner-helper:latest  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.8.0 )
-Using locally found image version due to "if-not-present" pull policy
-Using docker image sha256:c95744588b6d7e170a6866854932de40eaf1b5ed229ed818cba6a87a1f885773 for registry.dev.sbiepay.sbi:8443/library/gitlab-runner-helper:latest with digest registry.dev.sbiepay.sbi:8443/library/gitlab-runner-helper@sha256:ebbf1c21e4272ae1f8c18b034d390809c836c2fc68c0f0f6d3a5aff9760aabf5 ...
-Using helper image:  registry.dev.sbiepay.sbi:8443/library/gitlab-runner-helper:latest  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.8.0 )
-Using docker image sha256:c95744588b6d7e170a6866854932de40eaf1b5ed229ed818cba6a87a1f885773 for registry.dev.sbiepay.sbi:8443/library/gitlab-runner-helper:latest with digest registry.dev.sbiepay.sbi:8443/library/gitlab-runner-helper@sha256:ebbf1c21e4272ae1f8c18b034d390809c836c2fc68c0f0f6d3a5aff9760aabf5 ...
-Using locally found image version due to "if-not-present" pull policy
-Using docker image sha256:e35c3559b44abd0dfdbb0d2452de990630985a9f95782c3f92357d62e1f6db71 for registry.dev.sbiepay.sbi:8443/ubi9/ochelm:03122024 with digest registry.dev.sbiepay.sbi:8443/ubi9/ochelm@sha256:f3dea1ca55cf5f37fb762cce33f16f409e63c9ad14aa203c83963ff73244c54c ...
-Preparing environment
-00:02
-Using helper image:  registry.dev.sbiepay.sbi:8443/library/gitlab-runner-helper:latest  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.8.0 )
-Using docker image sha256:c95744588b6d7e170a6866854932de40eaf1b5ed229ed818cba6a87a1f885773 for registry.dev.sbiepay.sbi:8443/library/gitlab-runner-helper:latest with digest registry.dev.sbiepay.sbi:8443/library/gitlab-runner-helper@sha256:ebbf1c21e4272ae1f8c18b034d390809c836c2fc68c0f0f6d3a5aff9760aabf5 ...
-Running on runner-rmtqxlq3-project-23-concurrent-0 via Gitlab-DC-Runr...
-Getting source from Git repository
-00:19
-$ git config --global http.proxy $HTTP_PROXY; git config --global https.proxy $HTTPS_PROXY; git config --global no.proxy $NO_PROXY
-Fetching changes...
-Initialized empty Git repository in /tmp/builds/epay/devops/deployment/.git/
-Created fresh repository.
-Checking out c6b936cf as detached HEAD (ref is refs/merge-requests/408/head)...
-Skipping Git submodules setup
-Executing "step_script" stage of the job script
-00:05
-Using docker image sha256:e35c3559b44abd0dfdbb0d2452de990630985a9f95782c3f92357d62e1f6db71 for registry.dev.sbiepay.sbi:8443/ubi9/ochelm:03122024 with digest registry.dev.sbiepay.sbi:8443/ubi9/ochelm@sha256:f3dea1ca55cf5f37fb762cce33f16f409e63c9ad14aa203c83963ff73244c54c ...
-$ set -eo pipefail # collapsed multi-line command
-Using namespace: perf-epay-common
-PREPROD_TOKEN
-Logging into OpenShift cluster...
-WARNING: Using insecure TLS client config. Setting this option is not supported!
-Logged into "https://api.preprod.epay.sbi:6443" as "system:serviceaccount:default:cicd-sa" using the token provided.
-You have access to 146 projects, the list has been suppressed. You can list all projects with 'oc projects'
-Using project "default".
-Welcome! See 'oc help' to get started.
-Successfully switched to namespace perf-epay-common
-$ set -eo pipefail # collapsed multi-line command
-Deploying "epay-common" to perf-epay-common...
-Chart path: /tmp/builds/epay/devops/deployment/perf/charts/epay_common
-Executing: helm upgrade --install "epay-common" /tmp/builds/epay/devops/deployment/perf/charts/epay_common   --namespace perf-epay-common   --history-max 10   --timeout 15m
-Error: UPGRADE FAILED: template: epay_common/templates/kafka/kafka-console.yaml:1:40: executing "epay_common/templates/kafka/kafka-console.yaml" at <.Values.kafka.console.enabled>: nil pointer evaluating interface {}.enabled
-Error: Helm deployment failed
-Last 5 revisions:
-Error: release name is invalid: "epay-common"
-Cleaning up project directory and file based variables
-00:03
-ERROR: Job failed: exit code 1
+kafka:
+  console:
+    enabled: true
+    name: perf-kafka-console
+    namespace: perf-kafka
+    hostname: perf-kafka-console.apps.preprod.epay.sbi
+    listener: plain
+    kafkaClusters:
+      name: perf-kafka
+      namespace: perf-kafka
