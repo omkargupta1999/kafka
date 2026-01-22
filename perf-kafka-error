@@ -1,10 +1,752 @@
-kafka:
-  console:
+# ================================================================
+# EPay Common Chart - Pre-Prod Environment Configuration
+# ================================================================
+# Global values for all charts
+#
+#
+global:
+  environment: perf
+  clusterDomain: perf.epay.sbi
+  imageRegistry: registry.preprod.epay.sbi:8443
+  imagePullSecrets: []
+  storageClass: trident-csi-retain
+
+# ================================================================
+# Service Mesh 3.0 Configuration (Pre-Prod Instance)
+# ================================================================
+serviceMesh:
+  enabled: true
+  # Core Istio Control Plane
+  controlPlane:
+    name: "perf-istio"
+    namespace: "perf-istio-system"
+    version: "v1.24-latest"
+    updateStrategy: "InPlace"
+    meshId: "perf-mesh"
+    network: "perf-network"
+    # Discovery selector for namespace scoping
+    discoverySelector:
+      key: "istio-discovery"
+      value: "perf-istio"
+  # CNI Configuration
+  cni:
+    enabled: false
+    createResource: false
+    name: "default"
+    namespace: "istio-cni"
+    excludeNamespaces:
+      - perf-istio-system
+      - perf-istio-cni
+      - kube-system
+      - openshift-system
+      - openshift-operators
+      - openshift-monitoring
+      - openshift-user-workload-monitoring
+  # Gateway Configuration (One-time mesh-wide)
+  gateway:
+    # Istio Gateway resource
+    istioGateway:
+      name: "perf-gateway"
+      namespace: "perf-istio-system"
+      hosts:
+        - "perf.epay.sbi"
+      port: 8080
+    # Gateway Deployment and Service
+    deployment:
+      name: "perf-istio-gateway"
+      namespace: "perf-istio-system"
+      replicas: 1
+      selector: "perf-istio-gateway"
+      revision: "perf-istio"
+      resources:
+        requests:
+          cpu: "1000m"
+          memory: "512Mi"
+        limits:
+          cpu: "2000m"
+          memory: "1024Mi"
+    # Gateway Service
+    service:
+      name: "perf-istio-gateway-service"
+      type: ClusterIP
+      ports:
+        status: 15021
+        http: 8080
+        https: 8443
+    # OpenShift Route
+    route:
+      name: "perf-istio-gateway-route"
+      enabled: true
+      host: "perf.epay.sbi"
+      tls:
+        termination: "edge"
+        insecureEdgeTerminationPolicy: "None"
+  # Service Mesh HPA Configuration (Environment-level)
+  hpa:
     enabled: true
-    name: perf-kafka-console
-    namespace: perf-kafka
-    hostname: perf-kafka-console.apps.preprod.epay.sbi
-    listener: plain
-    kafkaClusters:
-      name: perf-kafka
-      namespace: perf-kafka
+    # Istio Control Plane HPA
+    istiod:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 6
+      targetCPUUtilizationPercentage: 70
+      targetMemoryUtilizationPercentage: 80
+      behavior:
+        scaleUp:
+          stabilizationWindowSeconds: 60
+          policies:
+            - type: "Percent"
+              value: 50
+              periodSeconds: 30
+        scaleDown:
+          stabilizationWindowSeconds: 300
+          policies:
+            - type: "Percent"
+              value: 10
+              periodSeconds: 60
+    # Istio Gateway HPA#
+    gateway:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 6
+      targetCPUUtilizationPercentage: 70
+      targetMemoryUtilizationPercentage: 80
+      behavior:
+        scaleUp:
+          stabilizationWindowSeconds: 60
+          policies:
+            - type: "Percent"
+              value: 100
+              periodSeconds: 15
+        scaleDown:
+          stabilizationWindowSeconds: 300
+          policies:
+            - type: "Percent"
+              value: 10
+              periodSeconds: 60
+
+# ================================================================
+# Infrastructure Services (One-time mesh-wide)
+# ================================================================
+
+
+  # Traffic Management Configuration (Infrastructure level only)
+  trafficManagement:
+    virtualServices:
+      enabled: true
+    destinationRules:
+      enabled: true
+  # Security Configuration (Infrastructure level only)
+  security:
+    authorizationPolicies:
+      enabled: true
+infrastructure:
+  # Infrastructure peer authentication (mesh-wide)
+  peerAuthentication:
+    # Disable mTLS for infrastructure components in perf
+    kafka:
+      enabled: true
+      mtlsMode: "DISABLE"
+    gemfire:
+      enabled: true
+      mtlsMode: "DISABLE"
+    managementConsoles:
+      enabled: true
+      mtlsMode: "DISABLE"
+#
+# ================================================================
+# Security Configuration
+# ================================================================
+security:
+  enabled: false
+  scc:
+    enabled: false
+    name: "epay-restricted-scc"
+    runAsUser:
+      uidRangeMin: 1000
+      uidRangeMax: 2000
+    seLinux:
+      level: "s0"
+    fsGroup:
+      min: 1000
+      max: 2000
+    supplementalGroups:
+      min: 1000
+      max: 2000
+    users: []
+    groups: []
+  # Security contexts for containers
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
+    seccompProfile:
+      type: RuntimeDefault
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    readOnlyRootFilesystem: false
+    capabilities:
+      drop:
+        - ALL
+  # Network policies for infrastructure
+  networkPolicies:
+    enabled: false
+  # Service accounts for infrastructure components
+  serviceAccounts:
+    enabled: false
+
+# ================================================================
+# GemFire Configuration (Simplified to match reference)
+# ================================================================
+gemfire:
+  enabled: true
+  namespace: "perf-gemfire"
+  # GemFire Cluster (Simplified like reference)
+  cluster:
+    name: "gemfire-perf-system"
+    image: "registry.preprod.epay.sbi:8443/ubi9/pivotal-gemfire/vmware-gemfire:10.1.2"
+    # Locators configuration
+    locators:
+      replicas: 3
+    # Servers configuration
+    servers:
+      replicas: 3
+    # Node affinity for GemFire cluster
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: node-role.kubernetes.io/worker
+              operator: Exists
+  # Management Console (Simplified like reference)
+  managementConsole:
+    enabled: false
+    name: "perf-gemfire-management-console"
+    image: "registry.preprod.epay.sbi:8443/ubi9/gemfire-management-console/gemfire-management-console:latest"
+    replicas: 1
+    port: 8080
+    # Node affinity for management console
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: node-role.kubernetes.io/worker
+              operator: Exists
+    # Route configuration
+    route:
+      enabled: true
+      host: "perf-gemfire-management-console.apps.preprod.epay.sbi"
+      tls:
+        termination: "edge"
+        insecureEdgeTerminationPolicy: "Redirect"
+
+# ================================================================
+# Kafka Configuration (AMQ Streams - KRaft JBOD)
+# ================================================================
+kafka:
+  enabled: true
+  namespace: "perf-kafka"
+  # Kafka Cluster Configuration (KRaft mode)
+  cluster:
+    name: "perf-kafka-cluster"
+    version: "3.9.0"
+    metadataVersion: "3.9-IV0"
+    # Annotations
+    annotations:
+      strimzi.io/node-pools: "enabled"
+      strimzi.io/kraft: "enabled"
+    # Kafka configuration
+    kafka:
+      listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+      config:
+        offsets.topic.replication.factor: 3
+        transaction.state.log.replication.factor: 3
+        transaction.state.log.min.isr: 2
+        default.replication.factor: 3
+        min.insync.replicas: 2
+        # PDF Recommendations - Additional config
+        acks: "all"
+        # Performance tuning
+        num.network.threads: 8
+        num.io.threads: 8
+        socket.send.buffer.bytes: 102400
+        socket.receive.buffer.bytes: 102400
+        socket.request.max.bytes: 104857600
+        log.retention.hours: 168
+        log.segment.bytes: 1073741824
+        log.retention.check.interval.ms: 300000
+        log.cleanup.policy: "delete"
+        compression.type: "producer"
+    # Controller node pool (PDF: At least 3, 4+ vCPU, 8GB+ RAM, 64GB+ disk)
+    controller:
+      name: "controller"
+      replicas: 3
+      roles:
+        - controller
+      # PDF Recommendation: Resource specifications for controllers
+      resources:
+        requests:
+          memory: "8Gi"
+          cpu: "4"
+        limits:
+          memory: "16Gi"
+          cpu: "8"
+      storage:
+        type: jbod
+        volumes:
+          - id: 0
+            type: persistent-claim
+            size: 100Gi  # Keep existing size to avoid warning
+            kraftMetadata: shared
+            deleteClaim: false
+      # PDF Recommendation: terminationGracePeriodSeconds >60s
+      terminationGracePeriodSeconds: 120
+      # Node affinity for controllers
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/worker
+                operator: Exists
+              - key: workload-type
+                operator: In
+                values: ["kafka"]
+      # Tolerations for controllers
+      tolerations:
+        - key: "workload-type"
+          operator: "Equal"
+          value: "kafka"
+          effect: "NoSchedule"
+        - key: "node.kubernetes.io/disk-pressure"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 300
+    # Broker node pool (PDF: At least 3, 12+ vCPU, 64GB+ RAM, 1TB+ disk)
+    broker:
+      name: "broker"
+      replicas: 3
+      roles:
+        - broker
+      # PDF Recommendation: Resource specifications for brokers
+      resources:
+        requests:
+          memory: "64Gi"
+          cpu: "12"
+        limits:
+          memory: "128Gi"
+          cpu: "24"
+      storage:
+        type: jbod
+        volumes:
+          - id: 0
+            type: persistent-claim
+            size: 100Gi  # Keep existing size to avoid warning
+            kraftMetadata: shared
+            deleteClaim: false
+          - id: 1
+            type: persistent-claim
+            size: 100Gi  # Keep existing size to avoid warning
+            deleteClaim: false
+      # PDF Recommendation: terminationGracePeriodSeconds >60s
+      terminationGracePeriodSeconds: 120
+      # Node affinity for brokers
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/worker
+                operator: Exists
+              - key: workload-type
+                operator: In
+                values: ["kafka"]
+      # Tolerations for brokers
+      tolerations:
+        - key: "workload-type"
+          operator: "Equal"
+          value: "kafka"
+          effect: "NoSchedule"
+        - key: "node.kubernetes.io/disk-pressure"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 300
+        - key: "node.kubernetes.io/memory-pressure"
+          operator: "Exists"
+          effect: "NoExecute"
+          tolerationSeconds: 300
+
+  # PDF Recommendation: Cruise Control for cluster rebalancing
+  cruiseControl:
+    enabled: true
+    name: "perf-kafka-cruise-control"
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+    config:
+      # Cruise Control configuration
+
+      webserver.servlet.capacity: "15"
+      webserver.request.timeout.ms: "300000"
+
+      num.concurrent.partition.movements.per.broker: "2"
+      num.concurrent.leader.movements: "500"
+
+      metric.sampling.interval.ms: "120000"
+      min.samples.per.partition: "1"
+      default.goals: >
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.RackAwareGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.ReplicaCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.DiskCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkInboundCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.CpuCapacityGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.ReplicaDistributionGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.PotentialNwOutGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.DiskUsageDistributionGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkInboundUsageDistributionGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundUsageDistributionGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.CpuUsageDistributionGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.TopicReplicaDistributionGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.LeaderReplicaDistributionGoal,
+        com.linkedin.kafka.cruisecontrol.analyzer.goals.LeaderBytesInDistributionGoal
+      cpu.balance.threshold: "1.1"
+      disk.balance.threshold: "1.1"
+      network.inbound.balance.threshold: "1.1"
+      network.outbound.balance.threshold: "1.1"
+
+  # PDF Recommendation: Kafka Connect for database integration
+  kafkaConnect:
+    enabled: true
+    name: "perf-kafka-connect"
+    replicas: 3
+    bootstrapServers: "perf-kafka-cluster-kafka-bootstrap.perf-kafka.svc.cluster.local:9093"
+    resources:
+      requests:
+        memory: "4Gi"
+        cpu: "2"
+      limits:
+        memory: "8Gi"
+        cpu: "4"
+    config:
+      group:
+        id: "perf-connect-cluster"
+      offset:
+        storage:
+          topic: "perf-connect-cluster-offsets"
+        flush:
+          interval:
+            ms: 10000
+          timeout:
+            ms: 5000
+      config:
+        storage:
+          topic: "perf-connect-cluster-configs"
+      status:
+        storage:
+          topic: "perf-connect-cluster-status"
+    ## Connectors configuration
+    connectors:
+      # Oracle Database connector for ePay
+      - name: "epay-oracle-source"
+        config:
+          connector:
+            class: "io.debezium.connector.oracle.OracleConnector"
+          database:
+            hostname: "EPAYDNSPREPRODNEW.sbiepay.sbi"
+            port: "1524"
+            user: "PAYAGGTRANSCTION"
+            password: "April_2025"
+            dbname: "epaydbpp"
+            server:
+              name: "epay-perf-db"
+            history:
+              kafka:
+                bootstrap:
+                  servers: "perf-kafka-cluster-kafka-bootstrap.perf-kafka.svc.cluster.local:9093"
+                topic: "epay-db-history"
+          table:
+            include:
+              list: "PAYAGGTRANSCTION.*"
+          include:
+            schema:
+              changes: true
+
+  # PDF Recommendation: MirrorMaker 2 for disaster recovery
+  mirrorMaker2:
+    enabled: false
+    name: "perf-kafka-mirror-maker"
+    # Active/Passive setup for DR
+    clusters:
+      - alias: "source"
+        bootstrapServers: "perf-kafka-cluster-kafka-bootstrap.perf-kafka.svc.cluster.local:9092"
+      - alias: "target"
+        bootstrapServers: "dr-kafka-cluster-kafka-bootstrap.dr-kafka.svc.cluster.local:9092"
+    mirrors:
+      - sourceCluster: "source"
+        targetCluster: "target"
+        sourceConnector:
+          config:
+            replication.factor: 3
+            offset-syncs.topic.replication.factor: 3
+            sync.topic.acls.enabled: true
+            replication.policy.class: "org.apache.kafka.connect.mirror.IdentityReplicationPolicy"
+        heartbeatConnector:
+          config:
+            heartbeats.topic.replication.factor: 3
+        checkpointConnector:
+          config:
+            checkpoints.topic.replication.factor: 3
+        topicsPattern: ".*"
+        groupsPattern: ".*"
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "1"
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+
+# Kafka Topics for ePay application
+topics:
+  - name: "perf-connect-cluster-offsets"
+    partitions: 25
+    replicas: 3
+  - name: "perf-connect-cluster-configs"
+    partitions: 1
+    replicas: 3
+  - name: "perf-connect-cluster-status"
+    partitions: 5
+    replicas: 3
+  - name: "epay-db-history"
+    partitions: 1
+    replicas: 3
+
+# PDF Recommendation: Distributed tracing for environment
+tracing:
+  enabled: true
+  type: "tempo"
+  # Create our own Tempo instance for perf environment
+  tempo:
+    enabled: true
+    name: "perf-tempo"
+    namespace: "perf-tempo"
+    # Tempo instance configuration for latest operator
+    spec:
+      # Storage configuration
+      storage:
+        secret:
+          name: "tempo-s3-storage-secret"
+          type: "s3"
+      # Retention policy
+      retention:
+        global:
+          traces: "168h"  # 7 days
+      # Resource configuration
+      resources:
+        total:
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+          requests:
+            memory: "1Gi" 
+            cpu: "500m"
+      # Service configuration for perf
+      services:
+        distributor:
+          replicas: 1
+        ingester:
+          replicas: 1
+        querier:
+          replicas: 1
+        query_frontend:
+          replicas: 1
+        compactor:
+          replicas: 1
+    # Persistence for our Tempo instance
+    persistence:
+      enabled: true
+      size: "50Gi"
+      storageClass: "trident-csi-retain"
+# Environment-level monitoring infrastructure
+monitoring:
+  enabled: true
+  
+  # Use OpenShift User Workload Monitoring (built-in Prometheus)
+  userWorkloadMonitoring:
+    enabled: true
+    namespace: "openshift-user-workload-monitoring"
+    
+  # Disable separate Prometheus deployment - use OpenShift built-in
+  prometheus:
+    enabled: true
+    retention: "30d"
+    
+  # Grafana for enhanced dashboards (optional - OpenShift Console has basic monitoring)
+  grafana:
+    enabled: true
+    persistence:
+      enabled: true
+      size: "20Gi"
+      storageClass: "trident-csi-retain"
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: "500m"
+      limits:
+        memory: "2Gi"
+        cpu: "1"
+    
+  # ServiceMonitor for infrastructure components (required for OpenShift monitoring)
+  serviceMonitor:
+    enabled: true
+    labels:
+      app: "epay-infrastructure-monitoring"
+    endpoints:
+      - port: "metrics"
+        interval: "30s"
+        path: "/metrics"
+    
+  # PrometheusRule for infrastructure alerting (works with OpenShift monitoring)
+  prometheusRule:
+    enabled: true
+    rules:
+      - alert: "KafkaClusterDown"
+        expr: "kafka_server_replicamanager_leadercount == 0"
+        for: "5m"
+        labels:
+          severity: "critical"
+        annotations:
+          summary: "Kafka cluster is down"
+          description: "Kafka cluster has no active leaders"
+      
+      - alert: "TempoDown"
+        expr: "up{job='tempo'} == 0"
+        for: "5m"
+        labels:
+          severity: "critical"
+        annotations:
+          summary: "Tempo tracing is down"
+          description: "Tempo distributed tracing service is unavailable"
+
+# Environment-level persistent storage
+persistentStorage:
+  enabled: true
+  
+  # Storage classes configuration
+  storageClasses:
+    default: "trident-csi-retain"
+  
+  # Persistent volumes for infrastructure components
+  volumes:
+    # Tempo storage
+    tempo:
+      enabled: true
+      size: "50Gi"
+      storageClass: "trident-csi-retain"
+      accessMode: "ReadWriteOnce"
+      
+    # Prometheus storage (disabled - using OpenShift User Workload Monitoring)
+    prometheus:
+      enabled: true
+      size: "200Gi"
+      storageClass: "trident-csi-retain"
+      accessMode: "ReadWriteOnce"      
+    # Grafana storage
+    grafana:
+      enabled: true
+      size: "20Gi"
+      storageClass: "trident-csi-retain"
+      accessMode: "ReadWriteOnce"
+      
+    # Kafka storage
+    kafka:
+      enabled: true
+      size: "100Gi"
+      storageClass: "trident-csi-retain"
+      accessMode: "ReadWriteOnce"
+      
+    # Environment logs storage
+    environment-logs:
+      enabled: true
+      size: "50Gi"
+      storageClass: "trident-csi-retain"
+      accessMode: "ReadWriteMany"
+      
+    # Backup storage
+    backup:
+      enabled: true
+      size: "500Gi"
+      storageClass: "trident-csi-retain"
+      accessMode: "ReadWriteOnce"
+
+# OpenTelemetry configuration for environment
+opentelemetry:
+  enabled: true
+  
+  # OpenTelemetry Collector
+  collector:
+    enabled: true
+    replicas: 2
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: "500m"
+      limits:
+        memory: "2Gi"
+        cpu: "1"
+    
+    # Collector configuration
+    config:
+      receivers:
+        otlp:
+          protocols:
+            grpc:
+              endpoint: "0.0.0.0:4317"
+            http:
+              endpoint: "0.0.0.0:4318"
+        jaeger:
+          protocols:
+            grpc:
+              endpoint: "0.0.0.0:14250"
+            thrift_http:
+              endpoint: "0.0.0.0:14268"
+      
+      processors:
+        batch:
+          timeout: "1s"
+          send_batch_size: 1024
+        memory_limiter:
+          limit_mib: 1024
+      
+      exporters:
+        tempo:
+          endpoint: "tempo-distributor.perf-tempo.svc.cluster.local:4317"
+          tls:
+            insecure: true
+      
+      service:
+        pipelines:
+          traces:
+            receivers: ["otlp", "jaeger"]
+            processors: ["memory_limiter", "batch"]
+            exporters: ["tempo"]
+  
