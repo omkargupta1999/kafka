@@ -7,3 +7,81 @@ spec:
     limits:
       cpu: "1"
       memory: "2Gi"
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+{{- if and .Values.kafka.enabled .Values.kafka.console.enabled }}
+apiVersion: console.streamshub.github.com/v1alpha1
+kind: Console
+metadata:
+  name: {{ .Values.kafka.console.name }}
+  namespace: {{ .Values.kafka.console.namespace }}
+spec:
+  hostname: {{ .Values.kafka.console.hostname }}
+
+  # -------------------------------
+  # Resource tuning (IMPORTANT)
+  # -------------------------------
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+
+  # -------------------------------
+  # Kafka Cluster Configuration
+  # -------------------------------
+  kafkaClusters:
+    - name: {{ .Values.kafka.console.kafkaClusters.name }}
+      namespace: {{ .Values.kafka.console.kafkaClusters.namespace }}
+      listener: {{ .Values.kafka.console.listener }}
+
+      # ---- Admin Client ----
+      adminProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+          - name: request.timeout.ms
+            value: "30000"
+          - name: default.api.timeout.ms
+            value: "30000"
+        valuesFrom: []
+
+      # ---- Producer ----
+      producerProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+          - name: request.timeout.ms
+            value: "30000"
+        valuesFrom: []
+
+      # ---- Consumer ----
+      consumerProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+          - name: request.timeout.ms
+            value: "30000"
+        valuesFrom: []
+
+      # ---- Generic Properties ----
+      properties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+        valuesFrom: []
+
+      # ---- Auth (INTENTIONALLY DISABLED) ----
+      # credentials:
+      #   kafkaUser:
+      #     name: {{ .Values.kafka.console.credentials.kafkaUser.name }}
+
+  # -------------------------------
+  # Metrics (Optional / UI only)
+  # -------------------------------
+  metricsSources:
+    - name: k8s
+      type: openshift-monitoring
+{{- end }}
