@@ -1,126 +1,925 @@
-webui error
-Not Authenticated
-Not Authenticated: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are [] (4011)
+previous logs___________
 
 
-
-
-
-
-pod logs
-
-~]$ oc get pods -n dev-kafka
-NAME                                                 READY   STATUS    RESTARTS       AGE
-dev-console-console-deployment-588f96784f-v26pb      2/2     Running   0              102s
-dev-kafka-cluster-broker-0                           1/1     Running   0              28d
-dev-kafka-cluster-broker-1                           1/1     Running   0              28d
-dev-kafka-cluster-broker-2                           1/1     Running   0              28d
-dev-kafka-cluster-controller-3                       1/1     Running   0              28d
-dev-kafka-cluster-controller-4                       1/1     Running   0              28d
-dev-kafka-cluster-controller-5                       1/1     Running   0              28d
-dev-kafka-cluster-cruise-control-7678c88585-8jm5p    1/1     Running   5 (14h ago)    4d
-dev-kafka-cluster-entity-operator-656dcf5cdd-b6qxp   2/2     Running   0              28d
-dev-kafka-connect-mq-test-connect-0                  0/1     Running   8 (48s ago)    175m
-dev-kafka-connect-mq-test-connect-1                  0/1     Running   11 (48s ago)   175m
-dev-kafka-connect-mq-test-connect-2                  0/1     Running   10 (46s ago)   175m
-dev-kafka-mirror-maker-mirrormaker2-0                0/1     Pending   0              20d
-[osuser@bastion ~]$ oc logs -f dev-console-console-deployment-588f96784f-v26pb
-Error from server (NotFound): pods "dev-console-console-deployment-588f96784f-v26pb" not found
-[osuser@bastion ~]$ oc logs -f dev-console-console-deployment-588f96784f-v26pb -n dev-kafka
-Defaulted container "console-api" out of: console-api, console-ui
-INFO exec -a "java" java -Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -cp "." -jar /deployments/quarkus-run.jar
+INFO exec -a "java" java -Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -cp "." -jar /deployments/quarkus-run.jar 
 INFO running in /deployments
-__  ____  __  _____   ___  __ ____  ______
- --/ __ \/ / / / _ | / _ \/ //_/ / / / __/
- -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \
---\___\_\____/_/ |_/_/|_/_/|_|\____/___/
-2026-01-21 09:39:37,494 INFO  [com.git.str.con.api.sup.fac.ConsoleConfigFactory] (main) Loading console configuration from file:/deployments/config/console-config.yaml
-2026-01-21 09:39:37,726 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (main) The client is using resource type 'kafkas' with unstable version 'v1beta2'
-2026-01-21 09:39:38,452 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (main) The client is using resource type 'kafkanodepools' with unstable version 'v1beta2'
-2026-01-21 09:39:38,520 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (main) The client is using resource type 'kafkatopics' with unstable version 'v1beta2'
-2026-01-21 09:39:38,565 INFO  [com.git.str.con.LoggingConfigWatcher] (main) No log config files set to monitor
-2026-01-21 09:39:38,627 INFO  [io.quarkus] (main) console-api 0.8.6.redhat-00002 on JVM (powered by Quarkus 3.20.2.redhat-00004) started in 4.443s. Listening on: http://0.0.0.0:8080
-2026-01-21 09:39:38,627 INFO  [io.quarkus] (main) Profile prod activated.
-2026-01-21 09:39:38,628 INFO  [io.quarkus] (main) Installed features: [cdi, hibernate-validator, kubernetes-client, micrometer, oidc, oidc-client, rest, rest-client, rest-jackson, security, smallrye-context-propagation, smallrye-health, smallrye-openapi, swagger-ui, vertx]
-2026-01-21 09:40:24,569 INFO  [com.git.str.con.api.ClientFactory] (vert.x-eventloop-thread-3) Added KafkaContext for cluster dev-kafka/dev-kafka-cluster, id=3aEx1xmUSTWs8xSplBnYtA, global=true
-2026-01-21 09:40:24,740 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 395ms 435
-2026-01-21 09:40:24,810 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion&page%5Bsize%5D=20&sort=name HTTP/1.1" 200 20ms 471
-2026-01-21 09:40:24,939 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:24,946 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion&page%5Bsize%5D=1000 HTTP/1.1" 200 9ms 435
-2026-01-21 09:40:25,047 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:25,458 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:26,437 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 401 8ms 218
-2026-01-21 09:40:26,437 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 401 26ms 218
-2026-01-21 09:40:26,462 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 401 33ms 218
-2026-01-21 09:40:26,466 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 200 37ms 98
-2026-01-21 09:40:26,485 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 401 5ms 218
-2026-01-21 09:40:26,493 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:27,508 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:28,519 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:29,535 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:30,563 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:31,500 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:32,404 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:33,421 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:34,431 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:35,456 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:36,473 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:37,509 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:38,530 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:39,539 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:40,565 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:41,580 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:42,614 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:43,526 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:44,538 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:45,563 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:46,585 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:47,414 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:48,430 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:49,334 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:40:50,358 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:41:09,720 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 401 6ms 218
-2026-01-21 09:41:09,720 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 401 6ms 218
-2026-01-21 09:41:09,721 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 200 6ms 98
-2026-01-21 09:41:09,721 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 401 7ms 218
-2026-01-21 09:41:09,754 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 401 5ms 218
-2026-01-21 09:41:10,720 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 401 5ms 218
-2026-01-21 09:41:10,721 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 401 4ms 218
-2026-01-21 09:41:10,727 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 401 8ms 218
-2026-01-21 09:41:10,728 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 200 7ms 98
-2026-01-21 09:41:10,776 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 401 5ms 218
-2026-01-21 09:41:11,095 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 401 4ms 218
-2026-01-21 09:41:11,095 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 401 2ms 218
-2026-01-21 09:41:11,098 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 200 3ms 98
-2026-01-21 09:41:11,099 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 401 7ms 218
-2026-01-21 09:41:11,126 INFO  [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/3aEx1xmUSTWs8xSplBnYtA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 401 6ms 218
-2026-01-21 09:41:20,107 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:41:21,184 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:41:22,199 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:41:39,659 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:41:40,680 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:41:41,592 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:41:54,950 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:41:55,987 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:41:56,996 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:41:57,926 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:41:58,947 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:41:59,954 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:00,982 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:02,000 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:03,033 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:04,053 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:05,064 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:06,087 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:10,644 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:11,493 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:12,529 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:12,619 INFO  [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 13ms 435
-2026-01-21 09:42:13,442 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:14,457 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:15,362 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:16,392 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:17,316 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-2026-01-21 09:42:18,340 ERROR [org.apa.kaf.cli.NetworkClient] (kafka-admin-client-thread | adminclient-1) [AdminClient clientId=adminclient-1] Connection to node -1 (dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc/172.30.191.95:9092) failed authentication due to: Unexpected handshake request with client mechanism SCRAM-SHA-512, enabled mechanisms are []
-^C
-[osuser@bastion ~]$
+__  ____  __  _____   ___  __ ____  ______ 
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
+2026-01-20 21:19:10,241 INFO  [io.qua.ope.run.OperatorProducer] (main) Quarkus Java Operator SDK extension 7.1.1.redhat-00002 (commit: bbd08ea) built on Mon Apr 07 13:41:33 UTC 2025
+2026-01-20 21:19:10,319 INFO  [io.jav.ope.Operator] (main) Registered reconciler: 'consolereconciler' for resource: 'class com.github.streamshub.console.api.v1alpha1.Console' for namespace(s): [all namespaces]
+2026-01-20 21:19:10,320 INFO  [io.qua.ope.run.AppEventListener] (main) Starting operator.
+2026-01-20 21:19:10,320 INFO  [io.jav.ope.Operator] (main) Operator SDK 5.0.4.redhat-00001 (commit: 2a58f2b) built on Thu Apr 03 15:50:23 UTC 2025 starting...
+2026-01-20 21:19:10,320 INFO  [io.jav.ope.Operator] (main) Client version: 7.1.0.redhat-00001
+2026-01-20 21:19:10,322 INFO  [io.jav.ope.pro.Controller] (Controller Starter for: consolereconciler) Starting 'consolereconciler' controller for reconciler: com.github.streamshub.console.ConsoleReconciler, resource: com.github.streamshub.console.api.v1alpha1.Console
+2026-01-20 21:19:10,972 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (InformerWrapper [consoles.console.streamshub.github.com/v1alpha1] 50) The client is using resource type 'consoles' with unstable version 'v1alpha1'
+2026-01-20 21:19:11,543 INFO  [io.jav.ope.pro.Controller] (Controller Starter for: consolereconciler) 'consolereconciler' controller started
+2026-01-20 21:19:11,597 INFO  [io.jav.ope.LeaderElectionManager] (pool-10-thread-1) New leader with identity: amq-streams-console-operator-v3.0.1-3-5b558654dc-rqbrx
+2026-01-20 21:19:11,604 INFO  [io.jav.ope.pro.Controller] (Event processor starter for: consolereconciler) Started event processing for controller: consolereconciler
+2026-01-20 21:19:11,665 INFO  [io.quarkus] (main) console-operator 0.8.6.redhat-00002 on JVM (powered by Quarkus 3.20.2.redhat-00004) started in 3.645s. Listening on: http://0.0.0.0:8080
+2026-01-20 21:19:11,666 INFO  [io.quarkus] (main) Profile prod activated. 
+2026-01-20 21:19:11,666 INFO  [io.quarkus] (main) Installed features: [cdi, hibernate-validator, kubernetes, kubernetes-client, micrometer, operator-sdk, smallrye-context-propagation, smallrye-health, vertx]
+2026-01-20 21:19:11,735 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (pool-13-thread-1) The client is using resource type 'kafkausers' with unstable version 'v1beta2'
+2026-01-20 21:19:11,986 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:20:12,168 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:21:12,286 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:22:12,390 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:23:12,477 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:24:12,558 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:25:12,637 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:26:12,931 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-11) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:27:13,029 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:28:13,102 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:29:13,175 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:30:13,262 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:31:13,321 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:32:13,382 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:33:13,446 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-3) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:34:13,519 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:35:13,586 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:36:13,644 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:37:13,709 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-3) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:38:13,770 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:39:13,821 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:40:13,961 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:41:14,023 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:42:14,085 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:43:14,145 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:44:14,203 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:45:14,260 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:46:14,319 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:47:14,375 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:48:14,430 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:49:14,485 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:50:16,294 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:51:19,490 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:52:19,555 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-42) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:53:19,609 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:54:19,670 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:55:19,727 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:56:19,789 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-39) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:57:19,849 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:58:19,905 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 21:59:19,964 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:00:20,026 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:01:20,091 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:02:20,157 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:03:20,214 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-42) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:04:20,273 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:05:20,332 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:06:20,384 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:07:20,441 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-39) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:08:20,495 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:09:20,549 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:10:20,605 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:11:20,655 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:12:20,700 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:13:29,655 WARN  [io.fab.kub.cli.ext.lea.LeaderElector] (pool-10-thread-30) Exception occurred while acquiring lock 'LeaseLock: pre-prod-dc-kafka - streamshub-console-operator-lease (amq-streams-console-operator-v3.0.1-3-5b558654dc-rqbrx) retrying...': io.fabric8.kubernetes.client.KubernetesClientException: The timeout period of 10000ms has been exceeded while executing GET /apis/coordination.k8s.io/v1/namespaces/pre-prod-dc-kafka/leases/streamshub-console-operator-lease for server null
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.waitForResult(OperationSupport.java:509)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handleResponse(OperationSupport.java:524)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handleGet(OperationSupport.java:467)
+	at io.fabric8.kubernetes.client.dsl.internal.BaseOperation.handleGet(BaseOperation.java:792)
+	at io.fabric8.kubernetes.client.dsl.internal.BaseOperation.requireFromServer(BaseOperation.java:193)
+	at io.fabric8.kubernetes.client.dsl.internal.BaseOperation.get(BaseOperation.java:149)
+	at io.fabric8.kubernetes.client.dsl.internal.BaseOperation.get(BaseOperation.java:98)
+	at io.fabric8.kubernetes.client.extended.leaderelection.resourcelock.ResourceLock.get(ResourceLock.java:48)
+	at io.fabric8.kubernetes.client.extended.leaderelection.LeaderElector.tryAcquireOrRenew(LeaderElector.java:227)
+	at io.fabric8.kubernetes.client.extended.leaderelection.LeaderElector.lambda$renewWithTimeout$6(LeaderElector.java:207)
+	at io.fabric8.kubernetes.client.extended.leaderelection.LeaderElector.lambda$loop$8(LeaderElector.java:292)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: io.vertx.core.impl.NoStackTraceTimeoutException: The timeout period of 10000ms has been exceeded while executing GET /apis/coordination.k8s.io/v1/namespaces/pre-prod-dc-kafka/leases/streamshub-console-operator-lease for server null
+
+2026-01-20 22:13:29,657 INFO  [io.jav.ope.LeaderElectionManager] (pool-10-thread-30) Stopped leading for identity: amq-streams-console-operator-v3.0.1-3-5b558654dc-rqbrx. Exiting.
+2026-01-20 22:13:29,674 INFO  [io.qua.ope.run.AppEventListener] (Shutdown thread) Quarkus Java Operator SDK extension is shutting down. Is standard shutdown: false
+2026-01-20 22:13:29,674 INFO  [io.jav.ope.Operator] (Shutdown thread) Operator SDK 5.0.4.redhat-00001 is shutting down...
+2026-01-20 22:13:29,684 ERROR [io.jav.ope.pro.dep.wor.WorkflowReconcileExecutor] (ReconcilerExecutor-consolereconciler-140) Thread interrupted for primary: ResourceID{name='pre-prod-dc-console', namespace='pre-prod-dc-kafka'} [Error Occurred After Shutdown]: java.lang.InterruptedException
+	at java.base/java.lang.Object.wait(Native Method)
+	at java.base/java.lang.Object.wait(Object.java:338)
+	at io.javaoperatorsdk.operator.processing.dependent.workflow.AbstractWorkflowExecutor.waitForScheduledExecutionsToRun(AbstractWorkflowExecutor.java:54)
+	at io.javaoperatorsdk.operator.processing.dependent.workflow.WorkflowReconcileExecutor.reconcile(WorkflowReconcileExecutor.java:30)
+	at io.javaoperatorsdk.operator.processing.dependent.workflow.DefaultWorkflow.reconcile(DefaultWorkflow.java:100)
+	at io.javaoperatorsdk.operator.processing.Controller$1.lambda$execute$0(Controller.java:158)
+	at java.base/java.util.Optional.ifPresent(Optional.java:178)
+	at io.javaoperatorsdk.operator.processing.Controller$1.execute(Controller.java:155)
+	at io.javaoperatorsdk.operator.processing.Controller$1.execute(Controller.java:117)
+	at io.javaoperatorsdk.operator.monitoring.micrometer.MicrometerMetrics.lambda$timeControllerExecution$0(MicrometerMetrics.java:151)
+	at io.micrometer.core.instrument.composite.CompositeTimer.record(CompositeTimer.java:69)
+	at io.javaoperatorsdk.operator.monitoring.micrometer.MicrometerMetrics.timeControllerExecution(MicrometerMetrics.java:148)
+	at io.javaoperatorsdk.operator.processing.Controller.reconcile(Controller.java:116)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.reconcileExecution(ReconciliationDispatcher.java:153)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleReconcile(ReconciliationDispatcher.java:130)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleDispatch(ReconciliationDispatcher.java:97)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleExecution(ReconciliationDispatcher.java:68)
+	at io.javaoperatorsdk.operator.processing.event.EventProcessor$ReconcilerExecutor.run(EventProcessor.java:467)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+
+2026-01-20 22:13:30,331 INFO  [io.quarkus] (Shutdown thread) console-operator stopped in 0.673s
+
+
+
+Curent logs ______________________
+
+INFO exec -a "java" java -Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -cp "." -jar /deployments/quarkus-run.jar 
+INFO running in /deployments
+__  ____  __  _____   ___  __ ____  ______ 
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
+2026-01-20 22:14:00,599 INFO  [io.qua.ope.run.OperatorProducer] (main) Quarkus Java Operator SDK extension 7.1.1.redhat-00002 (commit: bbd08ea) built on Mon Apr 07 13:41:33 UTC 2025
+2026-01-20 22:14:00,668 INFO  [io.jav.ope.Operator] (main) Registered reconciler: 'consolereconciler' for resource: 'class com.github.streamshub.console.api.v1alpha1.Console' for namespace(s): [all namespaces]
+2026-01-20 22:14:00,668 INFO  [io.qua.ope.run.AppEventListener] (main) Starting operator.
+2026-01-20 22:14:00,669 INFO  [io.jav.ope.Operator] (main) Operator SDK 5.0.4.redhat-00001 (commit: 2a58f2b) built on Thu Apr 03 15:50:23 UTC 2025 starting...
+2026-01-20 22:14:00,669 INFO  [io.jav.ope.Operator] (main) Client version: 7.1.0.redhat-00001
+2026-01-20 22:14:00,672 INFO  [io.jav.ope.pro.Controller] (Controller Starter for: consolereconciler) Starting 'consolereconciler' controller for reconciler: com.github.streamshub.console.ConsoleReconciler, resource: com.github.streamshub.console.api.v1alpha1.Console
+2026-01-20 22:14:04,658 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (InformerWrapper [consoles.console.streamshub.github.com/v1alpha1] 50) The client is using resource type 'consoles' with unstable version 'v1alpha1'
+2026-01-20 22:14:05,234 INFO  [io.jav.ope.pro.Controller] (Controller Starter for: consolereconciler) 'consolereconciler' controller started
+2026-01-20 22:14:05,301 INFO  [io.jav.ope.LeaderElectionManager] (pool-10-thread-1) New leader with identity: amq-streams-console-operator-v3.0.1-3-5b558654dc-rqbrx
+2026-01-20 22:14:05,307 INFO  [io.jav.ope.pro.Controller] (Event processor starter for: consolereconciler) Started event processing for controller: consolereconciler
+2026-01-20 22:14:05,357 INFO  [io.quarkus] (main) console-operator 0.8.6.redhat-00002 on JVM (powered by Quarkus 3.20.2.redhat-00004) started in 7.126s. Listening on: http://0.0.0.0:8080
+2026-01-20 22:14:05,358 INFO  [io.quarkus] (main) Profile prod activated. 
+2026-01-20 22:14:05,358 INFO  [io.quarkus] (main) Installed features: [cdi, hibernate-validator, kubernetes, kubernetes-client, micrometer, operator-sdk, smallrye-context-propagation, smallrye-health, vertx]
+2026-01-20 22:14:05,422 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (pool-13-thread-1) The client is using resource type 'kafkausers' with unstable version 'v1beta2'
+2026-01-20 22:14:06,333 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:15:06,481 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:16:06,573 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:17:06,687 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:18:06,771 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:19:06,846 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:20:06,924 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-39) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:21:07,008 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-11) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:22:07,094 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:23:07,165 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:24:07,238 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:25:07,294 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:26:07,356 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:27:07,419 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:28:07,487 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:29:07,554 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:30:07,615 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:31:07,675 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:32:07,738 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:33:07,803 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:34:07,869 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:35:07,939 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-11) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:36:08,005 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:37:08,068 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:38:08,130 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:39:08,188 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:40:08,251 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:41:08,316 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:42:08,385 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:43:08,438 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:44:08,490 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:45:08,540 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-39) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:46:08,593 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:47:08,650 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:48:08,707 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:49:08,758 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:50:08,810 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:51:08,861 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:52:08,922 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:53:08,981 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:54:09,041 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:55:09,100 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:56:09,153 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:57:09,207 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:58:09,266 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 22:59:09,315 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:00:09,396 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:01:09,459 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:02:09,506 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:03:09,566 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:04:09,613 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:05:09,669 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:06:09,718 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:07:09,778 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:08:09,831 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:09:09,883 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:10:09,938 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-49) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:11:09,998 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:12:10,057 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-20) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:13:10,113 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-3) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:14:10,166 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:15:10,213 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-2) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:16:10,269 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:17:10,329 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:18:10,387 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:19:10,435 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:20:10,487 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:21:10,540 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:22:10,592 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:23:10,645 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-33) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:24:10,698 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:25:10,746 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:26:10,795 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:27:10,849 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:28:10,897 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:29:10,946 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:30:10,992 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:31:11,058 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-11) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:32:11,113 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:33:11,162 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:34:11,212 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:35:11,266 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:36:11,314 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:37:11,360 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:38:11,414 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:39:11,461 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:40:11,507 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:41:11,557 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-33) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:42:11,603 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:43:11,648 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:44:11,700 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-42) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:45:11,746 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:46:11,794 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:47:11,853 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:48:11,898 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-20) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:49:11,941 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:50:11,989 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-49) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:51:12,038 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:52:12,088 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:53:12,144 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-3) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:54:12,190 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:55:12,239 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:56:12,292 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:57:12,338 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:58:12,382 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-20 23:59:12,431 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:00:12,478 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:01:12,530 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-8) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:02:12,575 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:03:12,622 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-20) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:04:12,671 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:05:12,713 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:06:12,761 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:07:12,809 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:08:12,856 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-43) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:09:12,902 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-2) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:10:12,946 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:11:12,987 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:12:13,040 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:13:13,089 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-8) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:14:13,139 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:15:13,189 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:16:13,239 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:17:13,288 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:18:13,342 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:19:13,389 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:20:13,434 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:21:13,484 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:22:13,533 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-43) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:23:13,576 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:24:13,627 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-39) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:25:13,672 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-50) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:26:13,714 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-49) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:27:13,759 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:28:13,803 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:29:13,853 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:30:13,910 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:31:13,950 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:32:13,994 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:33:14,046 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:34:14,092 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:35:14,136 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-39) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:36:14,192 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-3) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:37:14,241 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:38:14,288 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:39:14,335 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:40:14,382 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:41:14,428 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:42:14,476 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:43:14,521 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:44:14,565 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:45:14,606 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-2) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:46:14,650 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-39) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:47:14,694 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:48:14,740 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-49) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:49:14,782 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:50:14,823 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:51:14,868 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:52:14,910 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-42) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:53:14,951 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:54:15,084 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:55:15,129 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:56:15,176 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:57:15,224 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:58:15,273 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 00:59:15,317 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:00:15,359 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:01:15,407 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:02:15,451 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:03:15,494 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:04:15,539 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-43) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:05:15,582 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:06:15,628 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-11) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:07:15,672 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-20) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:08:15,717 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:09:15,759 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:10:15,806 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:11:15,853 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:12:15,901 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:13:15,950 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:14:15,996 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:15:16,047 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:16:16,092 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:17:16,141 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-11) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:18:16,189 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-49) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:19:16,232 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:20:16,279 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:21:16,326 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:22:16,372 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:23:16,422 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:24:16,468 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:25:16,510 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:26:16,556 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:27:16,603 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:28:16,649 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:29:16,688 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:30:16,729 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:31:16,771 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:32:16,816 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-20) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:33:16,864 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-33) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:34:16,913 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:35:16,959 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:36:16,999 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:37:17,050 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:38:17,095 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:39:17,149 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:40:17,198 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:41:17,246 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:42:17,287 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:43:17,328 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:44:17,373 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:45:17,416 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:46:17,462 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:47:17,510 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:48:17,554 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:49:17,598 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:50:17,641 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:51:17,680 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:52:17,728 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:53:17,767 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:54:17,814 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-20) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:55:17,857 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:56:17,900 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:57:17,943 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:58:17,987 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 01:59:18,031 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:00:18,078 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:01:18,124 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:02:18,172 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-50) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:03:18,221 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:04:18,268 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:05:18,313 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:06:18,364 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-9) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:07:18,407 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:08:18,454 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:09:18,503 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:10:18,548 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:11:18,595 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:12:18,645 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:13:18,688 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:14:18,739 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-42) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:15:18,781 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:16:18,824 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:17:18,865 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-50) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:18:18,909 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:19:18,957 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:20:18,997 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-8) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:21:19,043 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:22:19,092 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-43) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:23:19,141 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:24:19,186 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:25:19,231 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:26:19,283 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:27:19,339 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:28:19,400 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:29:19,445 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:30:19,492 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:31:19,544 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-8) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:32:19,587 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:33:19,628 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-20) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:34:19,674 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:35:19,723 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:36:19,775 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:37:19,829 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-33) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:38:19,881 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:39:19,921 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:40:19,960 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:41:20,002 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:42:20,046 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:43:20,090 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:44:20,136 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-43) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:45:20,181 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:46:20,228 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:47:20,272 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:48:20,316 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:49:20,360 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:50:20,405 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:51:20,447 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:52:20,491 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:53:20,543 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:54:20,590 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:55:20,639 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-43) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:56:20,681 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:57:20,724 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:58:20,778 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 02:59:20,825 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:00:20,869 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:01:20,914 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:02:20,957 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-20) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:03:20,997 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:04:21,038 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:05:21,086 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:06:21,130 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-2) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:07:21,167 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:08:21,209 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:09:21,255 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:10:21,298 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:11:21,346 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-42) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:12:21,388 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:13:21,438 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:14:21,479 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:15:21,521 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:16:21,565 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:17:21,612 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:18:21,651 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:19:21,695 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:20:21,735 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:21:21,776 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:22:21,821 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:23:21,864 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:24:21,905 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:25:21,953 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:26:21,995 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:27:22,038 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:28:22,080 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:29:22,124 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-42) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:30:22,163 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:31:22,206 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-49) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:32:22,250 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:33:22,292 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:34:22,332 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:35:22,376 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-50) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:36:22,422 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:37:22,466 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:38:22,510 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:39:22,554 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:40:22,599 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:41:22,641 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-43) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:42:22,681 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:43:22,726 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:44:22,768 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:45:22,817 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:46:22,857 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:47:22,907 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:48:22,949 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:49:22,997 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:50:23,041 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:51:23,081 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:52:23,130 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-39) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:53:23,178 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:54:23,225 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:55:23,268 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:56:23,319 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:57:23,367 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:58:23,406 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 03:59:23,448 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:00:23,493 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-49) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:01:23,534 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-11) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:02:23,576 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-3) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:03:23,616 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:04:23,659 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-50) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:05:23,711 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:06:23,748 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:07:23,793 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:08:23,835 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:09:23,880 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:10:23,926 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:11:23,976 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:12:24,026 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:13:24,073 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:14:24,119 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:15:24,169 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:16:24,212 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:17:24,253 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:18:24,297 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:19:24,340 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:20:24,391 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-3) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:21:24,437 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:22:24,480 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:23:24,519 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:24:24,555 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:25:24,598 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-49) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:26:24,642 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:27:24,690 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:28:24,732 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:29:24,777 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:30:24,819 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:31:24,865 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:32:24,910 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:33:24,954 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-11) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:34:25,000 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:35:25,048 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:36:25,089 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:37:25,135 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:38:26,022 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:39:26,066 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:40:26,111 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:41:26,153 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-20) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:42:26,195 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-8) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:43:26,236 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-49) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:44:26,277 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:45:26,327 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:46:26,379 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-50) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:47:26,424 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:48:26,469 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:49:26,507 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:50:26,548 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:51:26,590 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:52:26,633 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-2) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:53:26,685 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:54:26,737 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-49) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:55:26,784 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:56:26,825 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:57:26,867 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-50) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:58:26,911 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 04:59:26,952 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:00:26,995 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:01:27,039 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:02:27,082 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:03:27,130 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:04:27,179 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:05:27,223 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:06:27,261 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-20) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:07:27,308 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:08:27,357 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:09:27,400 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:10:27,445 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:11:27,489 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:12:27,527 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:13:27,574 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:14:27,615 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:15:27,654 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:16:27,693 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:17:27,735 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:18:27,779 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:19:27,820 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:20:27,866 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:21:27,908 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:22:27,952 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:23:27,994 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:24:28,041 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:25:28,082 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:26:28,125 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:27:28,165 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:28:28,205 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:29:28,247 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:30:28,296 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:31:28,338 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-33) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:32:28,382 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:33:28,430 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:34:28,465 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:35:28,504 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:36:28,553 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:37:28,588 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:38:28,627 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:39:28,672 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:40:28,745 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:41:28,793 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-11) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:42:28,841 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:43:28,887 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-33) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:44:28,938 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:45:28,980 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:46:29,029 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:47:29,075 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:48:29,119 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:49:29,161 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:50:29,208 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:51:29,247 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:52:29,290 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:53:29,332 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:54:29,374 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:55:29,420 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:56:29,458 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:57:29,502 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-43) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:58:29,545 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 05:59:29,585 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:00:29,628 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-8) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:01:29,674 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:02:29,717 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:03:29,760 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:04:29,801 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-3) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:05:29,851 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:06:29,894 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:07:29,934 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-20) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:08:29,977 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-50) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:09:30,019 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:10:30,064 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:11:30,105 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-42) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:12:30,145 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:13:30,189 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:14:30,232 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:15:30,287 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-8) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:16:30,326 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:17:30,377 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:18:30,417 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:19:30,455 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:20:30,495 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:21:30,535 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-33) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:22:30,576 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:23:30,619 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:24:30,660 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:25:30,703 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:26:30,745 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:27:30,787 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:28:30,831 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:29:30,875 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:30:30,917 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:31:30,964 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:32:31,009 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:33:31,049 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:34:31,089 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:35:31,130 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:36:31,169 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:37:31,215 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:38:31,261 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:39:31,299 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:40:31,336 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:41:31,376 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:42:31,420 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-9) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:43:31,463 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:44:31,506 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:45:31,545 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:46:31,590 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-39) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:47:31,632 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:48:31,680 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:49:31,722 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:50:31,770 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:51:31,812 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:52:31,854 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:53:31,896 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:54:31,936 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-8) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:55:31,980 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:56:32,023 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:57:32,068 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-9) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:58:32,236 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-50) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 06:59:32,283 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:00:32,328 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:01:32,373 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:02:32,421 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:03:32,463 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:04:32,507 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:05:32,549 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:06:32,596 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:07:32,639 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:08:32,680 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:09:32,729 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-50) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:10:32,778 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:11:32,821 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:12:32,865 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:13:32,908 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:14:32,949 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:15:32,992 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:16:33,032 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:17:33,073 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:18:33,116 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:19:33,159 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:20:33,199 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:21:33,246 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:22:33,287 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:23:33,329 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:24:33,376 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:25:33,416 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:26:33,458 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-39) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:27:33,504 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:28:33,547 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-11) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:29:33,597 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:30:33,642 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:31:33,686 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:32:33,728 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:33:33,769 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:34:33,813 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:35:33,856 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:36:33,902 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:37:33,948 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:38:33,988 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:39:34,028 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:40:34,071 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:41:34,115 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:42:34,160 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:43:34,203 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:44:34,241 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:45:34,286 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:46:34,329 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:47:34,368 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:48:34,413 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:49:34,455 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:50:34,497 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:51:34,536 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:52:34,574 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:53:34,615 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:54:34,654 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:55:34,696 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:56:34,744 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:57:34,784 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-11) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:58:34,826 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 07:59:34,870 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:00:34,918 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:01:34,965 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-39) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:02:35,011 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:03:35,051 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:04:35,095 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:05:35,140 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-9) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:06:35,181 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:07:35,223 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:08:35,267 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:09:35,316 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:10:35,369 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:11:35,410 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:12:35,494 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-3) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:13:35,541 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:14:35,590 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:15:35,636 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:16:35,693 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-43) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:17:35,737 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-34) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:18:35,780 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:19:35,827 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:20:35,869 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-43) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:21:35,907 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:22:35,953 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:23:35,998 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:24:36,042 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-41) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:25:36,088 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:26:36,132 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:27:36,177 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-33) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:28:36,219 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-14) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:29:36,262 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:30:36,299 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:31:36,338 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:32:36,374 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-19) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:33:36,418 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:34:36,456 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:35:36,499 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:36:36,542 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:37:36,584 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:38:36,628 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-33) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:39:36,673 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:40:36,716 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:41:36,759 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:42:36,803 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:43:36,847 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-11) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:44:36,897 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-49) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:45:36,948 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:46:36,997 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:47:37,044 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:48:37,083 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:49:37,123 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:50:37,168 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:51:37,208 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:52:37,245 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-10) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:53:37,288 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:54:37,329 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:55:37,370 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-23) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:56:37,410 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-50) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:57:37,453 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-28) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:58:37,493 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 08:59:37,532 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-38) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:00:37,575 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-20) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:01:37,616 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:02:37,661 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-48) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:03:37,706 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-4) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:04:37,752 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:05:37,795 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:06:37,838 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-27) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:07:37,877 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-43) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:08:37,922 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-9) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:09:37,964 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:10:38,008 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-2) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:11:38,053 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-20) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:12:38,095 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:13:38,137 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:14:38,183 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:15:38,222 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:16:38,264 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:17:38,312 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:18:38,353 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:19:38,396 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:20:38,434 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-9) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:21:38,475 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-2) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:22:38,516 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-40) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:23:38,555 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:24:38,610 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:25:38,647 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:26:38,689 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:27:38,735 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-3) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:28:38,779 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-13) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:29:38,822 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-16) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:30:38,862 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-18) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:31:38,908 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:32:38,950 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-43) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:33:38,994 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:34:39,040 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-22) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:35:39,081 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:36:39,125 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:37:39,164 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:38:39,210 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-37) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:39:39,255 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-24) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:40:39,293 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-2) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:41:39,335 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-32) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:42:39,373 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-21) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:43:39,413 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-7) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:44:39,449 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-25) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:45:39,488 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-12) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:46:39,526 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:47:39,573 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-17) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:48:39,611 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-49) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:49:39,652 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-36) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:50:39,696 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:51:39,739 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-47) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:52:39,786 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:53:39,829 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-45) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:54:39,866 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-46) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:55:39,911 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-44) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:56:39,958 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:57:40,007 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-6) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:58:40,054 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-42) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 09:59:40,101 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-29) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 10:00:40,145 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-5) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 10:01:40,191 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-31) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 10:02:40,228 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-15) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 10:03:40,272 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-30) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 10:04:40,314 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-26) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 10:05:40,358 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 10:06:40,400 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-3) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 10:07:40,444 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-35) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 10:08:40,492 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-43) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 10:09:40,530 WARN  [com.git.str.con.dep.con.DeploymentReadyCondition] (pool-13-thread-1) Deployment pre-prod-dc-console-prometheus-deployment has timed out
+2026-01-21 10:10:39,276 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (pool-13-thread-22) The client is using resource type 'kafkas' with unstable version 'v1beta2'
+2026-01-21 10:10:39,552 ERROR [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-156) Error during event processing ExecutionScope{ resource id: ResourceID{name='pre-prod-dc-console', namespace='pre-prod-dc-kafka'}, version: 219283008}: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/pre-prod-dc-kafka/consoles/pre-prod-dc-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "pre-prod-dc-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=pre-prod-dc-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "pre-prod-dc-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.KubernetesClientException.copyAsCause(KubernetesClientException.java:205)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.waitForResult(OperationSupport.java:507)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handleResponse(OperationSupport.java:524)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:419)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:397)
+	at io.fabric8.kubernetes.client.dsl.internal.BaseOperation.handlePatch(BaseOperation.java:764)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.lambda$patch$2(HasMetadataOperation.java:231)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:236)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:251)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:44)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher$CustomResourceFacade.patchStatus(ReconciliationDispatcher.java:445)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleErrorStatusHandler(ReconciliationDispatcher.java:216)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleReconcile(ReconciliationDispatcher.java:132)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleDispatch(ReconciliationDispatcher.java:97)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleExecution(ReconciliationDispatcher.java:68)
+	at io.javaoperatorsdk.operator.processing.event.EventProcessor$ReconcilerExecutor.run(EventProcessor.java:467)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/pre-prod-dc-kafka/consoles/pre-prod-dc-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "pre-prod-dc-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=pre-prod-dc-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "pre-prod-dc-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:642)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:622)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.assertResponseCode(OperationSupport.java:582)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.lambda$handleResponse$0(OperationSupport.java:549)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient.lambda$completeOrCancel$10(StandardHttpClient.java:141)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler.onBodyDone(ByteArrayBodyHandler.java:51)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest.lambda$consumeBytes$1(VertxHttpRequest.java:120)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.http.impl.HttpEventHandler.handleEnd(HttpEventHandler.java:76)
+	at io.vertx.core.http.impl.HttpClientResponseImpl.handleEnd(HttpClientResponseImpl.java:250)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.lambda$new$0(Http1xClientConnection.java:424)
+	at io.vertx.core.streams.impl.InboundBuffer.handleEvent(InboundBuffer.java:279)
+	at io.vertx.core.streams.impl.InboundBuffer.write(InboundBuffer.java:157)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.handleEnd(Http1xClientConnection.java:734)
+	at io.vertx.core.impl.ContextImpl.lambda$execute$7(ContextImpl.java:329)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	... 1 more
+
+2026-01-21 10:10:50,586 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-159) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/pre-prod-dc-kafka/consoles/pre-prod-dc-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "pre-prod-dc-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=pre-prod-dc-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "pre-prod-dc-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-01-21 10:13:43,300 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-165) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/pre-prod-dc-kafka/consoles/pre-prod-dc-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "pre-prod-dc-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=pre-prod-dc-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "pre-prod-dc-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-01-21 10:13:54,517 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-169) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/pre-prod-dc-kafka/consoles/pre-prod-dc-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "pre-prod-dc-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=pre-prod-dc-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "pre-prod-dc-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-01-21 10:47:29,094 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-156) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/pre-prod-dc-kafka/consoles/pre-prod-dc-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "pre-prod-dc-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=pre-prod-dc-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "pre-prod-dc-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
