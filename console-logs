@@ -1,302 +1,66 @@
-[osuser@bastion ~]$ oc get project dev-kafka
-NAME        DISPLAY NAME   STATUS
-dev-kafka   dev-kafka      Active
-[osuser@bastion ~]$ oc  project dev-kafka
-Now using project "dev-kafka" on server "https://api.dev.sbiepay.sbi:6443".
-[osuser@bastion ~]$ oc get pods
-NAME                                                 READY   STATUS    RESTARTS      AGE
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running   0             45h
-dev-kafka-cluster-broker-0                           1/1     Running   0             28d
-dev-kafka-cluster-broker-1                           1/1     Running   0             28d
-dev-kafka-cluster-broker-2                           1/1     Running   0             28d
-dev-kafka-cluster-controller-3                       1/1     Running   0             28d
-dev-kafka-cluster-controller-4                       1/1     Running   0             28d
-dev-kafka-cluster-controller-5                       1/1     Running   0             28d
-dev-kafka-cluster-cruise-control-7678c88585-8jm5p    1/1     Running   5 (13h ago)   3d23h
-dev-kafka-cluster-entity-operator-656dcf5cdd-b6qxp   2/2     Running   0             28d
-dev-kafka-connect-mq-test-connect-0                  1/1     Running   5 (30m ago)   111m
-dev-kafka-connect-mq-test-connect-1                  1/1     Running   8 (27m ago)   111m
-dev-kafka-connect-mq-test-connect-2                  1/1     Running   6 (27m ago)   111m
-dev-kafka-mirror-maker-mirrormaker2-0                0/1     Pending   0             20d
-[osuser@bastion ~]$ oc get pods -n dev-kafka | grep -i console
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running   0             45h
-[osuser@bastion ~]$ oc describe pod dev-console-console-deployment-6bf885486b-k2g9m -n dev-kafka
-Name:             dev-console-console-deployment-6bf885486b-k2g9m
-Namespace:        dev-kafka
-Priority:         0
-Service Account:  dev-console-console-serviceaccount
-Node:             worker1.dev.sbiepay.sbi/10.177.142.141
-Start Time:       Mon, 19 Jan 2026 11:33:37 +0000
-Labels:           app.kubernetes.io/instance=dev-console-console-deployment
-                  pod-template-hash=6bf885486b
-Annotations:      k8s.ovn.org/pod-networks:
-                    {"default":{"ip_addresses":["172.16.8.35/23"],"mac_address":"0a:58:ac:10:08:23","gateway_ips":["172.16.8.1"],"routes":[{"dest":"172.16.0.0...
-                  k8s.v1.cni.cncf.io/network-status:
-                    [{
-                        "name": "ovn-kubernetes",
-                        "interface": "eth0",
-                        "ips": [
-                            "172.16.8.35"
-                        ],
-                        "mac": "0a:58:ac:10:08:23",
-                        "default": true,
-                        "dns": {}
-                    }]
-                  openshift.io/scc: restricted-v2
-                  seccomp.security.alpha.kubernetes.io/pod: runtime/default
-                  streamshub.github.com/dependency-digest: 1b5fd2759f84ea8db5d080b687aeffc7ce2bb797
-Status:           Running
-SeccompProfile:   RuntimeDefault
-IP:               172.16.8.35
-IPs:
-  IP:           172.16.8.35
-Controlled By:  ReplicaSet/dev-console-console-deployment-6bf885486b
-Containers:
-  console-api:
-    Container ID:    cri-o://382793ba6a4d4767777a87cc72f7f2ae79ae7e8ac54d3f7c130074d6e67792cc
-    Image:           registry.redhat.io/amq-streams/console-api-rhel9@sha256:7f3638288c8a354ba9feceeb14e990ed7a09e3ef245d6fd288cd0bd8ad6c2c75
-    Image ID:        registry.redhat.io/amq-streams/console-api-rhel9@sha256:7f3638288c8a354ba9feceeb14e990ed7a09e3ef245d6fd288cd0bd8ad6c2c75
-    Port:            8080/TCP
-    Host Port:       0/TCP
-    SeccompProfile:  RuntimeDefault
-    State:           Running
-      Started:       Mon, 19 Jan 2026 11:35:23 +0000
-    Ready:           True
-    Restart Count:   0
-    Liveness:        http-get http://:http/health/live delay=5s timeout=10s period=10s #success=1 #failure=3
-    Readiness:       http-get http://:http/health/ready delay=5s timeout=10s period=10s #success=1 #failure=3
-    Startup:         http-get http://:http/health/started delay=5s timeout=10s period=10s #success=1 #failure=3
-    Environment:
-      CONSOLE_CONFIG_PATH:  /deployments/config/console-config.yaml
-    Mounts:
-      /deployments/config from config (rw)
-      /tmp from work (rw)
-      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-8rmfq (ro)
-  console-ui:
-    Container ID:    cri-o://a4389d47c1f4d597b0ec3642f1038d8b75b986bd158aed72fc9710a6803ec333
-    Image:           registry.redhat.io/amq-streams/console-ui-rhel9@sha256:b0f8e0b895e1a4667da521ddacfc476c7fa2b9b0983044bd139978181499c774
-    Image ID:        registry.redhat.io/amq-streams/console-ui-rhel9@sha256:9766acbf81d37d07dde1af361d151c370d71551fc45727a2c493d83205a82cfe
-    Port:            3000/TCP
-    Host Port:       0/TCP
-    SeccompProfile:  RuntimeDefault
-    State:           Running
-      Started:       Mon, 19 Jan 2026 11:36:42 +0000
-    Ready:           True
-    Restart Count:   0
-    Liveness:        http-get http://:http/healthz delay=5s timeout=10s period=10s #success=1 #failure=3
-    Readiness:       http-get http://:http/healthz delay=5s timeout=10s period=10s #success=1 #failure=3
-    Startup:         http-get http://:http/healthz delay=5s timeout=10s period=10s #success=1 #failure=3
-    Environment:
-      NEXTAUTH_SECRET:      <set to the key 'NEXTAUTH_SECRET' in secret 'dev-console-console-secret'>  Optional: false
-      NEXTAUTH_URL:         https://dev-kafkaconsole.apps.dev.sbiepay.sbi
-      BACKEND_URL:          http://127.0.0.1:8080
-      CONSOLE_CONFIG_PATH:  /deployments/config/console-config.yaml
-      CONSOLE_MODE:         read-only
-      LOG_LEVEL:            info
-    Mounts:
-      /app/.next/cache from work (rw)
-      /deployments/config from config (rw)
-      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-8rmfq (ro)
-Conditions:
-  Type                        Status
-  PodReadyToStartContainers   True
-  Initialized                 True
-  Ready                       True
-  ContainersReady             True
-  PodScheduled                True
-Volumes:
-  work:
-    Type:       EmptyDir (a temporary directory that shares a pod's lifetime)
-    Medium:
-    SizeLimit:  <unset>
-  config:
-    Type:        Secret (a volume populated by a Secret)
-    SecretName:  dev-console-console-secret
-    Optional:    false
-  kube-api-access-8rmfq:
-    Type:                    Projected (a volume that contains injected data from multiple sources)
-    TokenExpirationSeconds:  3607
-    ConfigMapName:           kube-root-ca.crt
-    ConfigMapOptional:       <nil>
-    DownwardAPI:             true
-    ConfigMapName:           openshift-service-ca.crt
-    ConfigMapOptional:       <nil>
-QoS Class:                   BestEffort
-Node-Selectors:              env=dev
-Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
-                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
-Events:                      <none>
-[osuser@bastion ~]$ oc get route -n dev-kafka
-NAME                                HOST/PORT                                                          PATH   SERVICES                                     PORT      TERMINATION     WILDCARD
-dev-console-console-ingress-6svtx   dev-kafkaconsole.apps.dev.sbiepay.sbi                                     dev-console-console-service                  <all>     edge/Redirect   None
-dev-kafka-cluster-broker-0          dev-kafka-cluster-broker-0-dev-kafka.apps.dev.sbiepay.sbi                 dev-kafka-cluster-broker-0                   9094      passthrough     None
-dev-kafka-cluster-broker-1          dev-kafka-cluster-broker-1-dev-kafka.apps.dev.sbiepay.sbi                 dev-kafka-cluster-broker-1                   9094      passthrough     None
-dev-kafka-cluster-broker-2          dev-kafka-cluster-broker-2-dev-kafka.apps.dev.sbiepay.sbi                 dev-kafka-cluster-broker-2                   9094      passthrough     None
-dev-kafka-cluster-kafka-bootstrap   dev-kafka-cluster-kafka-bootstrap-dev-kafka.apps.dev.sbiepay.sbi          dev-kafka-cluster-kafka-external-bootstrap   9094      passthrough     None
-grafana-route                       grafana-route-dev-kafka.apps.dev.sbiepay.sbi                              grafana                                      grafana   edge            None
-[osuser@bastion ~]$
+Timed out waiting for backend service
+Timed out waiting for backend service: Timed out waiting for a node assignment. Call: listNodes (5041)
 
 
 
+Timed out waiting for backend service
+Timed out waiting for backend service: Call(callName=describeMetadataQuorum, deadlineMs=1769143783546, tries=1, nextAllowedTryMs=1769143783669) timed out at 1769143783551 after 1 attempt(s) (5041)
+
+
+values.yaml
+ console:
+    enabled: true
+    name: dev-console
+    namespace: dev-kafka
+    hostname: dev-kafkaconsole.apps.dev.sbiepay.sbi
+    credentials:
+      kafkaUser:
+        name: epay-user
+    listener: plain
+    kafkaClusters:
+      name: dev-kafka-cluster 
+      namespace: dev-kafka
 
 
 
-[osuser@bastion ~]$ oc get kafka dev-kafka-cluster -n dev-kafka -o yaml | grep -A5 listeners
-    listeners:
-    - name: plain
-      port: 9092
-      tls: false
-      type: internal
-    - name: tls
---
-  listeners:
-  - addresses:
-    - host: dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc
-      port: 9092
-    bootstrapServers: dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc:9092
-    name: plain
-[osuser@bastion ~]$ oc get kafka dev-kafka-cluster -n dev-kafka
-NAME                READY   METADATA STATE   WARNINGS
-dev-kafka-cluster   True    KRaft
-[osuser@bastion ~]$
+kafka-console.yaml
+{{- if and .Values.kafka.enabled .Values.kafka.console.enabled }}
+apiVersion: console.streamshub.github.com/v1alpha1
+kind: Console
+metadata:
+  name: {{ .Values.kafka.console.name }}
+  namespace: {{ .Values.kafka.console.namespace }}
+spec:
+  hostname: {{ .Values.kafka.console.hostname }}
+  kafkaClusters:
+    - adminProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+        valuesFrom: []
+      consumerProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+        valuesFrom: []
+      # credentials:
+      #   kafkaUser:
+      #     name: {{ .Values.kafka.console.credentials.kafkaUser.name }}
+      listener: {{ .Values.kafka.console.listener }}
+      name: {{ .Values.kafka.console.kafkaClusters.name }}
+      namespace: {{ .Values.kafka.console.kafkaClusters.namespace }}
+      producerProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT       
+        valuesFrom: []
+      properties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+        valuesFrom: []
+  metricsSources:
+  - name: k8s
+    type: openshift-monitoring       
+{{- end }}
 
-[osuser@bastion ~]$ oc exec it dev-console-console-deployment-6bf885486b-k2g9m -c console-api --cat /deployments/conifg/console-config.yaml
-error: unknown flag: --cat
-See 'oc exec --help' for usage.
-[osuser@bastion ~]$ oc exec it dev-console-console-deployment-6bf885486b-k2g9m \-c console-api --cat /deployments/conifg/console-config.yaml
-error: unknown flag: --cat
-See 'oc exec --help' for usage.
-[osuser@bastion ~]$ oc exec -it dev-console-console-deployment-6bf885486b-k2g9m \
-> -c console-api --cat /deployments/conifg/console-config.yaml
-error: unknown flag: --cat
-See 'oc exec --help' for usage.
-[osuser@bastion ~]$
-
-
-
-
-[osuser@bastion ~]$ oc exec -it dev-console-console-deployment-6bf885486b-k2g9m -c console-api -- cat /deployments/config/console-config.yaml
----
-kubernetes:
-  enabled: true
-security:
-  subjects: []
-  roles: []
-  audit: []
-  oidc: null
-metricsSources:
-- name: "k8s"
-  type: "openshift-monitoring"
-  url: "https://thanos-querier-openshift-monitoring.apps.dev.sbiepay.sbi"
-schemaRegistries: []
-kafka:
-  clusters:
-  - name: "dev-kafka-cluster"
-    namespace: "dev-kafka"
-    listener: "plain"
-    security:
-      subjects: []
-      roles: []
-      audit: []
-    properties:
-      security.protocol: "PLAINTEXT"
-      bootstrap.servers: "dev-kafka-cluster-kafka-bootstrap.dev-kafka.svc:9092"
-      sasl.jaas.config: "org.apache.kafka.common.security.scram.ScramLoginModule required\
-        \ username=\"epay-user\" password=\"tKPGcWn0MxrMCCDvVA1lWiLMXkW4wYHa\";"
-    adminProperties: {}
-    consumerProperties: {}
-    producerProperties: {}
-[osuser@bastion ~]$
-
-
-
-
-
-
-
-
-
-
-
-
-[osuser@bastion ~]$ oc get pods
-NAME                                                 READY   STATUS    RESTARTS      AGE
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running   0             45h
-dev-kafka-cluster-broker-0                           1/1     Running   0             28d
-dev-kafka-cluster-broker-1                           1/1     Running   0             28d
-dev-kafka-cluster-broker-2                           1/1     Running   0             28d
-dev-kafka-cluster-controller-3                       1/1     Running   0             28d
-dev-kafka-cluster-controller-4                       1/1     Running   0             28d
-dev-kafka-cluster-controller-5                       1/1     Running   0             28d
-dev-kafka-cluster-cruise-control-7678c88585-8jm5p    1/1     Running   5 (13h ago)   3d23h
-dev-kafka-cluster-entity-operator-656dcf5cdd-b6qxp   2/2     Running   0             28d
-dev-kafka-connect-mq-test-connect-0                  1/1     Running   5 (48m ago)   129m
-dev-kafka-connect-mq-test-connect-1                  1/1     Running   8 (45m ago)   129m
-dev-kafka-connect-mq-test-connect-2                  1/1     Running   6 (45m ago)   129m
-dev-kafka-mirror-maker-mirrormaker2-0                0/1     Pending   0             20d
-[osuser@bastion ~]$ oc rollout restart deployment dev-console-console-deployment -n dev-kafka
-deployment.apps/dev-console-console-deployment restarted
-[osuser@bastion ~]$ oc get pods
-NAME                                                 READY   STATUS              RESTARTS      AGE
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
-dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             11s
-dev-kafka-cluster-broker-0                           1/1     Running             0             28d
-dev-kafka-cluster-broker-1                           1/1     Running             0             28d
-dev-kafka-cluster-broker-2                           1/1     Running             0             28d
-dev-kafka-cluster-controller-3                       1/1     Running             0             28d
-dev-kafka-cluster-controller-4                       1/1     Running             0             28d
-dev-kafka-cluster-controller-5                       1/1     Running             0             28d
-dev-kafka-cluster-cruise-control-7678c88585-8jm5p    1/1     Running             5 (13h ago)   3d23h
-dev-kafka-cluster-entity-operator-656dcf5cdd-b6qxp   2/2     Running             0             28d
-dev-kafka-connect-mq-test-connect-0                  1/1     Running             5 (49m ago)   129m
-dev-kafka-connect-mq-test-connect-1                  1/1     Running             8 (46m ago)   129m
-dev-kafka-connect-mq-test-connect-2                  1/1     Running             6 (46m ago)   129m
-dev-kafka-mirror-maker-mirrormaker2-0                0/1     Pending             0             20d
-[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
-dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             24s
-[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
-dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             31s
-[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
-dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             40s
-[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
-dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             42s
-[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
-dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             49s
-[osuser@bastion ~]$ oc logs -f dev-console-console-deployment-77b79d7f49-rjh2z
-Error from server (NotFound): pods "dev-console-console-deployment-77b79d7f49-rjh2z" not found
-[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
-dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             69s
-[osuser@bastion ~]$ oc describe pod dev-console-console-deployment-77b79d7f49-rjh2z
-Error from server (NotFound): pods "dev-console-console-deployment-77b79d7f49-rjh2z" not found
-[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
-dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             84s
-[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
-dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             93s
-[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
-dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             106s
-[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
-dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             2m4s
-[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
-dev-console-console-deployment-6bf885486b-k2g9m      2/2     Running             0             45h
-dev-console-console-deployment-77b79d7f49-rjh2z      0/2     ContainerCreating   0             2m13s
-[osuser@bastion ~]$ oc get pods -n dev-kafka | grep console
-dev-console-console-deployment-77b79d7f49-rjh2z      2/2     Running   0             2m35s
-[osuser@bastion ~]$
-
-
-
-
-webui error
-
-Resource not found
-Resource not found: Requested Kafka cluster 3aEx1xmUSTWs8xSplBnYtA does not exist or is not configured (4041)
