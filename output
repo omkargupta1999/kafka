@@ -1,52 +1,3 @@
-2026-01-29 08:42:50,166 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1151322699, epoch=463) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:42:50,166 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146783385, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955715829, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654218476, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832673034, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1151322699, epoch=463), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 08:45:51,738 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1547509429, epoch=17284) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:45:51,739 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955759679, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1547509429, epoch=17284), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 08:47:20,464 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1231978063, epoch=5116) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:47:20,464 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146796699, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1231978063, epoch=5116), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 08:48:47,846 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=951641675, epoch=7529) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:48:47,846 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955787618, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=951641675, epoch=7529), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 08:49:21,980 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1864335536, epoch=217) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:49:21,980 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955788084, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832769368, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285]), __consumer_offsets-43=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=741704455, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5119], lastFetchedEpoch=Optional[5119])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1864335536, epoch=217), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 08:49:55,607 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1887876010, epoch=240) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:49:55,607 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146801514, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654323296, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832771252, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1887876010, epoch=240), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 08:50:50,832 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=702159595, epoch=2374) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:50:50,832 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955794440, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654334273, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832781269, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=702159595, epoch=2374), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 08:52:12,159 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=459208890, epoch=4791) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:52:12,159 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146807233, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955806281, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832800914, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=459208890, epoch=4791), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 08:53:02,363 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1746962103, epoch=2716) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:53:02,363 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146808787, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654360681, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832808999, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285]), __consumer_offsets-43=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=741720047, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5119], lastFetchedEpoch=Optional[5119])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1746962103, epoch=2716), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 08:53:46,641 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=495269314, epoch=1774) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:53:46,641 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146809814, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955812592, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654366131, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832814933, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285]), __consumer_offsets-43=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=741722048, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5119], lastFetchedEpoch=Optional[5119])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=495269314, epoch=1774), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 08:55:18,262 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=581827352, epoch=7527) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:55:18,262 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146814555, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832839301, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=581827352, epoch=7527), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 08:55:57,521 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=292988855, epoch=77) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:55:57,521 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146814832, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955825679, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654392332, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832840759, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285]), __consumer_offsets-43=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=741731194, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5119], lastFetchedEpoch=Optional[5119])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=292988855, epoch=77), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 08:56:39,603 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=781419349, epoch=494) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:56:39,603 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654396494, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832846118, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285]), __consumer_offsets-43=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=741733146, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5119], lastFetchedEpoch=Optional[5119])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=781419349, epoch=494), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 08:56:55,703 WARN [Producer clientId=CruiseControlMetricsReporter] Got error produce response with correlation id 16041 on topic-partition strimzi.cruisecontrol.metrics-0, retrying (4 attempts left). Error: REQUEST_TIMED_OUT. Error Message: Disconnected from node 2 due to timeout (org.apache.kafka.clients.producer.internals.Sender) [kafka-producer-network-thread | CruiseControlMetricsReporter]
-2026-01-29 08:57:46,494 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1856606101, epoch=1291) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 08:57:46,494 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146816409, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955831224, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654400331, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832850191, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1856606101, epoch=1291), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 09:00:16,579 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=520038891, epoch=18361) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 09:00:16,579 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146825850, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955856652, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), strimzi.cruisecontrol.partitionmetricsamples-2=PartitionData(topicId=_VUjfcCnSOKbmcSbz8bdaw, fetchOffset=702275, logStartOffset=694069, maxBytes=1048576, currentLeaderEpoch=Optional[5135], lastFetchedEpoch=Optional[5135]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832897889, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285]), strimzi.cruisecontrol.modeltrainingsamples-27=PartitionData(topicId=X6nkVddzT5qQWnIDQf6FZA, fetchOffset=1615, logStartOffset=1314, maxBytes=1048576, currentLeaderEpoch=Optional[5137], lastFetchedEpoch=Optional[5137])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=520038891, epoch=18361), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 09:01:17,466 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=364967963, epoch=3640) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 09:01:17,467 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832911048, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=364967963, epoch=3640), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 09:02:58,495 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1985532537, epoch=9319) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 09:02:58,495 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955880807, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1985532537, epoch=9319), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 09:03:49,735 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=994884230, epoch=3034) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 09:03:49,736 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832947644, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=994884230, epoch=3034), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 09:04:46,298 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=203552974, epoch=1278) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 09:04:46,298 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654502218, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=203552974, epoch=1278), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 09:04:48,615 WARN [Producer clientId=CruiseControlMetricsReporter] Got error produce response with correlation id 16053 on topic-partition strimzi.cruisecontrol.metrics-0, retrying (4 attempts left). Error: REQUEST_TIMED_OUT. Error Message: Disconnected from node 2 due to timeout (org.apache.kafka.clients.producer.internals.Sender) [kafka-producer-network-thread | CruiseControlMetricsReporter]
-2026-01-29 09:06:08,515 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=282182441, epoch=3888) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 09:06:08,515 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832967734, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=282182441, epoch=3888), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 09:07:02,700 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1932673097, epoch=990) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 09:07:02,700 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146840154, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1932673097, epoch=990), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 09:08:09,733 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=776424014, epoch=1165) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 09:08:09,733 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146843000, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=776424014, epoch=1165), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-2026-01-29 09:08:47,232 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1718631127, epoch=278) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
-2026-01-29 09:08:47,232 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146843527, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654535455, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1718631127, epoch=278), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
-^C
 [osuser@bastion ~]$ oc get pods
 NAME                                                 READY   STATUS    RESTARTS          AGE
 dev-console-console-deployment-fbc4f6b4b-82hft       2/2     Running   0                 6d3h
@@ -62,4 +13,315 @@ dev-kafka-connect-mq-test-connect-0                  1/1     Running   565 (11m 
 dev-kafka-connect-mq-test-connect-1                  1/1     Running   550 (3m56s ago)   7d1h
 dev-kafka-connect-mq-test-connect-2                  1/1     Running   564 (12m ago)     7d2h
 dev-kafka-mirror-maker-mirrormaker2-0                0/1     Pending   0                 28d
-[osuser@bastion ~]$ oc get pods
+[osuser@bastion ~]$ oc describe pvc pvc dev-kafka-cluster-broker-2
+Error from server (NotFound): persistentvolumeclaims "pvc" not found
+Error from server (NotFound): persistentvolumeclaims "dev-kafka-cluster-broker-2" not found
+[osuser@bastion ~]$ oc describe pvc dev-kafka-cluster-broker-2
+Error from server (NotFound): persistentvolumeclaims "dev-kafka-cluster-broker-2" not found
+[osuser@bastion ~]$ oc describe pvc dev-kafka-cluster-broker-0
+Error from server (NotFound): persistentvolumeclaims "dev-kafka-cluster-broker-0" not found
+[osuser@bastion ~]$ oc get pvc -n dev-kafka
+NAME                                    STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+data-0-dev-kafka-cluster-broker-0       Bound    pvc-e9bc2f66-2768-4182-b4a4-53878c2abd69   100Gi      RWO            trident-csi    <unset>                 78d
+data-0-dev-kafka-cluster-broker-1       Bound    pvc-899edda4-91ba-4831-a976-4cf83a522422   100Gi      RWO            trident-csi    <unset>                 78d
+data-0-dev-kafka-cluster-broker-2       Bound    pvc-004aae41-7e86-4514-a156-57def718fbcc   100Gi      RWO            trident-csi    <unset>                 78d
+data-0-dev-kafka-cluster-controller-3   Bound    pvc-6e526729-e27e-40c2-a91e-e17a6f39a75a   100Gi      RWO            trident-csi    <unset>                 78d
+data-0-dev-kafka-cluster-controller-4   Bound    pvc-e0dbcddb-9c9d-4f5c-9ae0-0006267aba83   100Gi      RWO            trident-csi    <unset>                 78d
+data-0-dev-kafka-cluster-controller-5   Bound    pvc-e1a8a8e2-4c2b-442b-9625-f1177b3e4d65   100Gi      RWO            trident-csi    <unset>                 78d
+data-1-dev-kafka-cluster-broker-0       Bound    pvc-9bdd5ed5-cfb5-4fcd-9ce1-63ed6f4d87b0   100Gi      RWO            trident-csi    <unset>                 78d
+data-1-dev-kafka-cluster-broker-1       Bound    pvc-35c5884f-5b17-40ae-b9a6-b4f619ff4465   100Gi      RWO            trident-csi    <unset>                 78d
+data-1-dev-kafka-cluster-broker-2       Bound    pvc-11365ce9-5c60-45dc-b85b-931d54509301   100Gi      RWO            trident-csi    <unset>                 78d
+kafka-pvc                               Bound    pvc-2e26cf09-cdca-4473-9b45-d7e45b8c6a3b   10Gi       RWO            trident-csi    <unset>                 230d
+[osuser@bastion ~]$ oc describe pvc pvc-004aae41-7e86-4514-a156-57def718fbcc
+Error from server (NotFound): persistentvolumeclaims "pvc-004aae41-7e86-4514-a156-57def718fbcc" not found
+[osuser@bastion ~]$ oc rsh data-0-dev-kafka-cluster-broker-0
+Error from server (NotFound): pods "data-0-dev-kafka-cluster-broker-0" not found
+[osuser@bastion ~]$ oc rsh dev-kafka-cluster-broker-0
+sh-5.1$ cd bin
+sh-5.1$ ./kafka-topics.sh --describe --topic __consumer_offsets --bootstrap-server localhost:9092
+Topic: __consumer_offsets       TopicId: rKarGsXGQ5mg17smxL1-Yw PartitionCount: 50      ReplicationFactor: 3    Configs: compression.type=producer,min.insync.replicas=2,cleanup.policy=compact,segment.bytes=104857600
+        Topic: __consumer_offsets       Partition: 0    Leader: 2       Replicas: 0,1,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 1    Leader: 2       Replicas: 1,2,0 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 2    Leader: 2       Replicas: 2,0,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 3    Leader: 2       Replicas: 0,2,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 4    Leader: 2       Replicas: 2,1,0 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 5    Leader: 2       Replicas: 1,0,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 6    Leader: 2       Replicas: 2,0,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 7    Leader: 2       Replicas: 0,1,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 8    Leader: 2       Replicas: 1,2,0 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 9    Leader: 2       Replicas: 2,0,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 10   Leader: 2       Replicas: 0,1,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 11   Leader: 2       Replicas: 1,2,0 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 12   Leader: 2       Replicas: 1,2,0 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 13   Leader: 2       Replicas: 2,0,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 14   Leader: 2       Replicas: 0,1,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 15   Leader: 2       Replicas: 1,0,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 16   Leader: 2       Replicas: 0,2,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 17   Leader: 2       Replicas: 2,1,0 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 18   Leader: 2       Replicas: 0,2,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 19   Leader: 2       Replicas: 2,1,0 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 20   Leader: 2       Replicas: 1,0,2 Isr: 2,0,1      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 21   Leader: 2       Replicas: 0,1,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 22   Leader: 2       Replicas: 1,2,0 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 23   Leader: 2       Replicas: 2,0,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 24   Leader: 2       Replicas: 0,2,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 25   Leader: 2       Replicas: 2,1,0 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 26   Leader: 2       Replicas: 1,0,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 27   Leader: 2       Replicas: 1,0,2 Isr: 2,0,1      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 28   Leader: 2       Replicas: 0,2,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 29   Leader: 2       Replicas: 2,1,0 Isr: 2,0,1      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 30   Leader: 2       Replicas: 0,1,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 31   Leader: 2       Replicas: 1,2,0 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 32   Leader: 2       Replicas: 2,0,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 33   Leader: 2       Replicas: 2,0,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 34   Leader: 2       Replicas: 0,1,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 35   Leader: 2       Replicas: 1,2,0 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 36   Leader: 2       Replicas: 2,1,0 Isr: 2,0,1      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 37   Leader: 2       Replicas: 1,0,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 38   Leader: 2       Replicas: 0,2,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 39   Leader: 2       Replicas: 2,1,0 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 40   Leader: 2       Replicas: 1,0,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 41   Leader: 2       Replicas: 0,2,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 42   Leader: 2       Replicas: 0,1,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 43   Leader: 2       Replicas: 1,2,0 Isr: 2,0,1      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 44   Leader: 2       Replicas: 2,0,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 45   Leader: 2       Replicas: 1,0,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 46   Leader: 2       Replicas: 0,2,1 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 47   Leader: 2       Replicas: 2,1,0 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 48   Leader: 2       Replicas: 0,1,2 Isr: 2,1,0      Elr:    LastKnownElr:
+        Topic: __consumer_offsets       Partition: 49   Leader: 2       Replicas: 1,2,0 Isr: 2,1,0      Elr:    LastKnownElr:
+
+sh-5.1$ ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --all-groups
+
+Warning: Consumer group 'admin-consumers' is rebalancing.
+
+GROUP           TOPIC                                    PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+admin-consumers adminPortal_sms_notification_topic       3          570             571             1               -               -               -
+admin-consumers adminPortal_sms_notification_topic       2          740             740             0               -               -               -
+admin-consumers adminPortal_sms_notification_topic       1          0               0               0               -               -               -
+admin-consumers local_adminPortal_sms_notification_topic 3          0               0               0               -               -               -
+admin-consumers adminPortal_sms_notification_topic       0          0               0               0               -               -               -
+admin-consumers local_adminPortal_sms_notification_topic 0          0               0               0               -               -               -
+admin-consumers local_adminPortal_sms_notification_topic 2          2               2               0               -               -               -
+admin-consumers local_adminPortal_sms_notification_topic 1          0               0               0               -               -               -
+Consumer group 'connect-neft-mq-sink' has no active members.
+
+GROUP                TOPIC                      PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+connect-neft-mq-sink neft.processed.kafka.topic 0          10              10              0               -               -               -
+Consumer group 'connect-neft-mq-sink-dest' has no active members.
+
+GROUP                     TOPIC                     PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+connect-neft-mq-sink-dest neft.outbound.kafka.topic 0          35              35              0               -               -               -
+Consumer group 'epay-payment-service-local-group' has no active members.
+
+GROUP                            TOPIC                                      PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+epay-payment-service-local-group payments                                   0          2669            2669            0               -               -               -
+epay-payment-service-local-group payment_sms_notification_topic             2          0               0               0               -               -               -
+epay-payment-service-local-group payment_sms_notification_topic             3          1               1               0               -               -               -
+epay-payment-service-local-group payment_sms_notification_topic             0          1               1               0               -               -               -
+epay-payment-service-local-group payment_sms_notification_topic             1          659             692             33              -               -               -
+epay-payment-service-local-group payment_cashstatusquery_notification_topic 2          1421545         1422015         470             -               -               -
+epay-payment-service-local-group payment_cashstatusquery_notification_topic 3          1803679         1809860         6181            -               -               -
+epay-payment-service-local-group payment_email_notification_topic           0          346             372             26              -               -               -
+epay-payment-service-local-group payment_cashstatusquery_notification_topic 0          1298469         1307567         9098            -               -               -
+epay-payment-service-local-group payment_cashstatusquery_notification_topic 1          1413099         1422659         9560            -               -               -
+epay-payment-service-local-group payment_email_notification_topic           3          201             207             6               -               -               -
+epay-payment-service-local-group payment_email_notification_topic           1          72              72              0               -               -               -
+epay-payment-service-local-group payment_email_notification_topic           2          34              35              1               -               -               -
+Warning: Consumer group 'gatewayOfflinePooling-consumers' is rebalancing.
+
+GROUP                           TOPIC                                          PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+gatewayOfflinePooling-consumers upibhimqr_offline_gateway_pooling_dev_upi_qr   3          333             333             0               -               -               -
+gatewayOfflinePooling-consumers upiself_offline_gateway_pooling_dev_upi_self   2          10602           10602           0               -               -               -
+gatewayOfflinePooling-consumers upibhimqr_offline_gateway_pooling_dev_upi_qr   1          1246            1246            0               -               -               -
+gatewayOfflinePooling-consumers upiself_offline_gateway_pooling_dev_upi_self   0          15314           15314           0               -               -               -
+gatewayOfflinePooling-consumers otherinb_offline_gateway_pooling_dev_other_inb 1          0               0               0               -               -               -
+gatewayOfflinePooling-consumers local_payment_sms_notification_topic           3          0               0               0               -               -               -
+gatewayOfflinePooling-consumers otherinb_offline_gateway_pooling_dev_other_inb 3          0               0               0               -               -               -
+gatewayOfflinePooling-consumers local_payment_sms_notification_topic           1          0               0               0               -               -               -
+gatewayOfflinePooling-consumers inb_offline_gateway_pooling_local              3          1               1               0               -               -               -
+gatewayOfflinePooling-consumers inb_offline_gateway_pooling_local              1          567             567             0               -               -               -
+gatewayOfflinePooling-consumers payment_cashstatusquery_notification_topic     3          1803679         1809860         6181            -               -               -
+gatewayOfflinePooling-consumers payment_cashstatusquery_notification_topic     1          1413229         1422659         9430            -               -               -
+gatewayOfflinePooling-consumers local_payment_email_notification_topic         3          0               0               0               -               -               -
+gatewayOfflinePooling-consumers local_payment_email_notification_topic         1          0               0               0               -               -               -
+gatewayOfflinePooling-consumers upibhimqr_offline_gateway_pooling_dev_upi_qr   2          1142            1142            0               -               -               -
+gatewayOfflinePooling-consumers upibhimqr_offline_gateway_pooling_dev_upi_qr   0          1893            1893            0               -               -               -
+gatewayOfflinePooling-consumers upiself_offline_gateway_pooling_dev_upi_self   3          17081           17081           0               -               -               -
+gatewayOfflinePooling-consumers local_payment_sms_notification_topic           2          0               0               0               -               -               -
+gatewayOfflinePooling-consumers otherinb_offline_gateway_pooling_dev_other_inb 0          0               0               0               -               -               -
+gatewayOfflinePooling-consumers upiself_offline_gateway_pooling_dev_upi_self   1          15903           15903           0               -               -               -
+gatewayOfflinePooling-consumers local_payment_sms_notification_topic           0          0               0               0               -               -               -
+gatewayOfflinePooling-consumers otherinb_offline_gateway_pooling_dev_other_inb 2          0               0               0               -               -               -
+gatewayOfflinePooling-consumers inb_offline_gateway_pooling_local              2          3               3               0               -               -               -
+gatewayOfflinePooling-consumers inb_offline_gateway_pooling_local              0          3               3               0               -               -               -
+gatewayOfflinePooling-consumers payment_cashstatusquery_notification_topic     2          1421611         1422015         404             -               -               -
+gatewayOfflinePooling-consumers payment_cashstatusquery_notification_topic     0          1298585         1307567         8982            -               -               -
+gatewayOfflinePooling-consumers local_payment_email_notification_topic         2          0               0               0               -               -               -
+gatewayOfflinePooling-consumers local_payment_email_notification_topic         0          0               0               0               -               -               -
+Warning: Consumer group 'merchant-consumers' is rebalancing.
+
+GROUP              TOPIC                                   PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+merchant-consumers local_gst_report_status_topic           0          1               1               0               -               -               -
+merchant-consumers local_gst_report_status_topic           2          16              16              0               -               -               -
+merchant-consumers local_report_sms_notification_topic     3          0               0               0               -               -               -
+merchant-consumers local_merchant_report_topic             2          101             101             0               -               -               -
+merchant-consumers local_merchant_report_topic             0          105             105             0               -               -               -
+merchant-consumers merchant_email_notification_topic       1          430             430             0               -               -               -
+merchant-consumers local_merchant_report_alert_topic       0          0               0               0               -               -               -
+merchant-consumers local_report_sms_notification_topic     1          0               0               0               -               -               -
+merchant-consumers local_merchant_sms_notification_topic   3          14              14              0               -               -               -
+merchant-consumers local_merchant_email_notification_topic 2          33              33              0               -               -               -
+merchant-consumers local_merchant_sms_notification_topic   1          11              11              0               -               -               -
+merchant-consumers local_merchant_email_notification_topic 0          9               9               0               -               -               -
+merchant-consumers merchant_email_notification_topic       3          436             436             0               -               -               -
+merchant-consumers local_merchant_email_notification_topic 3          40              40              0               -               -               -
+merchant-consumers merchant_sms_notification_topic         1          197             200             3               -               -               -
+merchant-consumers local_gst_invoice_download_topic        1          661             661             0               -               -               -
+merchant-consumers merchant_sms_notification_topic         3          395             396             1               -               -               -
+merchant-consumers merchant_report_topic                   2          195             195             0               -               -               -
+merchant-consumers merchant_report_topic                   0          209             209             0               -               -               -
+merchant-consumers local_gst_invoice_download_topic        3          786             786             0               -               -               -
+merchant-consumers local_gst_report_status_topic           1          12              12              0               -               -               -
+merchant-consumers local_gst_report_status_topic           3          5               5               0               -               -               -
+merchant-consumers local_report_sms_notification_topic     2          121             121             0               -               -               -
+merchant-consumers local_merchant_report_topic             3          96              96              0               -               -               -
+merchant-consumers local_merchant_report_topic             1          113             113             0               -               -               -
+merchant-consumers merchant_email_notification_topic       2          253             253             0               -               -               -
+merchant-consumers local_report_sms_notification_topic     0          0               0               0               -               -               -
+merchant-consumers merchant_email_notification_topic       0          143             143             0               -               -               -
+merchant-consumers local_merchant_sms_notification_topic   2          39              39              0               -               -               -
+merchant-consumers local_merchant_sms_notification_topic   0          23              23              0               -               -               -
+merchant-consumers local_recon_report_generation_topic     0          0               0               0               -               -               -
+merchant-consumers local_merchant_email_notification_topic 1          27              27              0               -               -               -
+merchant-consumers ops_report_generation_topic             0          462             462             0               -               -               -
+merchant-consumers merchant_sms_notification_topic         0          351             354             3               -               -               -
+merchant-consumers local_gst_invoice_download_topic        2          604             604             0               -               -               -
+merchant-consumers merchant_report_topic                   3          206             206             0               -               -               -
+merchant-consumers local_gst_invoice_download_topic        0          636             636             0               -               -               -
+merchant-consumers merchant_report_topic                   1          184             184             0               -               -               -
+merchant-consumers merchant_sms_notification_topic         2          254             254             0               -               -               -
+merchant-consumers merchant_report_alert_topic             0          610             610             0               -               -               -
+Warning: Consumer group 'operation-consumers' is rebalancing.
+
+GROUP               TOPIC                                PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+operation-consumers ops_report_confirmation_topic        0          307             307             0               -               -               -
+operation-consumers ops_recon_fail_ack_topic             3          28              28              0               -               -               -
+operation-consumers ops_recon_fail_ack_topic             2          9               9               0               -               -               -
+operation-consumers ops_recon_fail_ack_topic             1          28              28              0               -               -               -
+operation-consumers ops_recon_fail_ack_topic             0          16              16              0               -               -               -
+operation-consumers ops_refund_adjust_confirmation_topic 0          2               2               0               -               -               -
+operation-consumers ops_payout_topic                     0          121             121             0               -               -               -
+operation-consumers ops_refund_adjust_confirmation_topic 1          11              11              0               -               -               -
+operation-consumers ops_refund_adjust_confirmation_topic 2          4               4               0               -               -               -
+operation-consumers ops_recon_file_topic                 3          39              39              0               -               -               -
+operation-consumers ops_refund_adjust_confirmation_topic 3          9               9               0               -               -               -
+operation-consumers ops_recon_file_topic                 0          52              52              0               -               -               -
+operation-consumers ops_recon_file_topic                 2          52              52              0               -               -               -
+operation-consumers ops_recon_file_topic                 1          53              53              0               -               -               -
+Warning: Consumer group 'payment-consumers' is rebalancing.
+
+GROUP             TOPIC                                      PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+payment-consumers payment_email_notification_topic           0          372             372             0               -               -               -
+payment-consumers payment_cashstatusquery_notification_topic 0          1307567         1307567         0               -               -               -
+payment-consumers payment_cashstatusquery_notification_topic 1          1422659         1422659         0               -               -               -
+payment-consumers payment_sms_notification_topic             2          0               0               0               -               -               -
+payment-consumers payment_sms_notification_topic             3          1               1               0               -               -               -
+payment-consumers payment_sms_notification_topic             0          1               1               0               -               -               -
+payment-consumers payment_sms_notification_topic             1          692             692             0               -               -               -
+payment-consumers payment_cashstatusquery_notification_topic 2          1422015         1422015         0               -               -               -
+payment-consumers payment_email_notification_topic           3          207             207             0               -               -               -
+payment-consumers payment_cashstatusquery_notification_topic 3          1809860         1809860         0               -               -               -
+payment-consumers payment_email_notification_topic           1          72              72              0               -               -               -
+payment-consumers payment_email_notification_topic           2          35              35              0               -               -               -
+Warning: Consumer group 'rns-consumers' is rebalancing.
+
+GROUP           TOPIC                                         PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+rns-consumers   local_ops_refund_adjust_confirmation_topic    1          0               0               0               -               -               -
+rns-consumers   local_ops_refund_adjust_confirmation_topic    2          0               0               0               -               -               -
+rns-consumers   local_ops_refund_adjust_confirmation_topic    3          0               0               0               -               -               -
+rns-consumers   local_ops_report_confirmation_topic           0          0               0               0               -               -               -
+rns-consumers   local_ops_recon_fail_ack_topic                0          5               5               0               -               -               -
+rns-consumers   local_ops_recon_fail_ack_topic                2          4               4               0               -               -               -
+rns-consumers   local_ops_refund_adjust_confirmation_topic    0          0               0               0               -               -               -
+rns-consumers   local_ops_recon_fail_ack_topic                1          8               8               0               -               -               -
+rns-consumers   local_ops_recon_file_topic                    0          8               9               1               -               -               -
+rns-consumers   local_ops_recon_file_topic_jeevan             3          8               8               0               -               -               -
+rns-consumers   local_ops_recon_fail_ack_topic                3          8               8               0               -               -               -
+rns-consumers   local_ops_recon_file_topic_jeevan             1          10              10              0               -               -               -
+rns-consumers   local_ops_recon_file_topic                    2          11              11              0               -               -               -
+rns-consumers   local_ops_recon_file_topic                    1          4               4               0               -               -               -
+rns-consumers   local_ops_recon_file_topic_jeevan             2          6               6               0               -               -               -
+rns-consumers   local_ops_refund_adjust_confirmation_topic_ak 2          0               0               0               -               -               -
+rns-consumers   local_ops_recon_file_topic_jeevan             0          14              14              0               -               -               -
+rns-consumers   local_ops_recon_file_topic                    3          9               9               0               -               -               -
+rns-consumers   local_ops_refund_adjust_confirmation_topic_ak 3          5               5               0               -               -               -
+rns-consumers   local_ops_refund_adjust_confirmation_topic_ak 0          6               6               0               -               -               -
+rns-consumers   local_ops_payout_topic                        0          5               5               0               -               -               -
+rns-consumers   local_ops_refund_adjust_confirmation_topic_ak 1          2               2               0               -               -               -
+Consumer group 'simple-kafka-test-consumer' has no active members.
+
+GROUP                      TOPIC                                      PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+simple-kafka-test-consumer local_payment_sms_notification_topic       2          0               0               0               -               -               -
+simple-kafka-test-consumer local_payment_sms_notification_topic       3          0               0               0               -               -               -
+simple-kafka-test-consumer local_payment_sms_notification_topic       0          0               0               0               -               -               -
+simple-kafka-test-consumer neft.inbound.kafka.topic                   0          12              12              0               -               -               -
+simple-kafka-test-consumer local_payment_sms_notification_topic       1          0               0               0               -               -               -
+simple-kafka-test-consumer payment_cashstatusquery_notification_topic 2          1421751         1422015         264             -               -               -
+simple-kafka-test-consumer payment_cashstatusquery_notification_topic 3          1804136         1809860         5724            -               -               -
+simple-kafka-test-consumer payment_cashstatusquery_notification_topic 0          1304326         1307567         3241            -               -               -
+simple-kafka-test-consumer payment_cashstatusquery_notification_topic 1          1419106         1422659         3553            -               -               -
+simple-kafka-test-consumer local_payment_email_notification_topic     3          0               0               0               -               -               -
+simple-kafka-test-consumer local_payment_email_notification_topic     1          0               0               0               -               -               -
+simple-kafka-test-consumer local_payment_email_notification_topic     2          0               0               0               -               -               -
+simple-kafka-test-consumer local_payment_email_notification_topic     0          0               0               0               -               -               -
+Consumer group 'spring.kafka.consumer.group-id' has no active members.
+
+GROUP                          TOPIC                    PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+spring.kafka.consumer.group-id neft.inbound.kafka.topic 0          12              12              0               -               -               -
+Warning: Consumer group 'transaction-consumers' is rebalancing.
+
+GROUP                 TOPIC                                      PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+transaction-consumers local_ops_refund_adjust_detail_topic_ak    0          14              14              0               -               -               -
+transaction-consumers local_ops_recon_record_duplicate_topic     0          7               7               0               -               -               -
+transaction-consumers transaction_push_verification_topic        1          2115            2115            0               -               -               -
+transaction-consumers transaction_push_verification_topic        3          2073            2073            0               -               -               -
+transaction-consumers transaction_email_notification_topic       2          32              32              0               -               -               -
+transaction-consumers process_bookingDetails_topic               0          6               6               0               -               -               -
+transaction-consumers ops_recon_record_unmatched_topic           0          909             909             0               -               -               -
+transaction-consumers local_transaction_sms_notification_topic   1          0               0               0               -               -               -
+transaction-consumers local_transaction_push_verification_topic  2          1896            1896            0               -               -               -
+transaction-consumers local_transaction_sms_notification_topic   3          0               0               0               -               -               -
+transaction-consumers local_transaction_push_verification_topic  0          1818            1818            0               -               -               -
+transaction-consumers transaction_sms_notification_topic         3          64              64              0               -               -               -
+transaction-consumers ops_recon_record_matched_topic             0          150             150             0               -               -               -
+transaction-consumers transaction_sms_notification_topic         1          0               0               0               -               -               -
+transaction-consumers process_bulk_refund_topic                  1          1               1               0               -               -               -
+transaction-consumers local_process-bulk-refund-topic            1          0               0               0               -               -               -
+transaction-consumers local_process-bulk-refund-topic            3          1               1               0               -               -               -
+transaction-consumers local_transaction_email_notification_topic 1          0               0               0               -               -               -
+transaction-consumers local_transaction_email_notification_topic 3          0               0               0               -               -               -
+transaction-consumers process_bulk_refund_topic                  3          1               1               0               -               -               -
+transaction-consumers transaction_push_verification_topic        2          2167            2167            0               -               -               -
+transaction-consumers local_ops_recon_record_matched_topic       0          11              11              0               -               -               -
+transaction-consumers ops_refund_adjust_detail_topic             0          26              26              0               -               -               -
+transaction-consumers transaction_email_notification_topic       1          0               0               0               -               -               -
+transaction-consumers transaction_email_notification_topic       3          0               0               0               -               -               -
+transaction-consumers local_transaction_sms_notification_topic   0          0               0               0               -               -               -
+transaction-consumers local_ops_refund_adjust_detail_topic       0          9               9               0               -               -               -
+transaction-consumers local_transaction_push_verification_topic  3          1811            1811            0               -               -               -
+transaction-consumers local_ops_recon_record_unmatched_topic     0          455             455             0               -               -               -
+transaction-consumers local_transaction_push_verification_topic  1          1723            1723            0               -               -               -
+transaction-consumers local_transaction_sms_notification_topic   2          0               0               0               -               -               -
+transaction-consumers transaction_sms_notification_topic         2          0               0               0               -               -               -
+transaction-consumers transaction_sms_notification_topic         0          0               0               0               -               -               -
+transaction-consumers transaction_email_notification_topic       0          32              32              0               -               -               -
+transaction-consumers local_process-bulk-refund-topic            2          0               0               0               -               -               -
+transaction-consumers process_bulk_refund_topic                  2          2               2               0               -               -               -
+transaction-consumers local_transaction_email_notification_topic 0          0               0               0               -               -               -
+transaction-consumers transaction_push_verification_topic        0          2322            2322            0               -               -               -
+transaction-consumers process_bulk_refund_topic                  0          0               0               0               -               -               -
+transaction-consumers local_transaction_email_notification_topic 2          0               0               0               -               -               -
+transaction-consumers local_process-bulk-refund-topic            0          1               1               0               -               -               -
+transaction-consumers local_process-bookingdetails-topic         0          3               3               0               -               -               -
+transaction-consumers ops_recon_record_duplicate_topic           0          3               3               0               -               -               -sh-5.1$
