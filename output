@@ -1,328 +1,65 @@
-
-=======================================DC ================================================
-
-oc scale deploy --replicas=0 -n prod-dc-admin         admin-adminservice                           
-oc scale deploy --replicas=0 -n prod-dc-frontend      transactionfe-transaction-frontend                
-oc scale deploy --replicas=0 -n prod-dc-kms           kms-kmsservice                               
-oc scale deploy --replicas=0 -n prod-dc-simulators    demo-merchantsimulator                       
-oc scale deploy --replicas=0 -n prod-dc-simulators    javasimulator-javautilityapisimulator                                          
-oc scale deploy --replicas=0 -n prod-dc-transaction   payment-paymentservice                       
-oc scale deploy --replicas=0 -n prod-dc-transaction   txn-transactionservice 
-
-
-oc scale deploy --replicas=1 -n prod-dc-admin         admin-adminservice                           
-oc scale deploy --replicas=1 -n prod-dc-frontend      transactionfe-transaction-frontend                
-oc scale deploy --replicas=1 -n prod-dc-kms           kms-kmsservice                               
-oc scale deploy --replicas=1 -n prod-dc-simulators    demo-merchantsimulator                       
-oc scale deploy --replicas=1 -n prod-dc-simulators    javasimulator-javautilityapisimulator                                          
-oc scale deploy --replicas=1 -n prod-dc-transaction   payment-paymentservice                       
-oc scale deploy --replicas=1 -n prod-dc-transaction   txn-transactionservice
-
-=======================================DR ================================================
-
-
-oc scale deploy --replicas=0 -n prod-dr-admin         admin-adminservice                           
-oc scale deploy --replicas=0 -n prod-dr-frontend      transactionfe-transaction-frontend                
-oc scale deploy --replicas=0 -n prod-dr-kms           kms-kmsservice                               
-oc scale deploy --replicas=0 -n prod-dr-simulators    demo-merchantsimulator                       
-oc scale deploy --replicas=0 -n prod-dr-simulators    javasimulator-javautilityapisimulator                                          
-oc scale deploy --replicas=0 -n prod-dr-transaction   payment-paymentservice                       
-oc scale deploy --replicas=0 -n prod-dr-transaction   txn-transactionservice
-
-oc scale deploy --replicas=1 -n prod-dr-admin         admin-adminservice                           
-oc scale deploy --replicas=1 -n prod-dr-frontend      transactionfe-transaction-frontend                
-oc scale deploy --replicas=1 -n prod-dr-kms           kms-kmsservice                               
-oc scale deploy --replicas=1 -n prod-dr-simulators    demo-merchantsimulator                       
-oc scale deploy --replicas=1 -n prod-dr-simulators    javasimulator-javautilityapisimulator                                          
-oc scale deploy --replicas=1 -n prod-dr-transaction   payment-paymentservice                       
-oc scale deploy --replicas=1 -n prod-dr-transaction   txn-transactionservice
-
-
-[osuser@drepayprodbastion Drill_Script]$ oc rsh prod-dr-kafka-cluster-broker-0
-sh-5.1$ cd bin/
-sh-5.1$
-sh-5.1$
-sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
-__consumer_offsets
-heartbeats
-mirrormaker2-cluster-configs
-mirrormaker2-cluster-offsets
-mirrormaker2-cluster-status
-ops_refund_adjust_confirmation_topic
-ops_refund_adjust_detail_topic
-process_bookingDetails_topic
-process_bulk_refund_topic
-prod-dr-connect-cluster-configs
-prod-dr-connect-cluster-offsets
-prod-dr-connect-cluster-status
-recon_fail_ack_topic
-recon_record_duplicate_topic
-recon_record_matched_topic
-recon_record_unmatched_topic
-source.checkpoints.internal
-strimzi.cruisecontrol.metrics
-strimzi.cruisecontrol.modeltrainingsamples
-strimzi.cruisecontrol.partitionmetricsamples
-transaction_email_notification_topic
-transaction_push_verification_topic
-transaction_sms_notification_topic
-
-
-[osuser@dcepayprodbastion Drill_Script]$ oc rsh prod-dc-kafka-cluster-broker-0
-sh-5.1$
-sh-5.1$
-sh-5.1$ cd bin/
-sh-5.1$
-sh-5.1$
-sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
-__consumer_offsets
-mirrormaker2-cluster-configs
-mirrormaker2-cluster-offsets
-mirrormaker2-cluster-status
-mm2-offset-syncs.target.internal
-ops_refund_adjust_confirmation_topic
-ops_refund_adjust_detail_topic
-process_bookingDetails_topic
-process_bulk_refund_topic
-recon_fail_ack_topic
-recon_record_duplicate_topic
-recon_record_matched_topic
-recon_record_unmatched_topic
-strimzi.cruisecontrol.metrics
-strimzi.cruisecontrol.modeltrainingsamples
-strimzi.cruisecontrol.partitionmetricsamples
-transaction_email_notification_topic
-transaction_push_verification_topic
-transaction_sms_notification_topic
-sh-5.1$ exit
-exit
-
-
-=============================
-
-sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
-__consumer_offsets
-heartbeats
-mirrormaker2-cluster-configs
-mirrormaker2-cluster-offsets
-mirrormaker2-cluster-status
-ops_refund_adjust_confirmation_topic
-ops_refund_adjust_detail_topic
-process_bookingDetails_topic
-process_bulk_refund_topic
-prod-dr-connect-cluster-configs
-prod-dr-connect-cluster-offsets
-prod-dr-connect-cluster-status
-recon_fail_ack_topic
-recon_record_duplicate_topic
-recon_record_matched_topic
-recon_record_unmatched_topic
-source.checkpoints.internal
-strimzi.cruisecontrol.metrics
-strimzi.cruisecontrol.modeltrainingsamples
-strimzi.cruisecontrol.partitionmetricsamples
-transaction_email_notification_topic
-transaction_push_verification_topic
-transaction_sms_notification_topic
-sh-5.1$
-sh-5.1$
-sh-5.1$
-sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic recon_record_unmatched_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'^C
-sh-5.1$ cd bin
-sh: cd: bin: No such file or directory
-sh-5.1$ pwd
-/opt/kafka/bin
-sh-5.1$
-sh-5.1$
-sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic recon_record_unmatched_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-Total messages:
-sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic prod-dr-connect-cluster-configs  | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-Total messages:
-sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic recon_record_unmatched_topic  | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-Total messages:
-sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic transaction_email_notification_topic   | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-
-
-=================
-
-[osuser@dcepayprodbastion Drill_Script]$ oc rsh prod-dc-kafka-cluster-broker-0
-sh-5.1$
-sh-5.1$
-sh-5.1$
-sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
-sh: ./kafka-topics.sh: No such file or directory
-sh-5.1$ cd bin/
-sh-5.1$
-sh-5.1$
-sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
-__consumer_offsets
-mirrormaker2-cluster-configs
-mirrormaker2-cluster-offsets
-mirrormaker2-cluster-status
-mm2-offset-syncs.target.internal
-ops_refund_adjust_confirmation_topic
-ops_refund_adjust_detail_topic
-process_bookingDetails_topic
-process_bulk_refund_topic
-recon_fail_ack_topic
-recon_record_duplicate_topic
-recon_record_matched_topic
-recon_record_unmatched_topic
-strimzi.cruisecontrol.metrics
-strimzi.cruisecontrol.modeltrainingsamples
-strimzi.cruisecontrol.partitionmetricsamples
-transaction_email_notification_topic
-transaction_push_verification_topic
-transaction_sms_notification_topic
-sh-5.1$
-sh-5.1$ /opt/kafka/bin/kafka-run-class.sh kafka.tools.GetOffsetShell \
---broker-list localhost:9092 --topic recon_record_duplicate_topic | \
-awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-Total messages:
-sh-5.1$
-sh-5.1$
-sh-5.1$ /opt/kafka/bin/kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic recon_record_unmatched_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-Total messages:
-sh-5.1$ pwd
-/opt/kafka/bin
-sh-5.1$
-sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic recon_record_unmatched_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-Total messages:
-sh-5.1$
-sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic transaction_email_notification_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-Total messages:
-sh-5.1$
-sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic transaction_push_verification_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-Total messages:
-sh-5.1$
-sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic transaction_sms_notification_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-Total messages:
-sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic recon_fail_ack_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-Total messages:
-sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic process_bookingDetails_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-Total messages:
-sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic ops_refund_adjust_confirmation_topic | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-Total messages:
-
-
-
-
-
-
-
-
-=====================================
-
-
-[osuser@dcepayprodbastion ~]$ oc get po
-NAME                                                     READY   STATUS    RESTARTS       AGE
-prod-dc-kafka-cluster-broker-0                           1/1     Running   0              4d1h
-prod-dc-kafka-cluster-broker-1                           1/1     Running   0              4d1h
-prod-dc-kafka-cluster-broker-2                           1/1     Running   0              4d1h
-prod-dc-kafka-cluster-controller-3                       1/1     Running   0              26d
-prod-dc-kafka-cluster-controller-4                       1/1     Running   0              26d
-prod-dc-kafka-cluster-controller-5                       1/1     Running   0              26d
-prod-dc-kafka-cluster-cruise-control-5594865799-q6qjv    1/1     Running   16 (26d ago)   26d
-prod-dc-kafka-cluster-entity-operator-6fd9fdf6c4-77vsd   2/2     Running   0              26d
-prod-dc-kafka-mirror-maker-mirrormaker2-0                1/1     Running   0              14m
-[osuser@dcepayprodbastion ~]$
-c [osuser@dcepayprodbastion ~]$ oc logs -f prod-dc-kafka-mirror-maker-mirrormaker2-0  -n prod-dc-kafka | grep -i lag
-        offset.lag.max = 100
-        offset.lag.max = 100
-        offset.lag.max = 100
-        offset.lag.max = 100
+2026-01-29 08:42:50,166 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1151322699, epoch=463) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:42:50,166 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146783385, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955715829, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654218476, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832673034, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1151322699, epoch=463), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 08:45:51,738 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1547509429, epoch=17284) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:45:51,739 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955759679, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1547509429, epoch=17284), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 08:47:20,464 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1231978063, epoch=5116) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:47:20,464 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146796699, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1231978063, epoch=5116), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 08:48:47,846 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=951641675, epoch=7529) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:48:47,846 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955787618, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=951641675, epoch=7529), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 08:49:21,980 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1864335536, epoch=217) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:49:21,980 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955788084, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832769368, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285]), __consumer_offsets-43=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=741704455, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5119], lastFetchedEpoch=Optional[5119])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1864335536, epoch=217), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 08:49:55,607 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1887876010, epoch=240) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:49:55,607 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146801514, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654323296, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832771252, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1887876010, epoch=240), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 08:50:50,832 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=702159595, epoch=2374) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:50:50,832 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955794440, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654334273, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832781269, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=702159595, epoch=2374), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 08:52:12,159 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=459208890, epoch=4791) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:52:12,159 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146807233, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955806281, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832800914, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=459208890, epoch=4791), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 08:53:02,363 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1746962103, epoch=2716) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:53:02,363 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146808787, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654360681, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832808999, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285]), __consumer_offsets-43=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=741720047, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5119], lastFetchedEpoch=Optional[5119])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1746962103, epoch=2716), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 08:53:46,641 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=495269314, epoch=1774) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:53:46,641 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146809814, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955812592, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654366131, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832814933, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285]), __consumer_offsets-43=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=741722048, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5119], lastFetchedEpoch=Optional[5119])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=495269314, epoch=1774), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 08:55:18,262 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=581827352, epoch=7527) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:55:18,262 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146814555, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832839301, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=581827352, epoch=7527), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 08:55:57,521 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=292988855, epoch=77) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:55:57,521 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146814832, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955825679, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654392332, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832840759, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285]), __consumer_offsets-43=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=741731194, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5119], lastFetchedEpoch=Optional[5119])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=292988855, epoch=77), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 08:56:39,603 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=781419349, epoch=494) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:56:39,603 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654396494, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832846118, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285]), __consumer_offsets-43=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=741733146, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5119], lastFetchedEpoch=Optional[5119])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=781419349, epoch=494), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 08:56:55,703 WARN [Producer clientId=CruiseControlMetricsReporter] Got error produce response with correlation id 16041 on topic-partition strimzi.cruisecontrol.metrics-0, retrying (4 attempts left). Error: REQUEST_TIMED_OUT. Error Message: Disconnected from node 2 due to timeout (org.apache.kafka.clients.producer.internals.Sender) [kafka-producer-network-thread | CruiseControlMetricsReporter]
+2026-01-29 08:57:46,494 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1856606101, epoch=1291) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 08:57:46,494 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146816409, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955831224, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654400331, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832850191, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1856606101, epoch=1291), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 09:00:16,579 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=520038891, epoch=18361) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 09:00:16,579 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146825850, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955856652, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950]), strimzi.cruisecontrol.partitionmetricsamples-2=PartitionData(topicId=_VUjfcCnSOKbmcSbz8bdaw, fetchOffset=702275, logStartOffset=694069, maxBytes=1048576, currentLeaderEpoch=Optional[5135], lastFetchedEpoch=Optional[5135]), __consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832897889, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285]), strimzi.cruisecontrol.modeltrainingsamples-27=PartitionData(topicId=X6nkVddzT5qQWnIDQf6FZA, fetchOffset=1615, logStartOffset=1314, maxBytes=1048576, currentLeaderEpoch=Optional[5137], lastFetchedEpoch=Optional[5137])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=520038891, epoch=18361), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 09:01:17,466 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=364967963, epoch=3640) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 09:01:17,467 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832911048, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=364967963, epoch=3640), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 09:02:58,495 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1985532537, epoch=9319) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 09:02:58,495 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-29=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=955880807, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4950], lastFetchedEpoch=Optional[4950])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1985532537, epoch=9319), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 09:03:49,735 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=994884230, epoch=3034) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 09:03:49,736 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832947644, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=994884230, epoch=3034), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 09:04:46,298 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=203552974, epoch=1278) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 09:04:46,298 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654502218, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=203552974, epoch=1278), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 09:04:48,615 WARN [Producer clientId=CruiseControlMetricsReporter] Got error produce response with correlation id 16053 on topic-partition strimzi.cruisecontrol.metrics-0, retrying (4 attempts left). Error: REQUEST_TIMED_OUT. Error Message: Disconnected from node 2 due to timeout (org.apache.kafka.clients.producer.internals.Sender) [kafka-producer-network-thread | CruiseControlMetricsReporter]
+2026-01-29 09:06:08,515 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=282182441, epoch=3888) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 09:06:08,515 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-20=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1832967734, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[5285], lastFetchedEpoch=Optional[5285])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=282182441, epoch=3888), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 09:07:02,700 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1932673097, epoch=990) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 09:07:02,700 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146840154, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1932673097, epoch=990), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 09:08:09,733 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=776424014, epoch=1165) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 09:08:09,733 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146843000, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=776424014, epoch=1165), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
+2026-01-29 09:08:47,232 INFO [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error sending fetch request (sessionId=1718631127, epoch=278) to node 2: (org.apache.kafka.clients.FetchSessionHandler) [ReplicaFetcherThread-0-2]
+2026-01-29 09:08:47,232 WARN [ReplicaFetcher replicaId=1, leaderId=2, fetcherId=0] Error in response for fetch request (type=FetchRequest, replicaId=1, maxWait=500, minBytes=1, maxBytes=10485760, fetchData={__consumer_offsets-13=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=146843527, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[3855], lastFetchedEpoch=Optional[3855]), __consumer_offsets-36=PartitionData(topicId=rKarGsXGQ5mg17smxL1-Yw, fetchOffset=1654535455, logStartOffset=0, maxBytes=1048576, currentLeaderEpoch=Optional[4957], lastFetchedEpoch=Optional[4957])}, isolationLevel=read_uncommitted, removed=, replaced=, metadata=(sessionId=1718631127, epoch=278), rackId=) (kafka.server.ReplicaFetcherThread) [ReplicaFetcherThread-0-2]
 ^C
-
-
-===========================
-
-sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
-__consumer_offsets
-mirrormaker2-cluster-configs
-mirrormaker2-cluster-offsets
-mirrormaker2-cluster-status
-mm2-offset-syncs.target.internal
-ops_refund_adjust_confirmation_topic
-ops_refund_adjust_detail_topic
-process_bookingDetails_topic
-process_bulk_refund_topic
-recon_fail_ack_topic
-recon_record_duplicate_topic
-recon_record_matched_topic
-recon_record_unmatched_topic
-strimzi.cruisecontrol.metrics
-strimzi.cruisecontrol.modeltrainingsamples
-strimzi.cruisecontrol.partitionmetricsamples
-transaction_email_notification_topic
-transaction_push_verification_topic
-transaction_sms_notification_topic
-sh-5.1$
-sh-5.1$
-sh-5.1$ ./kafka-run-class.sh kafka.tools.GetOffsetShell \
---broker-list localhost:9092 \
---topic recon_record_unmatched_topic \
---time -1 | awk -F ":" '{sum += $3} END {print "Total messages:", sum}'
-Error: Could not find or load main class kafka.tools.GetOffsetShell
-Caused by: java.lang.ClassNotFoundException: kafka.tools.GetOffsetShell
-Total messages:
-sh-5.1$
-
-
-
-====================================
-
-
-
-
-
-
-
-
-
-[osuser@dcepayprodbastion ~]$ oc rsh prod-dc-kafka-cluster-broker-0
-sh-5.1$
-sh-5.1$
-sh-5.1$ cd bin/
-sh-5.1$
-sh-5.1$
-sh-5.1$
-sh-5.1$
-sh-5.1$ ./kafka-console-consumer.sh \
---bootstrap-server localhost:9092 \
---topic recon_record_unmatched_topic \
---from-beginning \
---timeout-ms 2000 | wc -l
-[2025-10-15 09:47:26,123] ERROR Error processing message, terminating consumer process:  (org.apache.kafka.tools.consumer.ConsoleConsumer)
-org.apache.kafka.common.errors.TimeoutException
-Processed a total of 0 messages
-0
-
-
-
-
+[osuser@bastion ~]$ oc get pods
+NAME                                                 READY   STATUS    RESTARTS          AGE
+dev-console-console-deployment-fbc4f6b4b-82hft       2/2     Running   0                 6d3h
+dev-kafka-cluster-broker-0                           1/1     Running   4 (7d ago)        7d1h
+dev-kafka-cluster-broker-1                           1/1     Running   0                 7d2h
+dev-kafka-cluster-broker-2                           1/1     Running   0                 7d2h
+dev-kafka-cluster-controller-3                       1/1     Running   0                 7d2h
+dev-kafka-cluster-controller-4                       1/1     Running   0                 7d2h
+dev-kafka-cluster-controller-5                       1/1     Running   0                 7d2h
+dev-kafka-cluster-cruise-control-7678c88585-95qjd    1/1     Running   44 (6d15h ago)    7d2h
+dev-kafka-cluster-entity-operator-656dcf5cdd-sqmhl   2/2     Running   0                 7d2h
+dev-kafka-connect-mq-test-connect-0                  1/1     Running   565 (11m ago)     7d2h
+dev-kafka-connect-mq-test-connect-1                  1/1     Running   550 (3m56s ago)   7d1h
+dev-kafka-connect-mq-test-connect-2                  1/1     Running   564 (12m ago)     7d2h
+dev-kafka-mirror-maker-mirrormaker2-0                0/1     Pending   0                 28d
+[osuser@bastion ~]$ oc get pods
