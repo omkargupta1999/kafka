@@ -1,0 +1,42 @@
+readinessProbe:
+  enabled: true
+  httpGet:
+    path: "/api/transaction/v1/actuator/health/readiness"
+    port: 9092
+    scheme: HTTP
+  initialDelaySeconds: 30
+  periodSeconds: 5
+
+livenessProbe:
+  enabled: true
+  httpGet:
+    path: "/api/transaction/v1/actuator/health/liveness"
+    port: 9092
+    scheme: HTTP
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  
+sidecar:
+  istio:
+    rewriteAppHTTPProbers: false
+
+# HPA Configuration
+hpa:
+  enabled: true
+  minReplicas: 7
+  maxReplicas: 30
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
