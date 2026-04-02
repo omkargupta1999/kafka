@@ -1,161 +1,252 @@
-[root@registry ~]# podman pull registry.dev.sbiepay.sbi:8443/ubi9/security-products/gitlab-advanced-sast:1 --tls-verify=false
-Trying to pull registry.dev.sbiepay.sbi:8443/ubi9/security-products/gitlab-advanced-sast:1...
+[root@registry ~]#  podman pull registry.dev.sbiepay.sbi:8443/library/rhelgit-oc-helm:1.0 --tls-verify=false
+Trying to pull registry.dev.sbiepay.sbi:8443/library/rhelgit-oc-helm:1.0...
 Getting image source signatures
-Copying blob 4475f86039fb done   |
-Copying blob 5bafb31cae1b done   |
-Copying blob 99ff1bb29cdf done   |
-Copying blob e2c1b7a9794e done   |
-Copying blob 1208047eb5f7 done   |
-Copying blob bbcc564f147b done   |
-Copying blob c5799392555c done   |
-Copying blob e4d890b3a27c done   |
-Copying config c5d3520399 done   |
+Copying blob 710214eec7c2 skipped: already exists
+Copying blob 250d47522d86 skipped: already exists
+Copying blob ffb83bb345b4 skipped: already exists
+Copying blob 2aa389805a35 skipped: already exists
+Copying blob 6f2fe2234e78 skipped: already exists
+Copying config db06a3e48e done   |
 Writing manifest to image destination
-c5d3520399775d27153fedb5be336837bbb495bd9af1755f6041c1ba6332706d
+db06a3e48eaa4339a92d53be57a37a699ba188fed41652c6c3c6c07bb86cb6f0
 [root@registry ~]#
-[root@registry ~]#
-[root@registry ~]# podman inspect registry.dev.sbiepay.sbi:8443/ubi9/security-products/gitlab-advanced-sast:1 --tls-verify=false
-Error: unknown flag: --tls-verify
-See 'podman inspect --help'
-[root@registry ~]#
-[root@registry ~]# podman inspect registry.dev.sbiepay.sbi:8443/ubi9/security-products/gitlab-advanced-sast:1
+[root@registry ~]#  podman inspect registry.dev.sbiepay.sbi:8443/library/rhelgit-oc-helm:1.0
 [
      {
-          "Id": "c5d3520399775d27153fedb5be336837bbb495bd9af1755f6041c1ba6332706d",
-          "Digest": "sha256:e9098fbb8cb3a8774f929dc0213432f72db31a0e1ccc10c5660afe700c6f5b8e",
+          "Id": "db06a3e48eaa4339a92d53be57a37a699ba188fed41652c6c3c6c07bb86cb6f0",
+          "Digest": "sha256:05aa0ca971d95f19f4865ddc19243bffbab11ec6019985ba7a630cb4e467c6dc",
           "RepoTags": [
-               "registry.dev.sbiepay.sbi:8443/ubi9/security-products/gitlab-advanced-sast:1"
+               "registry.dev.sbiepay.sbi:8443/library/rhelgit-oc-helm:1.0",
+               "docker.io/library/rhelgit-oc-helm:1.0"
           ],
           "RepoDigests": [
-               "registry.dev.sbiepay.sbi:8443/ubi9/security-products/gitlab-advanced-sast@sha256:e9098fbb8cb3a8774f929dc0213432f72db31a0e1ccc10c5660afe700c6f5b8e"
+               "docker.io/library/rhelgit-oc-helm@sha256:05aa0ca971d95f19f4865ddc19243bffbab11ec6019985ba7a630cb4e467c6dc",
+               "docker.io/library/rhelgit-oc-helm@sha256:65605f26e63ed7624e4711cdd933caf6577f9d309f240d48a295f1d2c790c4d9",
+               "registry.dev.sbiepay.sbi:8443/library/rhelgit-oc-helm@sha256:05aa0ca971d95f19f4865ddc19243bffbab11ec6019985ba7a630cb4e467c6dc",
+               "registry.dev.sbiepay.sbi:8443/library/rhelgit-oc-helm@sha256:65605f26e63ed7624e4711cdd933caf6577f9d309f240d48a295f1d2c790c4d9"
           ],
           "Parent": "",
           "Comment": "",
-          "Created": "2024-10-08T22:06:31.292493228Z",
+          "Created": "2025-12-30T15:12:51.644714645Z",
           "Config": {
                "Env": [
                     "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-                    "SCANNER_VERSION=v1.1.78",
-                    "PIP_NO_CACHE_DIR=off"
-               ],
-               "Entrypoint": [
-                    "/entrypoint.sh"
+                    "container=oci"
                ],
                "Cmd": [
-                    "/analyzer",
-                    "run"
+                    "/bin/bash"
                ],
-               "ArgsEscaped": true
+               "WorkingDir": "/",
+               "Labels": {
+                    "architecture": "x86_64",
+                    "build-date": "2025-12-22T00:57:37Z",
+                    "com.redhat.component": "ubi9-container",
+                    "com.redhat.license_terms": "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI",
+                    "cpe": "cpe:/a:redhat:enterprise_linux:9::appstream",
+                    "description": "The Universal Base Image is designed and engineered to be the base layer for all of your containerized applications, middleware and utilities. This base image is freely redistributable, but Red Hat only supports Red Hat technologies through subscriptions for Red Hat products. This image is maintained by Red Hat and updated regularly.",
+                    "distribution-scope": "public",
+                    "io.buildah.version": "1.41.4",
+                    "io.k8s.description": "The Universal Base Image is designed and engineered to be the base layer for all of your containerized applications, middleware and utilities. This base image is freely redistributable, but Red Hat only supports Red Hat technologies through subscriptions for Red Hat products. This image is maintained by Red Hat and updated regularly.",
+                    "io.k8s.display-name": "Red Hat Universal Base Image 9",
+                    "io.openshift.expose-services": "",
+                    "io.openshift.tags": "base rhel9",
+                    "maintainer": "Red Hat, Inc.",
+                    "name": "rhelgit-oc-helm",
+                    "org.opencontainers.image.created": "2025-12-22T00:57:37Z",
+                    "org.opencontainers.image.revision": "994e91d4001796a257ed44e33c0a03f54770a08d",
+                    "purpose": "git + oc + helm for air-gapped CI",
+                    "release": "1766364927",
+                    "summary": "Provides the latest release of Red Hat Universal Base Image 9.",
+                    "url": "https://catalog.redhat.com/en/search?searchType=containers",
+                    "vcs-ref": "994e91d4001796a257ed44e33c0a03f54770a08d",
+                    "vcs-type": "git",
+                    "vendor": "Red Hat, Inc.",
+                    "version": "9.7"
+               }
           },
-          "Version": "",
+          "Version": "28.2.2",
           "Author": "",
           "Architecture": "amd64",
           "Os": "linux",
-          "Size": 232390628,
-          "VirtualSize": 232390628,
+          "Size": 803425381,
+          "VirtualSize": 803425381,
           "GraphDriver": {
                "Name": "overlay",
                "Data": {
-                    "LowerDir": "/var/lib/containers/storage/overlay/8b86440e7414a31c6933a0474dd5f1cee35ad88825de8748af20c83805f4c8ad/diff:/var/lib/containers/storage/overlay/85218ee26b286439dafe6b3eedcaf8a170639e9f5a73ea56f98184de657197d9/diff:/var/lib/containers/storage/overlay/bf1ed9e0b102392dc9a313b99ee4f5e30f12800f409469a046a0147b7ce402f3/diff:/var/lib/containers/storage/overlay/b5f8360b16394a333f010409606a429182677d09ec6ca8d7d1b4c766deb372dc/diff:/var/lib/containers/storage/overlay/f2ec5ca37f6c32c75868ab9b91825f380ba073b8abe7077b4af0a1d03cc750d9/diff:/var/lib/containers/storage/overlay/a6f3eb17078134da851100c6c87bc950e396ecd4c327ac7415692561136996c0/diff:/var/lib/containers/storage/overlay/63ca1fbb43ae5034640e5e6cb3e083e05c290072c5366fcaa9d62435a4cced85/diff",
-                    "UpperDir": "/var/lib/containers/storage/overlay/f55022b070712c20fd24c1cea7fbfae9630e4faa6c4e71fd8016e6dbb757e6a9/diff",
-                    "WorkDir": "/var/lib/containers/storage/overlay/f55022b070712c20fd24c1cea7fbfae9630e4faa6c4e71fd8016e6dbb757e6a9/work"
+                    "LowerDir": "/var/lib/containers/storage/overlay/9fdf676ae3ee587da3527e689e45f2959e5928b9a75f69cbbd604c0368e6d504/diff:/var/lib/containers/storage/overlay/6ec16a2c7572dc36cec65b4ddf1a25b2bcb049a771b9c7fa627ca3a26dfb113a/diff:/var/lib/containers/storage/overlay/b10db342f2d7273dc34c52e56563b3cb6092fa9a70fe26175a0880d0c4c96b82/diff:/var/lib/containers/storage/overlay/b9ccb069e30b6e8fb23e47cd50c622ec6ff24b087170d4bb3e900dc5868ce209/diff",
+                    "UpperDir": "/var/lib/containers/storage/overlay/0d0cf1b9da8894ce85ff9e1bb5e846a18bc5a02a1f8bf9d196e230f857e82b39/diff",
+                    "WorkDir": "/var/lib/containers/storage/overlay/0d0cf1b9da8894ce85ff9e1bb5e846a18bc5a02a1f8bf9d196e230f857e82b39/work"
                }
           },
           "RootFS": {
                "Type": "layers",
                "Layers": [
-                    "sha256:63ca1fbb43ae5034640e5e6cb3e083e05c290072c5366fcaa9d62435a4cced85",
-                    "sha256:b24162cfed0fb6c7421b607a28b24286be3b903707f9e5885abd719cc60099c5",
-                    "sha256:590cc480bbfafaca598c265b8249125e63261e01f15cb2f951adc02057a157da",
-                    "sha256:bd4580544a9c2b456e529793efacc05e593a1f23ecc4bc81d4d0b3804ac9a0fa",
-                    "sha256:976f4ac30b353cd66fcbe7b76aebd05abf3d38722e0fe7798e3eac9517b23603",
-                    "sha256:e3d4c790d43f829e9047de1687b2a600750dfd1364140ba6544397bf19469854",
-                    "sha256:d6b95bdec38e10bbb29f3f8f9c4732f95c9744cbadd13f4887c2b8f09a70ce6c",
-                    "sha256:b37304b43f2fc18720e28c1e6da605dffe7d941d7de3075add6db3380cb4dc1b"
+                    "sha256:b9ccb069e30b6e8fb23e47cd50c622ec6ff24b087170d4bb3e900dc5868ce209",
+                    "sha256:3d34ef0a868242ac0685cf293a035be813741c21436d1952a054d9ceb998981b",
+                    "sha256:18f62e17dfa25266361ff3124f58afd16ea2bdfa5c467e98a0052d4dd6bfc93d",
+                    "sha256:0d7a73685c4c346af333edf17d54730fdce6a5e11ef780d8045987e84bb3db7d",
+                    "sha256:da9f9a5442a94bffb4595ec877b4bcc753dc6f941157ccb46961cc9902fe505d"
                ]
           },
-          "Labels": null,
+          "Labels": {
+               "architecture": "x86_64",
+               "build-date": "2025-12-22T00:57:37Z",
+               "com.redhat.component": "ubi9-container",
+               "com.redhat.license_terms": "https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI",
+               "cpe": "cpe:/a:redhat:enterprise_linux:9::appstream",
+               "description": "The Universal Base Image is designed and engineered to be the base layer for all of your containerized applications, middleware and utilities. This base image is freely redistributable, but Red Hat only supports Red Hat technologies through subscriptions for Red Hat products. This image is maintained by Red Hat and updated regularly.",
+               "distribution-scope": "public",
+               "io.buildah.version": "1.41.4",
+               "io.k8s.description": "The Universal Base Image is designed and engineered to be the base layer for all of your containerized applications, middleware and utilities. This base image is freely redistributable, but Red Hat only supports Red Hat technologies through subscriptions for Red Hat products. This image is maintained by Red Hat and updated regularly.",
+               "io.k8s.display-name": "Red Hat Universal Base Image 9",
+               "io.openshift.expose-services": "",
+               "io.openshift.tags": "base rhel9",
+               "maintainer": "Red Hat, Inc.",
+               "name": "rhelgit-oc-helm",
+               "org.opencontainers.image.created": "2025-12-22T00:57:37Z",
+               "org.opencontainers.image.revision": "994e91d4001796a257ed44e33c0a03f54770a08d",
+               "purpose": "git + oc + helm for air-gapped CI",
+               "release": "1766364927",
+               "summary": "Provides the latest release of Red Hat Universal Base Image 9.",
+               "url": "https://catalog.redhat.com/en/search?searchType=containers",
+               "vcs-ref": "994e91d4001796a257ed44e33c0a03f54770a08d",
+               "vcs-type": "git",
+               "vendor": "Red Hat, Inc.",
+               "version": "9.7"
+          },
           "Annotations": {},
-          "ManifestType": "application/vnd.docker.distribution.manifest.v2+json",
+          "ManifestType": "application/vnd.oci.image.manifest.v1+json",
           "User": "",
           "History": [
                {
-                    "created": "2024-09-06T22:20:07.740564901Z",
-                    "created_by": "/bin/sh -c #(nop) ADD file:5758b97d8301c84a204a6e516241275d785a7cade40b2fb99f01fe122482e283 in / "
-               },
-               {
-                    "created": "2024-09-06T22:20:07.972381771Z",
-                    "created_by": "/bin/sh -c #(nop)  CMD [\"/bin/sh\"]",
+                    "created": "2025-12-22T00:57:56.861874088Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL maintainer=\"Red Hat, Inc.\"       vendor=\"Red Hat, Inc.\"",
                     "empty_layer": true
                },
                {
-                    "created": "2024-10-08T22:06:29.282546814Z",
-                    "created_by": "ARG SCANNER_VERSION=v1.1.78",
-                    "comment": "buildkit.dockerfile.v0",
+                    "created": "2025-12-22T00:57:56.916243668Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL url=\"https://catalog.redhat.com/en/search?searchType=containers\"",
                     "empty_layer": true
                },
                {
-                    "created": "2024-10-08T22:06:29.282546814Z",
-                    "created_by": "ENV SCANNER_VERSION=v1.1.78",
-                    "comment": "buildkit.dockerfile.v0",
+                    "created": "2025-12-22T00:57:57.027647553Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL com.redhat.component=\"ubi9-container\"       name=\"ubi9/ubi\"       version=\"9.7\"       cpe=\"cpe:/a:redhat:enterprise_linux:9::appstream\"       distribution-scope=\"public\"",
                     "empty_layer": true
                },
                {
-                    "created": "2024-10-08T22:06:29.282546814Z",
-                    "created_by": "ENV PIP_NO_CACHE_DIR=off",
-                    "comment": "buildkit.dockerfile.v0",
+                    "created": "2025-12-22T00:57:57.118037724Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL com.redhat.license_terms=\"https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI\"",
                     "empty_layer": true
                },
                {
-                    "created": "2024-10-08T22:06:29.282546814Z",
-                    "created_by": "COPY /analyzer-gitlab-advanced-sast /analyzer-binary # buildkit",
-                    "comment": "buildkit.dockerfile.v0"
-               },
-               {
-                    "created": "2024-10-08T22:06:29.319291363Z",
-                    "created_by": "COPY ./lightz-aio_default_config.yaml /lightz-aio_default_config.yaml # buildkit",
-                    "comment": "buildkit.dockerfile.v0"
-               },
-               {
-                    "created": "2024-10-08T22:06:29.502953396Z",
-                    "created_by": "COPY /analyzer-tracking /analyzer-tracking # buildkit",
-                    "comment": "buildkit.dockerfile.v0"
-               },
-               {
-                    "created": "2024-10-08T22:06:29.552443291Z",
-                    "created_by": "COPY /start.sh /analyzer # buildkit",
-                    "comment": "buildkit.dockerfile.v0"
-               },
-               {
-                    "created": "2024-10-08T22:06:31.061447458Z",
-                    "created_by": "COPY /tmp/lightz-aio /lightz-aio # buildkit",
-                    "comment": "buildkit.dockerfile.v0"
-               },
-               {
-                    "created": "2024-10-08T22:06:31.100587837Z",
-                    "created_by": "COPY ./entrypoint.sh /entrypoint.sh # buildkit",
-                    "comment": "buildkit.dockerfile.v0"
-               },
-               {
-                    "created": "2024-10-08T22:06:31.292493228Z",
-                    "created_by": "RUN |1 SCANNER_VERSION=v1.1.78 /bin/sh -c chmod +x /entrypoint.sh # buildkit",
-                    "comment": "buildkit.dockerfile.v0"
-               },
-               {
-                    "created": "2024-10-08T22:06:31.292493228Z",
-                    "created_by": "ENTRYPOINT [\"/entrypoint.sh\"]",
-                    "comment": "buildkit.dockerfile.v0",
+                    "created": "2025-12-22T00:57:57.226375346Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL summary=\"Provides the latest release of Red Hat Universal Base Image 9.\"",
                     "empty_layer": true
                },
                {
-                    "created": "2024-10-08T22:06:31.292493228Z",
-                    "created_by": "CMD [\"/analyzer\" \"run\"]",
-                    "comment": "buildkit.dockerfile.v0",
+                    "created": "2025-12-22T00:57:57.314127994Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL description=\"The Universal Base Image is designed and engineered to be the base layer for all of your containerized applications, middleware and utilities. This base image is freely redistributable, but Red Hat only supports Red Hat technologies through subscriptions for Red Hat products. This image is maintained by Red Hat and updated regularly.\"",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-22T00:57:57.436567781Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL io.k8s.description=\"The Universal Base Image is designed and engineered to be the base layer for all of your containerized applications, middleware and utilities. This base image is freely redistributable, but Red Hat only supports Red Hat technologies through subscriptions for Red Hat products. This image is maintained by Red Hat and updated regularly.\"",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-22T00:57:57.586589176Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL io.k8s.display-name=\"Red Hat Universal Base Image 9\"",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-22T00:57:57.7160877Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL io.openshift.expose-services=\"\"",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-22T00:57:57.826875345Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL io.openshift.tags=\"base rhel9\"",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-22T00:57:57.934704615Z",
+                    "created_by": "/bin/sh -c #(nop) ENV container oci",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-22T00:57:59.69992835Z",
+                    "created_by": "/bin/sh -c #(nop) COPY dir:29a1fb685a30fe60096a5c86b222dd398fe24e413e85b7351c7e15618de360bf in /      ",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-22T00:57:59.787685108Z",
+                    "created_by": "/bin/sh -c #(nop) COPY file:1376702515d596f414e3aa494e0daa6d408a6d2475c4aeca96bf9392f5287f69 in /etc/yum.repos.d/.      ",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-22T00:57:59.806955452Z",
+                    "created_by": "/bin/sh -c #(nop) CMD [\"/bin/bash\"]",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-22T00:57:59.895171462Z",
+                    "created_by": "/bin/sh -c #(nop) COPY file:93583a9ebbaeff1e36b48820b647eea1eef523f6627dacfb0b21af79f5a41b35 in /usr/share/buildinfo/content-sets.json      ",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-22T00:57:59.981346987Z",
+                    "created_by": "/bin/sh -c #(nop) COPY file:93583a9ebbaeff1e36b48820b647eea1eef523f6627dacfb0b21af79f5a41b35 in /root/buildinfo/content_manifests/content-sets.json      ",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-22T00:58:00.066226672Z",
+                    "created_by": "/bin/sh -c #(nop) COPY file:bd8b725abb749c1fef330b931801c8b7e2fa582362e220c85ff712bb04fe1274 in /usr/share/buildinfo/labels.json      ",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-22T00:58:00.152806315Z",
+                    "created_by": "/bin/sh -c #(nop) COPY file:bd8b725abb749c1fef330b931801c8b7e2fa582362e220c85ff712bb04fe1274 in /root/buildinfo/labels.json      ",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-22T00:58:00.93332486Z",
+                    "created_by": "/bin/sh -c #(nop) LABEL \"architecture\"=\"x86_64\" \"vcs-type\"=\"git\" \"vcs-ref\"=\"994e91d4001796a257ed44e33c0a03f54770a08d\" \"org.opencontainers.image.revision\"=\"994e91d4001796a257ed44e33c0a03f54770a08d\" \"build-date\"=\"2025-12-22T00:57:37Z\" \"org.opencontainers.image.created\"=\"2025-12-22T00:57:37Z\" \"release\"=\"1766364927\"org.opencontainers.image.revision=994e91d4001796a257ed44e33c0a03f54770a08d,org.opencontainers.image.created=2025-12-22T00:57:37Z"
+               },
+               {
+                    "created": "2025-12-30T15:09:35.907175466Z",
+                    "created_by": "/bin/sh -c #(nop)  LABEL name=rhelgit-oc-helm",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-30T15:09:37.097111282Z",
+                    "created_by": "/bin/sh -c #(nop)  LABEL purpose=git + oc + helm for air-gapped CI",
+                    "empty_layer": true
+               },
+               {
+                    "created": "2025-12-30T15:12:31.102536208Z",
+                    "created_by": "/bin/sh -c dnf install -y     git     tar     gzip     ca-certificates     && dnf clean all"
+               },
+               {
+                    "created": "2025-12-30T15:12:36.766341199Z",
+                    "created_by": "/bin/sh -c #(nop) COPY file:f75d69814dc47f37e8886a114ed9e448b44f92e02d3567327f248428924d93ba in /usr/local/bin/oc "
+               },
+               {
+                    "created": "2025-12-30T15:12:38.906902159Z",
+                    "created_by": "/bin/sh -c #(nop) COPY file:469dff29eac8900b754fa04760ca69168611605f8842f1616eb82593ce5bcec2 in /usr/local/bin/helm "
+               },
+               {
+                    "created": "2025-12-30T15:12:47.137413817Z",
+                    "created_by": "/bin/sh -c chmod +x /usr/local/bin/oc /usr/local/bin/helm"
+               },
+               {
+                    "created": "2025-12-30T15:12:51.644714645Z",
+                    "created_by": "/bin/sh -c git --version && oc version --client && helm version",
                     "empty_layer": true
                }
           ],
           "NamesHistory": [
-               "registry.dev.sbiepay.sbi:8443/ubi9/security-products/gitlab-advanced-sast:1"
+               "docker.io/library/rhelgit-oc-helm:1.0",
+               "registry.dev.sbiepay.sbi:8443/library/rhelgit-oc-helm:1.0"
           ]
      }
 ]
