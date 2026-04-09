@@ -1,2 +1,45 @@
-Resource not found
-Resource not found: Requested Kafka cluster BmV9L8BkQGGHbWqFbnnYbA does not exist or is not configured (4041)
+apiVersion: console.streamshub.github.com/v1alpha1
+kind: Console
+metadata:
+  name: uat-console
+  namespace: uat-kafka
+
+spec:
+  hostname: uat-kafkaconsole.apps.dev.sbiepay.sbi
+
+  kafkaClusters:
+    - name: uat-kafka-cluster
+      namespace: uat-kafka
+      listener: plain
+
+      properties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+
+      adminProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+          - name: request.timeout.ms
+            value: '30000'
+          - name: default.api.timeout.ms
+            value: '30000'
+
+      consumerProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+          - name: request.timeout.ms
+            value: '30000'
+
+      producerProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+          - name: request.timeout.ms
+            value: '30000'
+
+  metricsSources:
+    - name: k8s
+      type: openshift-monitoring
