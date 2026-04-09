@@ -1,6 +1,78 @@
-[osuser@bastion ~]$ oc get servicemonitor -n uat-kafka
-Error from server (Forbidden): servicemonitors.monitoring.coreos.com is forbidden: User "V1021577" cannot list resource "servicemonitors" in API group "monitoring.coreos.com" in the namespace "uat-kafka"
-[osuser@bastion ~]$ oc get kafka uat-kafka-cluster -n uat-kafka -o yaml | grep -i metrics -A 5
-[osuser@bastion ~]$ oc auth can-i get pods -n openshift-monitoring
-yes
-[osuser@bastion ~]$
+{{- if .Values.kafka.enabled }}
+# Kafka Metrics ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-metrics
+  namespace: {{ .Values.kafka.namespace }}
+  labels:
+    app: strimzi
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    environment: {{ .Values.global.environment }}
+data:
+  kafka-metrics-config.yml: |-
+{{ .Files.Get "files/kafka-metrics.yaml" | indent 4 }}
+
+---
+# Kafka Configuration ConfigMap (KRaft Mode)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-config
+  namespace: {{ .Values.kafka.namespace }}
+  labels:
+    app.kubernetes.io/name: kafka-config
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: kafka-config
+    environment: {{ .Values.global.environment }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "7"
+data:
+  # Kafka client configuration (KRaft mode)
+  client.properties: |
+    # Kafka Client Configuration for EPay Pre-Prod (KRaft Mode)
+    bootstrap.servers={{ .Values.kafka.cluster.name }}-kafka-bootstrap.{{ .Values.kafka.namespace }}.svc.cluster.local:9092
+    
+    # Producer configuration
+    acks=all
+    retries=2147483647
+    max.in.flight.requests.per.connection=5
+    enable.idempotence=true
+    compression.type=snappy
+    batch.size=16384
+    linger.ms=5
+    buffer.memory=33554432
+    
+    # Consumer configuration
+    auto.offset.reset=earliest
+    enable.auto.commit=false
+    max.poll.records=500
+    fetch.min.bytes=1
+    fetch.max.wait.ms=500
+    
+    # Security configuration (disabled for pre-prod)
+    security.protocol=PLAINTEXT
+
+  # KRaft specific information
+  kraft-info.md: |
+    # Kafka KRaft Mode Configuration
+    
+    ## Overview
+    This Kafka cluster is running in KRaft mode (Kafka Raft) which eliminates the need for Apache Zookeeper.
+    
+    ## Architecture
+    - **Controller Nodes**: {{ .Values.kafka.cluster.controller.replicas }} replicas handling metadata
+    - **Broker Nodes**: {{ .Values.kafka.cluster.broker.replicas }} replicas handling client requests
+    - **Storage**: JBOD (Just a Bunch of Disks) with multiple volumes per broker
+    
+    ## Benefits of KRaft
+    - Simplified architecture (no Zookeeper dependency)
+    - Better scalability and performance
+    - Faster metadata operations
+    - Reduced operational complexity
+    
+    ## Connection Details
+    - Bootstrap servers: {{ .Values.kafka.cluster.name }}-kafka-bootstrap.{{ .Values.kafka.namespace }}.svc.cluster.local:9092
+    - TLS port: 9093 (if TLS is enabled)
+    - Plain port: 9092
+{{- end }}
