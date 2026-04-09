@@ -1,3 +1,10 @@
+This site can’t be reached
+The webpage at https://uat-kafkaconsole.apps.uat.epay.sbi/ might be temporarily down or it may have moved permanently to a new web address.
+ERR_TUNNEL_CONNECTION_FAILED
+
+
+
+
 [osuser@bastion ~]$ oc get po -n uat-kafka
 NAME                                                READY   STATUS    RESTARTS        AGE
 uat-console-console-deployment-6ff9b4f4bb-rdlwz     2/2     Running   0               5m35s
@@ -11,3 +18,5 @@ uat-kafka-cluster-cruise-control-85b7474f57-wkt48   1/1     Running   190 (34d a
 uat-kafka-cluster-entity-operator-668845cdc-pzmh5   2/2     Running   0               76d
 uat-kafka-mirror-maker-mirrormaker2-0               0/1     Pending   0               105d
 [osuser@bastion ~]$
+
+
