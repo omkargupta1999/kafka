@@ -1,48 +1,144 @@
-[osuser@bastion ~]$ oc get po -n uat-kafka
-NAME                                                READY   STATUS    RESTARTS        AGE
-uat-console-console-deployment-6ff9b4f4bb-rdlwz     2/2     Running   0               5m35s
-uat-kafka-cluster-broker-0                          1/1     Running   0               34d
-uat-kafka-cluster-broker-1                          1/1     Running   0               34d
-uat-kafka-cluster-broker-2                          1/1     Running   0               76d
-uat-kafka-cluster-controller-3                      1/1     Running   0               76d
-uat-kafka-cluster-controller-4                      1/1     Running   0               76d
-uat-kafka-cluster-controller-5                      1/1     Running   0               76d
-uat-kafka-cluster-cruise-control-85b7474f57-wkt48   1/1     Running   190 (34d ago)   76d
-uat-kafka-cluster-entity-operator-668845cdc-pzmh5   2/2     Running   0               76d
-uat-kafka-mirror-maker-mirrormaker2-0               0/1     Pending   0               105d
-[osuser@bastion ~]$ oc get route -n uat-kafka
+Getting below error while accessing the kafka console , Share below details as well for your reference.
+Error:
+This site can’t be reached
+The webpage at https://uat-kafkaconsole.apps.uat.epay.sbi/ might be temporarily down or it may have moved permanently to a new web address.
+ERR_TUNNEL_CONNECTION_FAILED
+
+
+
+
+
+
+[osuser@bastion ~]$ oc describe svc uat-console-console-service -n uat-kafka
+Name:              uat-console-console-service
+Namespace:         uat-kafka
+Labels:            app.kubernetes.io/managed-by=streamshub-console-operator
+                   app.kubernetes.io/name=console
+Annotations:       javaoperatorsdk.io/previous: 2770b898-15bf-4688-a90f-3e7d0b130358
+Selector:          app.kubernetes.io/instance=uat-console-console-deployment
+Type:              ClusterIP
+IP Family Policy:  SingleStack
+IP Families:       IPv4
+IP:                172.30.127.213
+IPs:               172.30.127.213
+Port:              <unset>  80/TCP
+TargetPort:        3000/TCP
+Endpoints:         172.16.21.153:3000
+Session Affinity:  None
+Events:            <none>
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc get po -n uat-kafka -o wide
+NAME                                                READY   STATUS    RESTARTS        AGE    IP              NODE                   NOMINATED NODE   READINESS GATES
+uat-console-console-deployment-6ff9b4f4bb-rdlwz     2/2     Running   0               16m    172.16.21.153   worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-broker-0                          1/1     Running   0               34d    172.16.19.191   worker1.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-broker-1                          1/1     Running   0               34d    172.16.21.27    worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-broker-2                          1/1     Running   0               76d    172.16.22.126   worker3.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-controller-3                      1/1     Running   0               76d    172.16.22.83    worker3.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-controller-4                      1/1     Running   0               76d    172.16.20.236   worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-controller-5                      1/1     Running   0               76d    172.16.22.88    worker3.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-cruise-control-85b7474f57-wkt48   1/1     Running   190 (34d ago)   76d    172.16.20.16    worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-entity-operator-668845cdc-pzmh5   2/2     Running   0               76d    172.16.18.11    worker1.uat.epay.sbi   <none>           <none>
+uat-kafka-mirror-maker-mirrormaker2-0               0/1     Pending   0               105d   <none>          <none>                 <none>           <none>
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc get po -n uat-kafka -o wide
+NAME                                                READY   STATUS    RESTARTS        AGE    IP              NODE                   NOMINATED NODE   READINESS GATES
+uat-console-console-deployment-6ff9b4f4bb-rdlwz     2/2     Running   0               17m    172.16.21.153   worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-broker-0                          1/1     Running   0               34d    172.16.19.191   worker1.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-broker-1                          1/1     Running   0               34d    172.16.21.27    worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-broker-2                          1/1     Running   0               76d    172.16.22.126   worker3.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-controller-3                      1/1     Running   0               76d    172.16.22.83    worker3.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-controller-4                      1/1     Running   0               76d    172.16.20.236   worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-controller-5                      1/1     Running   0               76d    172.16.22.88    worker3.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-cruise-control-85b7474f57-wkt48   1/1     Running   190 (34d ago)   76d    172.16.20.16    worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-entity-operator-668845cdc-pzmh5   2/2     Running   0               76d    172.16.18.11    worker1.uat.epay.sbi   <none>           <none>
+uat-kafka-mirror-maker-mirrormaker2-0               0/1     Pending   0               105d   <none>          <none>                 <none>           <none>
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc get po -n uat-kafka -o wide
+NAME                                                READY   STATUS    RESTARTS        AGE    IP              NODE                   NOMINATED NODE   READINESS GATES
+uat-console-console-deployment-6ff9b4f4bb-rdlwz     2/2     Running   0               17m    172.16.21.153   worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-broker-0                          1/1     Running   0               34d    172.16.19.191   worker1.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-broker-1                          1/1     Running   0               34d    172.16.21.27    worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-broker-2                          1/1     Running   0               76d    172.16.22.126   worker3.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-controller-3                      1/1     Running   0               76d    172.16.22.83    worker3.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-controller-4                      1/1     Running   0               76d    172.16.20.236   worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-controller-5                      1/1     Running   0               76d    172.16.22.88    worker3.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-cruise-control-85b7474f57-wkt48   1/1     Running   190 (34d ago)   76d    172.16.20.16    worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-entity-operator-668845cdc-pzmh5   2/2     Running   0               76d    172.16.18.11    worker1.uat.epay.sbi   <none>           <none>
+uat-kafka-mirror-maker-mirrormaker2-0               0/1     Pending   0               105d   <none>          <none>                 <none>           <none>
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc get po -n uat-kafka -o wide
+NAME                                                READY   STATUS    RESTARTS        AGE    IP              NODE                   NOMINATED NODE   READINESS GATES
+uat-console-console-deployment-6ff9b4f4bb-rdlwz     2/2     Running   0               17m    172.16.21.153   worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-broker-0                          1/1     Running   0               34d    172.16.19.191   worker1.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-broker-1                          1/1     Running   0               34d    172.16.21.27    worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-broker-2                          1/1     Running   0               76d    172.16.22.126   worker3.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-controller-3                      1/1     Running   0               76d    172.16.22.83    worker3.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-controller-4                      1/1     Running   0               76d    172.16.20.236   worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-controller-5                      1/1     Running   0               76d    172.16.22.88    worker3.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-cruise-control-85b7474f57-wkt48   1/1     Running   190 (34d ago)   76d    172.16.20.16    worker2.uat.epay.sbi   <none>           <none>
+uat-kafka-cluster-entity-operator-668845cdc-pzmh5   2/2     Running   0               76d    172.16.18.11    worker1.uat.epay.sbi   <none>           <none>
+uat-kafka-mirror-maker-mirrormaker2-0               0/1     Pending   0               105d   <none>          <none>                 <none>           <none>
+[osuser@bastion ~]$ oc get routes -n uat-kafka
 NAME                                HOST/PORT                            PATH   SERVICES                      PORT    TERMINATION     WILDCARD
 uat-console-console-ingress-44wmc   uat-kafkaconsole.apps.uat.epay.sbi          uat-console-console-service   <all>   edge/Redirect   None
-[osuser@bastion ~]$ oc describe route uat-console-console-deployment-6ff9b4f4bb-rdlwz -n uat-kafka
-Error from server (NotFound): routes.route.openshift.io "uat-console-console-deployment-6ff9b4f4bb-rdlwz" not found
-[osuser@bastion ~]$ oc describe route uat-console -n uat-kafka
-Name:                   uat-console-console-ingress-44wmc
-Namespace:              uat-kafka
-Created:                4 months ago
-Labels:                 app.kubernetes.io/managed-by=streamshub-console-operator
-                        app.kubernetes.io/name=console
-Annotations:            javaoperatorsdk.io/previous=d5deddef-995f-40a1-917e-1425f8b7f4c0
-                        nginx.ingress.kubernetes.io/backend-protocol=HTTP
-                        route.openshift.io/termination=edge
-Requested Host:         uat-kafkaconsole.apps.uat.epay.sbi
-                           exposed on router default (host router-default.apps.dev.sbiepay.sbi) 4 months ago
-Path:                   <none>
-TLS Termination:        edge
-Insecure Policy:        Redirect
-Endpoint Port:          <all endpoint ports>
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc get routes -n uat-kafka  uat-console-console-ingress-44wmc -o yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    javaoperatorsdk.io/previous: d5deddef-995f-40a1-917e-1425f8b7f4c0
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    route.openshift.io/termination: edge
+  creationTimestamp: "2025-11-12T06:23:45Z"
+  labels:
+    app.kubernetes.io/managed-by: streamshub-console-operator
+    app.kubernetes.io/name: console
+  name: uat-console-console-ingress-44wmc
+  namespace: uat-kafka
+  ownerReferences:
+  - apiVersion: networking.k8s.io/v1
+    controller: true
+    kind: Ingress
+    name: uat-console-console-ingress
+    uid: 9a6e1812-51fe-4d7a-a7c9-3267351ca847
+  resourceVersion: "497863901"
+  uid: e8acf13d-93e6-4bbc-86b3-364805c7913f
+spec:
+  host: uat-kafkaconsole.apps.uat.epay.sbi
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: uat-console-console-service
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+  - conditions:
+    - lastTransitionTime: "2025-11-12T06:23:45Z"
+      status: "True"
+      type: Admitted
+    host: uat-kafkaconsole.apps.uat.epay.sbi
+    routerCanonicalHostname: router-default.apps.dev.sbiepay.sbi
+    routerName: default
+    wildcardPolicy: None
 
-Service:        uat-console-console-service
-Weight:         100 (100%)
-Endpoints:      <none>
 
-[osuser@bastion ~]$ curl -vk https://uat-kafkaconsole.apps.uat.epay.sbi
-* Rebuilt URL to: https://uat-kafkaconsole.apps.uat.epay.sbi/
-* Could not resolve host: uat-kafkaconsole.apps.uat.epay.sbi
-* Closing connection 0
-curl: (6) Could not resolve host: uat-kafkaconsole.apps.uat.epay.sbi
-[osuser@bastion ~]$ curl -kv https://uat-kafkaconsole.apps.uat.epay.sbi
-* Rebuilt URL to: https://uat-kafkaconsole.apps.uat.epay.sbi/
-* Could not resolve host: uat-kafkaconsole.apps.uat.epay.sbi
-* Closing connection 0
-curl: (6) Could not resolve host: uat-kafkaconsole.apps.uat.epay.sbi
-[osuser@bastion ~
+------------------
+
+[osuser@bastion ~]$ oc get po --show-labels  -n uat-kafka
+NAME                                                READY   STATUS    RESTARTS        AGE    LABELS
+uat-console-console-deployment-6ff9b4f4bb-rdlwz     2/2     Running   0               19m    app.kubernetes.io/instance=uat-console-console-deployment,pod-template-hash=6ff9b4f4bb
+uat-kafka-cluster-broker-0                          1/1     Running   0               34d    app.kubernetes.io/instance=uat-kafka-cluster,app.kubernetes.io/managed-by=strimzi-cluster-operator,app.kubernetes.io/name=kafka,app.kubernetes.io/part-of=strimzi-uat-kafka-cluster,com.company=Red_Hat,environment=uat,rht.comp=AMQ_Streams,rht.comp_ver=3.0.1,rht.prod_name=Red_Hat_Application_Foundations,rht.prod_ver=2025.Q3,rht.subcomp=kafka-broker,rht.subcomp_t=application,strimzi.io/broker-role=true,strimzi.io/cluster=uat-kafka-cluster,strimzi.io/component-type=kafka,strimzi.io/controller-name=uat-kafka-cluster-broker,strimzi.io/controller-role=false,strimzi.io/controller=strimzipodset,strimzi.io/kind=Kafka,strimzi.io/name=uat-kafka-cluster-kafka,strimzi.io/pod-name=uat-kafka-cluster-broker-0,strimzi.io/pool-name=broker
+uat-kafka-cluster-broker-1                          1/1     Running   0               34d    app.kubernetes.io/instance=uat-kafka-cluster,app.kubernetes.io/managed-by=strimzi-cluster-operator,app.kubernetes.io/name=kafka,app.kubernetes.io/part-of=strimzi-uat-kafka-cluster,com.company=Red_Hat,environment=uat,rht.comp=AMQ_Streams,rht.comp_ver=3.0.1,rht.prod_name=Red_Hat_Application_Foundations,rht.prod_ver=2025.Q3,rht.subcomp=kafka-broker,rht.subcomp_t=application,strimzi.io/broker-role=true,strimzi.io/cluster=uat-kafka-cluster,strimzi.io/component-type=kafka,strimzi.io/controller-name=uat-kafka-cluster-broker,strimzi.io/controller-role=false,strimzi.io/controller=strimzipodset,strimzi.io/kind=Kafka,strimzi.io/name=uat-kafka-cluster-kafka,strimzi.io/pod-name=uat-kafka-cluster-broker-1,strimzi.io/pool-name=broker
+uat-kafka-cluster-broker-2                          1/1     Running   0               76d    app.kubernetes.io/instance=uat-kafka-cluster,app.kubernetes.io/managed-by=strimzi-cluster-operator,app.kubernetes.io/name=kafka,app.kubernetes.io/part-of=strimzi-uat-kafka-cluster,com.company=Red_Hat,environment=uat,rht.comp=AMQ_Streams,rht.comp_ver=3.0.1,rht.prod_name=Red_Hat_Application_Foundations,rht.prod_ver=2025.Q3,rht.subcomp=kafka-broker,rht.subcomp_t=application,strimzi.io/broker-role=true,strimzi.io/cluster=uat-kafka-cluster,strimzi.io/component-type=kafka,strimzi.io/controller-name=uat-kafka-cluster-broker,strimzi.io/controller-role=false,strimzi.io/controller=strimzipodset,strimzi.io/kind=Kafka,strimzi.io/name=uat-kafka-cluster-kafka,strimzi.io/pod-name=uat-kafka-cluster-broker-2,strimzi.io/pool-name=broker
+uat-kafka-cluster-controller-3                      1/1     Running   0               76d    app.kubernetes.io/instance=uat-kafka-cluster,app.kubernetes.io/managed-by=strimzi-cluster-operator,app.kubernetes.io/name=kafka,app.kubernetes.io/part-of=strimzi-uat-kafka-cluster,com.company=Red_Hat,environment=uat,rht.comp=AMQ_Streams,rht.comp_ver=3.0.1,rht.prod_name=Red_Hat_Application_Foundations,rht.prod_ver=2025.Q3,rht.subcomp=kafka-broker,rht.subcomp_t=application,strimzi.io/broker-role=false,strimzi.io/cluster=uat-kafka-cluster,strimzi.io/component-type=kafka,strimzi.io/controller-name=uat-kafka-cluster-controller,strimzi.io/controller-role=true,strimzi.io/controller=strimzipodset,strimzi.io/kind=Kafka,strimzi.io/name=uat-kafka-cluster-kafka,strimzi.io/pod-name=uat-kafka-cluster-controller-3,strimzi.io/pool-name=controller
+uat-kafka-cluster-controller-4                      1/1     Running   0               76d    app.kubernetes.io/instance=uat-kafka-cluster,app.kubernetes.io/managed-by=strimzi-cluster-operator,app.kubernetes.io/name=kafka,app.kubernetes.io/part-of=strimzi-uat-kafka-cluster,com.company=Red_Hat,environment=uat,rht.comp=AMQ_Streams,rht.comp_ver=3.0.1,rht.prod_name=Red_Hat_Application_Foundations,rht.prod_ver=2025.Q3,rht.subcomp=kafka-broker,rht.subcomp_t=application,strimzi.io/broker-role=false,strimzi.io/cluster=uat-kafka-cluster,strimzi.io/component-type=kafka,strimzi.io/controller-name=uat-kafka-cluster-controller,strimzi.io/controller-role=true,strimzi.io/controller=strimzipodset,strimzi.io/kind=Kafka,strimzi.io/name=uat-kafka-cluster-kafka,strimzi.io/pod-name=uat-kafka-cluster-controller-4,strimzi.io/pool-name=controller
+uat-kafka-cluster-controller-5                      1/1     Running   0               76d    app.kubernetes.io/instance=uat-kafka-cluster,app.kubernetes.io/managed-by=strimzi-cluster-operator,app.kubernetes.io/name=kafka,app.kubernetes.io/part-of=strimzi-uat-kafka-cluster,com.company=Red_Hat,environment=uat,rht.comp=AMQ_Streams,rht.comp_ver=3.0.1,rht.prod_name=Red_Hat_Application_Foundations,rht.prod_ver=2025.Q3,rht.subcomp=kafka-broker,rht.subcomp_t=application,strimzi.io/broker-role=false,strimzi.io/cluster=uat-kafka-cluster,strimzi.io/component-type=kafka,strimzi.io/controller-name=uat-kafka-cluster-controller,strimzi.io/controller-role=true,strimzi.io/controller=strimzipodset,strimzi.io/kind=Kafka,strimzi.io/name=uat-kafka-cluster-kafka,strimzi.io/pod-name=uat-kafka-cluster-controller-5,strimzi.io/pool-name=controller
+uat-kafka-cluster-cruise-control-85b7474f57-wkt48   1/1     Running   190 (34d ago)   76d    app.kubernetes.io/instance=uat-kafka-cluster,app.kubernetes.io/managed-by=strimzi-cluster-operator,app.kubernetes.io/name=cruise-control,app.kubernetes.io/part-of=strimzi-uat-kafka-cluster,com.company=Red_Hat,environment=uat,pod-template-hash=85b7474f57,rht.comp=AMQ_Streams,rht.comp_ver=3.0.1,rht.prod_name=Red_Hat_Application_Foundations,rht.prod_ver=2025.Q3,rht.subcomp=cruise-control,rht.subcomp_t=application,strimzi.io/cluster=uat-kafka-cluster,strimzi.io/component-type=cruise-control,strimzi.io/kind=Kafka,strimzi.io/name=uat-kafka-cluster-cruise-control
+uat-kafka-cluster-entity-operator-668845cdc-pzmh5   2/2     Running   0               77d    app.kubernetes.io/instance=uat-kafka-cluster,app.kubernetes.io/managed-by=strimzi-cluster-operator,app.kubernetes.io/name=entity-operator,app.kubernetes.io/part-of=strimzi-uat-kafka-cluster,com.company=Red_Hat,environment=uat,pod-template-hash=668845cdc,rht.comp=AMQ_Streams,rht.comp_ver=3.0.1,rht.prod_name=Red_Hat_Application_Foundations,rht.prod_ver=2025.Q3,rht.subcomp=entity-operator,rht.subcomp_t=infrastructure,strimzi.io/cluster=uat-kafka-cluster,strimzi.io/component-type=entity-operator,strimzi.io/kind=Kafka,strimzi.io/name=uat-kafka-cluster-entity-operator
+uat-kafka-mirror-maker-mirrormaker2-0               0/1     Pending   0               105d   app.kubernetes.io/instance=uat-kafka-mirror-maker,app.kubernetes.io/managed-by=strimzi-cluster-operator,app.kubernetes.io/name=kafka-mirror-maker-2,app.kubernetes.io/part-of=strimzi-uat-kafka-mirror-maker,com.company=Red_Hat,environment=uat,rht.comp=AMQ_Streams,rht.comp_ver=3.0.1,rht.prod_name=Red_Hat_Application_Foundations,rht.prod_ver=2025.Q3,rht.subcomp=kafka-connect,rht.subcomp_t=application,strimzi.io/cluster=uat-kafka-mirror-maker,strimzi.io/component-type=kafka-mirror-maker-2,strimzi.io/controller-name=uat-kafka-mirror-maker-mirrormaker2,strimzi.io/controller=strimzipodset,strimzi.io/kind=KafkaMirrorMaker2,strimzi.io/name=uat-kafka-mirror-maker-mirrormaker2,strimzi.io/pod-name=uat-kafka-mirror-maker-mirrormaker2-0
+[osuser@bastion ~]$
+
