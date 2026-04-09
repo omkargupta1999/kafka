@@ -1,79 +1,31 @@
+oc patch console uat-console -n uat-kafka -p '{"metadata":{"finalizers":[]}}' --type=merge
+oc delete console uat-console -n uat-kafka
+
+++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 apiVersion: console.streamshub.github.com/v1alpha1
 kind: Console
 metadata:
-  annotations:
-    meta.helm.sh/release-name: epay-common
-    meta.helm.sh/release-namespace: dev-epay-common
-  resourceVersion: '692376897'
-  name: dev-console
-  uid: 30cee49b-47aa-4d26-afc8-8051ac30415c
-  creationTimestamp: '2025-11-18T11:28:33Z'
-  generation: 5
-  managedFields:
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            'f:meta.helm.sh/release-name': {}
-            'f:meta.helm.sh/release-namespace': {}
-          'f:finalizers':
-            'v:"consoles.console.streamshub.github.com/finalizer"': {}
-          'f:labels':
-            'f:app.kubernetes.io/managed-by': {}
-        'f:status':
-          'f:conditions': {}
-          'f:observedGeneration': {}
-      manager: consolereconciler
-      operation: Apply
-      subresource: status
-      time: '2026-04-08T08:20:54Z'
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:finalizers':
-            .: {}
-            'v:"consoles.console.streamshub.github.com/finalizer"': {}
-      manager: fabric8-kubernetes-client
-      operation: Update
-      time: '2025-11-18T11:28:33Z'
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:status': {}
-      manager: fabric8-kubernetes-client
-      operation: Update
-      subresource: status
-      time: '2025-12-17T14:21:12Z'
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            .: {}
-            'f:meta.helm.sh/release-name': {}
-            'f:meta.helm.sh/release-namespace': {}
-          'f:labels':
-            .: {}
-            'f:app.kubernetes.io/managed-by': {}
-        'f:spec':
-          .: {}
-          'f:hostname': {}
-          'f:kafkaClusters': {}
-          'f:metricsSources': {}
-      manager: helm
-      operation: Update
-      time: '2026-01-23T05:50:27Z'
-  namespace: dev-kafka
-  finalizers:
-    - consoles.console.streamshub.github.com/finalizer
-  labels:
-    app.kubernetes.io/managed-by: Helm
+  name: uat-console
+  namespace: uat-kafka
+
 spec:
-  hostname: dev-kafkaconsole.apps.dev.sbiepay.sbi
+  hostname: uat-kafkaconsole.apps.uat.epay.sbi
+
   kafkaClusters:
-    - adminProperties:
+    - name: uat-kafka-cluster
+      namespace: uat-kafka
+      listener: plain
+
+      # ✅ NO credentials (match DEV)
+      
+      properties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+
+      adminProperties:
         values:
           - name: security.protocol
             value: PLAINTEXT
@@ -81,36 +33,22 @@ spec:
             value: '30000'
           - name: default.api.timeout.ms
             value: '30000'
-        valuesFrom: []
+
       consumerProperties:
         values:
           - name: security.protocol
             value: PLAINTEXT
           - name: request.timeout.ms
             value: '30000'
-        valuesFrom: []
-      listener: plain
-      name: dev-kafka-cluster
-      namespace: dev-kafka
+
       producerProperties:
         values:
           - name: security.protocol
             value: PLAINTEXT
           - name: request.timeout.ms
             value: '30000'
-        valuesFrom: []
-      properties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
-        valuesFrom: []
+
+  # ✅ SAME as DEV (key fix)
   metricsSources:
     - name: k8s
       type: openshift-monitoring
-status:
-  conditions:
-    - lastTransitionTime: '2026-04-08T08:20:54.305832174Z'
-      message: All resources ready
-      status: 'True'
-      type: Ready
-  observedGeneration: 5
