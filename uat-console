@@ -1,10 +1,3 @@
-This site can’t be reached
-The webpage at https://uat-kafkaconsole.apps.uat.epay.sbi/ might be temporarily down or it may have moved permanently to a new web address.
-ERR_TUNNEL_CONNECTION_FAILED
-
-
-
-
 [osuser@bastion ~]$ oc get po -n uat-kafka
 NAME                                                READY   STATUS    RESTARTS        AGE
 uat-console-console-deployment-6ff9b4f4bb-rdlwz     2/2     Running   0               5m35s
@@ -17,6 +10,39 @@ uat-kafka-cluster-controller-5                      1/1     Running   0         
 uat-kafka-cluster-cruise-control-85b7474f57-wkt48   1/1     Running   190 (34d ago)   76d
 uat-kafka-cluster-entity-operator-668845cdc-pzmh5   2/2     Running   0               76d
 uat-kafka-mirror-maker-mirrormaker2-0               0/1     Pending   0               105d
-[osuser@bastion ~]$
+[osuser@bastion ~]$ oc get route -n uat-kafka
+NAME                                HOST/PORT                            PATH   SERVICES                      PORT    TERMINATION     WILDCARD
+uat-console-console-ingress-44wmc   uat-kafkaconsole.apps.uat.epay.sbi          uat-console-console-service   <all>   edge/Redirect   None
+[osuser@bastion ~]$ oc describe route uat-console-console-deployment-6ff9b4f4bb-rdlwz -n uat-kafka
+Error from server (NotFound): routes.route.openshift.io "uat-console-console-deployment-6ff9b4f4bb-rdlwz" not found
+[osuser@bastion ~]$ oc describe route uat-console -n uat-kafka
+Name:                   uat-console-console-ingress-44wmc
+Namespace:              uat-kafka
+Created:                4 months ago
+Labels:                 app.kubernetes.io/managed-by=streamshub-console-operator
+                        app.kubernetes.io/name=console
+Annotations:            javaoperatorsdk.io/previous=d5deddef-995f-40a1-917e-1425f8b7f4c0
+                        nginx.ingress.kubernetes.io/backend-protocol=HTTP
+                        route.openshift.io/termination=edge
+Requested Host:         uat-kafkaconsole.apps.uat.epay.sbi
+                           exposed on router default (host router-default.apps.dev.sbiepay.sbi) 4 months ago
+Path:                   <none>
+TLS Termination:        edge
+Insecure Policy:        Redirect
+Endpoint Port:          <all endpoint ports>
 
+Service:        uat-console-console-service
+Weight:         100 (100%)
+Endpoints:      <none>
 
+[osuser@bastion ~]$ curl -vk https://uat-kafkaconsole.apps.uat.epay.sbi
+* Rebuilt URL to: https://uat-kafkaconsole.apps.uat.epay.sbi/
+* Could not resolve host: uat-kafkaconsole.apps.uat.epay.sbi
+* Closing connection 0
+curl: (6) Could not resolve host: uat-kafkaconsole.apps.uat.epay.sbi
+[osuser@bastion ~]$ curl -kv https://uat-kafkaconsole.apps.uat.epay.sbi
+* Rebuilt URL to: https://uat-kafkaconsole.apps.uat.epay.sbi/
+* Could not resolve host: uat-kafkaconsole.apps.uat.epay.sbi
+* Closing connection 0
+curl: (6) Could not resolve host: uat-kafkaconsole.apps.uat.epay.sbi
+[osuser@bastion ~
