@@ -1,106 +1,42 @@
 apiVersion: console.streamshub.github.com/v1alpha1
 kind: Console
 metadata:
-  annotations:
-    meta.helm.sh/release-name: epay-common
-    meta.helm.sh/release-namespace: uat-epay-common
-  resourceVersion: '694104042'
   name: uat-console
-  uid: ee657354-9749-476c-bdd9-f02c905c1321
-  creationTimestamp: '2025-11-11T12:15:00Z'
-  generation: 3
-  managedFields:
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            'f:meta.helm.sh/release-name': {}
-            'f:meta.helm.sh/release-namespace': {}
-          'f:finalizers':
-            'v:"consoles.console.streamshub.github.com/finalizer"': {}
-          'f:labels':
-            'f:app.kubernetes.io/managed-by': {}
-        'f:status':
-          'f:conditions': {}
-          'f:observedGeneration': {}
-      manager: consolereconciler
-      operation: Apply
-      subresource: status
-      time: '2026-04-09T06:24:19Z'
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:finalizers':
-            .: {}
-            'v:"consoles.console.streamshub.github.com/finalizer"': {}
-      manager: fabric8-kubernetes-client
-      operation: Update
-      time: '2025-11-11T12:15:00Z'
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:status': {}
-      manager: fabric8-kubernetes-client
-      operation: Update
-      subresource: status
-      time: '2025-12-20T05:41:10Z'
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            .: {}
-            'f:meta.helm.sh/release-name': {}
-            'f:meta.helm.sh/release-namespace': {}
-          'f:labels':
-            .: {}
-            'f:app.kubernetes.io/managed-by': {}
-        'f:spec':
-          .: {}
-          'f:hostname': {}
-          'f:kafkaClusters': {}
-          'f:metricsSources': {}
-      manager: helm
-      operation: Update
-      time: '2026-04-09T06:20:43Z'
   namespace: uat-kafka
-  finalizers:
-    - consoles.console.streamshub.github.com/finalizer
-  labels:
-    app.kubernetes.io/managed-by: Helm
 spec:
   hostname: uat-kafkaconsole.apps.uat.epay.sbi
+
   kafkaClusters:
-    - adminProperties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
-      consumerProperties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
+    - name: uat-kafka-cluster
+      namespace: uat-kafka
+      listener: plain
+
       credentials:
         kafkaUser:
           name: epay-user
-      listener: plain
-      name: uat-kafka-cluster
-      namespace: uat-kafka
-      producerProperties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
+
+      # Common Kafka client configs
       properties:
         values:
           - name: security.protocol
             value: PLAINTEXT
-  metricsSources: []
-status:
-  conditions:
-    - lastTransitionTime: '2026-04-09T06:24:19.248002737Z'
-      message: 'Resources not ready: PrometheusDeployment[uat-console-prometheus-deployment]'
-      reason: DependentsNotReady
-      status: 'False'
-      type: Ready
-  observedGeneration: 3
+
+      adminProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+
+      consumerProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+
+      producerProperties:
+        values:
+          - name: security.protocol
+            value: PLAINTEXT
+
+  # Uses OpenShift Monitoring (no internal Prometheus)
+  metricsSources:
+    - name: k8s
+      type: openshift-monitoring
