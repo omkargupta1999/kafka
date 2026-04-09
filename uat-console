@@ -1,115 +1,13 @@
-apiVersion: console.streamshub.github.com/v1alpha1
-kind: Console
-metadata:
-  annotations:
-    meta.helm.sh/release-name: epay-common
-    meta.helm.sh/release-namespace: uat-epay-common
-  resourceVersion: '694151364'
-  name: uat-console
-  uid: ee657354-9749-476c-bdd9-f02c905c1321
-  creationTimestamp: '2025-11-11T12:15:00Z'
-  generation: 5
-  managedFields:
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            'f:meta.helm.sh/release-name': {}
-            'f:meta.helm.sh/release-namespace': {}
-          'f:finalizers':
-            'v:"consoles.console.streamshub.github.com/finalizer"': {}
-          'f:labels':
-            'f:app.kubernetes.io/managed-by': {}
-        'f:status':
-          'f:conditions': {}
-          'f:observedGeneration': {}
-      manager: consolereconciler
-      operation: Apply
-      subresource: status
-      time: '2026-04-09T07:04:20Z'
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:finalizers':
-            .: {}
-            'v:"consoles.console.streamshub.github.com/finalizer"': {}
-      manager: fabric8-kubernetes-client
-      operation: Update
-      time: '2025-11-11T12:15:00Z'
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:status': {}
-      manager: fabric8-kubernetes-client
-      operation: Update
-      subresource: status
-      time: '2025-12-20T05:41:10Z'
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            .: {}
-            'f:meta.helm.sh/release-name': {}
-            'f:meta.helm.sh/release-namespace': {}
-          'f:labels':
-            .: {}
-            'f:app.kubernetes.io/managed-by': {}
-        'f:spec':
-          .: {}
-          'f:hostname': {}
-          'f:kafkaClusters': {}
-          'f:metricsSources': {}
-      manager: helm
-      operation: Update
-      time: '2026-04-09T07:04:08Z'
-  namespace: uat-kafka
-  finalizers:
-    - consoles.console.streamshub.github.com/finalizer
-  labels:
-    app.kubernetes.io/managed-by: Helm
-spec:
-  hostname: uat-kafkaconsole.apps.uat.epay.sbi
-  kafkaClusters:
-    - adminProperties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
-          - name: request.timeout.ms
-            value: '30000'
-          - name: default.api.timeout.ms
-            value: '30000'
-      consumerProperties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
-          - name: request.timeout.ms
-            value: '30000'
-      credentials:
-        kafkaUser:
-          name: epay-user
-      listener: plain
-      name: uat-kafka-cluster
-      namespace: uat-kafka
-      producerProperties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
-          - name: request.timeout.ms
-            value: '30000'
-      properties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
-  metricsSources:
-    - name: k8s
-      type: openshift-monitoring
-status:
-  conditions:
-    - lastTransitionTime: '2026-04-09T07:04:20.394373310Z'
-      message: All resources ready
-      status: 'True'
-      type: Ready
-  observedGeneration: 5
+[osuser@bastion ~]$ oc get po -n uat-kafka
+NAME                                                READY   STATUS    RESTARTS        AGE
+uat-console-console-deployment-6ff9b4f4bb-rdlwz     2/2     Running   0               5m35s
+uat-kafka-cluster-broker-0                          1/1     Running   0               34d
+uat-kafka-cluster-broker-1                          1/1     Running   0               34d
+uat-kafka-cluster-broker-2                          1/1     Running   0               76d
+uat-kafka-cluster-controller-3                      1/1     Running   0               76d
+uat-kafka-cluster-controller-4                      1/1     Running   0               76d
+uat-kafka-cluster-controller-5                      1/1     Running   0               76d
+uat-kafka-cluster-cruise-control-85b7474f57-wkt48   1/1     Running   190 (34d ago)   76d
+uat-kafka-cluster-entity-operator-668845cdc-pzmh5   2/2     Running   0               76d
+uat-kafka-mirror-maker-mirrormaker2-0               0/1     Pending   0               105d
+[osuser@bastion ~]$
