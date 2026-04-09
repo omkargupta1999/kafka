@@ -48,3 +48,57 @@ Error from server (NotFound): kafkas.kafka.strimzi.io "uat-kafka" not found
       bootstrapServers: uat-kafka-cluster-kafka-bootstrap.uat-kafka.svc:9093
       certificates:
 [osuser@bastion ~]$
+[osuser@bastion ~]$ oc rsh uat-kafka-cluster-broker-0
+sh-5.1$ cd bin
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --command-config client.properties --describe --topic strimzi.crusecontrol.metrics
+client.properties
+java.nio.file.NoSuchFileException: client.properties
+        at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+        at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+        at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+        at java.base/sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:218)
+        at java.base/java.nio.file.Files.newByteChannel(Files.java:380)
+        at java.base/java.nio.file.Files.newByteChannel(Files.java:432)
+        at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:422)
+        at java.base/java.nio.file.Files.newInputStream(Files.java:160)
+        at org.apache.kafka.common.utils.Utils.loadProps(Utils.java:655)
+        at org.apache.kafka.common.utils.Utils.loadProps(Utils.java:642)
+        at org.apache.kafka.tools.TopicCommand$TopicCommandOptions.commandConfig(TopicCommand.java:888)
+        at org.apache.kafka.tools.TopicCommand.execute(TopicCommand.java:101)
+        at org.apache.kafka.tools.TopicCommand.mainNoExit(TopicCommand.java:90)
+        at org.apache.kafka.tools.TopicCommand.main(TopicCommand.java:85)
+
+sh-5.1$ ./kafka-topics.sh --bootstrap-server localhost:9092 --list
+__consumer_offsets
+gst_invoice_download_topic
+gst_report_status_topic
+inb_offline_gateway_pooling_local
+merchant_email_notification_topic
+merchant_report_alert_topic
+merchant_report_topic
+merchant_sms_notification_topic
+ops_payout_topic
+ops_recon_fail_ack_topic
+ops_recon_file_topic
+ops_recon_record_duplicate_topic
+ops_recon_record_matched_topic
+ops_recon_record_unmatched_topic
+ops_refund_adjust_confirmation_topic
+ops_refund_adjust_detail_topic
+ops_report_confirmation_topic
+ops_report_generation_topic
+otherinb_offline_gateway_pooling_dev_other_inb
+process_bookingDetails_topic
+process_bulk_refund_topic
+report_email_notification_topic
+report_sms_notification_topic
+strimzi.cruisecontrol.metrics
+strimzi.cruisecontrol.modeltrainingsamples
+strimzi.cruisecontrol.partitionmetricsamples
+transaction_email_notification_topic
+transaction_push_verification_topic
+transaction_sms_notification_topic
+upibhimqr_offline_gateway_pooling_dev_upi_qr
+upiself_offline_gateway_pooling_dev_upi_self
+sh-5.1$
+
