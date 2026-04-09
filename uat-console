@@ -1,39 +1,6 @@
-P-260431882: Failure rate increase on Web service CardPaymentController - sbiepay2prod | SBIEPAY PROD REVAMP - Escalation Level 1 | OPEN
-CentralizedMonitoring@alerts.sbi.bank.in
-
-​devops.sbiepay;​
-Namdev Anantrao Gadve;​
-Suraj Bharat Andhale;​
-Omkar Gupta;​
-TECH1 SBIEPAY;​NOC team sbiepay​
-​
-sunadmin1 sbiepay​
-OPEN Problem P-260431882 in environment SBI One Observability 2-0
-
-Problem detected at: 13:14 (IST) 09.04.2026
-1 impacted service
-
-Web service
-CardPaymentController - sbiepay2prod
-Failure rate increase
-21.8 requests/min impacted
-by a failure rate increase to 24 %
-Service method: All methods affected
-dt.entity.cloud_application_namespace: [CLOUD_APPLICATION_NAMESPACE-E472F29BB17A40AC]
-dt.entity.kubernetes_cluster: [KUBERNETES_CLUSTER-E82754FB18FF0E03]
-k8s.cluster.name: [SBIEPAY PROD - OCP]
-k8s.cluster.uid: [0b00b9f0-b10c-4b95-858d-e8929fd2eee7]
-k8s.namespace.name: [prod-dc-transaction]
-
-Root cause
-Web service
-CardPaymentController - sbiepay2prod
-Failure rate increase
-21.8 requests/min impacted
-by a failure rate increase to 24 %
-Service method: All methods affected
-dt.entity.cloud_application_namespace: [CLOUD_APPLICATION_NAMESPACE-E472F29BB17A40AC]
-dt.entity.kubernetes_cluster: [KUBERNETES_CLUSTER-E82754FB18FF0E03]
-k8s.cluster.name: [SBIEPAY PROD - OCP]
-k8s.cluster.uid: [0b00b9f0-b10c-4b95-858d-e8929fd2eee7]
-k8s.namespace.name: [prod-dc-transaction]
+[osuser@bastion ~]$ oc get servicemonitor -n uat-kafka
+Error from server (Forbidden): servicemonitors.monitoring.coreos.com is forbidden: User "V1021577" cannot list resource "servicemonitors" in API group "monitoring.coreos.com" in the namespace "uat-kafka"
+[osuser@bastion ~]$ oc get kafka uat-kafka-cluster -n uat-kafka -o yaml | grep -i metrics -A 5
+[osuser@bastion ~]$ oc auth can-i get pods -n openshift-monitoring
+yes
+[osuser@bastion ~]$
