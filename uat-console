@@ -1,45 +1,39 @@
-apiVersion: console.streamshub.github.com/v1alpha1
-kind: Console
-metadata:
-  name: uat-console
-  namespace: uat-kafka
+P-260431882: Failure rate increase on Web service CardPaymentController - sbiepay2prod | SBIEPAY PROD REVAMP - Escalation Level 1 | OPEN
+CentralizedMonitoring@alerts.sbi.bank.in
 
-spec:
-  hostname: uat-kafkaconsole.apps.dev.sbiepay.sbi
+​devops.sbiepay;​
+Namdev Anantrao Gadve;​
+Suraj Bharat Andhale;​
+Omkar Gupta;​
+TECH1 SBIEPAY;​NOC team sbiepay​
+​
+sunadmin1 sbiepay​
+OPEN Problem P-260431882 in environment SBI One Observability 2-0
 
-  kafkaClusters:
-    - name: uat-kafka-cluster
-      namespace: uat-kafka
-      listener: plain
+Problem detected at: 13:14 (IST) 09.04.2026
+1 impacted service
 
-      properties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
+Web service
+CardPaymentController - sbiepay2prod
+Failure rate increase
+21.8 requests/min impacted
+by a failure rate increase to 24 %
+Service method: All methods affected
+dt.entity.cloud_application_namespace: [CLOUD_APPLICATION_NAMESPACE-E472F29BB17A40AC]
+dt.entity.kubernetes_cluster: [KUBERNETES_CLUSTER-E82754FB18FF0E03]
+k8s.cluster.name: [SBIEPAY PROD - OCP]
+k8s.cluster.uid: [0b00b9f0-b10c-4b95-858d-e8929fd2eee7]
+k8s.namespace.name: [prod-dc-transaction]
 
-      adminProperties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
-          - name: request.timeout.ms
-            value: '30000'
-          - name: default.api.timeout.ms
-            value: '30000'
-
-      consumerProperties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
-          - name: request.timeout.ms
-            value: '30000'
-
-      producerProperties:
-        values:
-          - name: security.protocol
-            value: PLAINTEXT
-          - name: request.timeout.ms
-            value: '30000'
-
-  metricsSources:
-    - name: k8s
-      type: openshift-monitoring
+Root cause
+Web service
+CardPaymentController - sbiepay2prod
+Failure rate increase
+21.8 requests/min impacted
+by a failure rate increase to 24 %
+Service method: All methods affected
+dt.entity.cloud_application_namespace: [CLOUD_APPLICATION_NAMESPACE-E472F29BB17A40AC]
+dt.entity.kubernetes_cluster: [KUBERNETES_CLUSTER-E82754FB18FF0E03]
+k8s.cluster.name: [SBIEPAY PROD - OCP]
+k8s.cluster.uid: [0b00b9f0-b10c-4b95-858d-e8929fd2eee7]
+k8s.namespace.name: [prod-dc-transaction]
