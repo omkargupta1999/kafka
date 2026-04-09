@@ -1,78 +1,296 @@
 {{- if .Values.kafka.enabled }}
-# Kafka Metrics ConfigMap
-apiVersion: v1
-kind: ConfigMap
+# Kafka Controller Node Pool (KRaft)
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
 metadata:
-  name: kafka-metrics
+  name: {{ .Values.kafka.cluster.controller.name }}
   namespace: {{ .Values.kafka.namespace }}
   labels:
-    app: strimzi
+    strimzi.io/cluster: {{ .Values.kafka.cluster.name }}
+    app.kubernetes.io/name: {{ .Values.kafka.cluster.controller.name }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-    environment: {{ .Values.global.environment }}
-data:
-  kafka-metrics-config.yml: |-
-{{ .Files.Get "files/kafka-metrics.yaml" | indent 4 }}
-
----
-# Kafka Configuration ConfigMap (KRaft Mode)
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kafka-config
-  namespace: {{ .Values.kafka.namespace }}
-  labels:
-    app.kubernetes.io/name: kafka-config
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/component: kafka-config
+    app.kubernetes.io/component: kafka-controller
     environment: {{ .Values.global.environment }}
   annotations:
-    argocd.argoproj.io/sync-wave: "7"
-data:
-  # Kafka client configuration (KRaft mode)
-  client.properties: |
-    # Kafka Client Configuration for EPay Pre-Prod (KRaft Mode)
-    bootstrap.servers={{ .Values.kafka.cluster.name }}-kafka-bootstrap.{{ .Values.kafka.namespace }}.svc.cluster.local:9092
+    argocd.argoproj.io/sync-wave: "8"
+spec:
+  replicas: {{ .Values.kafka.cluster.controller.replicas }}
+  roles:
+  {{- range .Values.kafka.cluster.controller.roles }}
+  - {{ . }}
+  {{- end }}
+  storage:
+    type: {{ .Values.kafka.cluster.controller.storage.type }}
+    volumes:
+    {{- range .Values.kafka.cluster.controller.storage.volumes }}
+    - id: {{ .id }}
+      type: {{ .type }}
+      size: {{ .size }}
+      {{- if .kraftMetadata }}
+      kraftMetadata: {{ .kraftMetadata }}
+      {{- end }}
+      deleteClaim: {{ .deleteClaim }}
+    {{- end }}
+  
+  # Pod template with affinity, tolerations, and resources
+  template:
+    pod:
+      {{- if .Values.kafka.cluster.controller.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.kafka.cluster.controller.terminationGracePeriodSeconds }}
+      {{- end }}
+      
+      {{- if .Values.kafka.cluster.controller.affinity }}
+      affinity:
+        {{- if .Values.kafka.cluster.controller.affinity.nodeAffinity }}
+        nodeAffinity:
+          {{- if .Values.kafka.cluster.controller.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            {{- range .Values.kafka.cluster.controller.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms }}
+            - matchExpressions:
+              {{- range .matchExpressions }}
+              - key: {{ .key }}
+                operator: {{ .operator }}
+                {{- if .values }}
+                values:
+                {{- range .values }}
+                - {{ . | quote }}
+                {{- end }}
+                {{- end }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+      
+      {{- if .Values.kafka.cluster.controller.tolerations }}
+      tolerations:
+      {{- range .Values.kafka.cluster.controller.tolerations }}
+      - key: {{ .key | quote }}
+        operator: {{ .operator }}
+        {{- if .value }}
+        value: {{ .value | quote }}
+        {{- end }}
+        effect: {{ .effect }}
+        {{- if .tolerationSeconds }}
+        tolerationSeconds: {{ .tolerationSeconds }}
+        {{- end }}
+      {{- end }}
+      {{- end }}
     
-    # Producer configuration
-    acks=all
-    retries=2147483647
-    max.in.flight.requests.per.connection=5
-    enable.idempotence=true
-    compression.type=snappy
-    batch.size=16384
-    linger.ms=5
-    buffer.memory=33554432
-    
-    # Consumer configuration
-    auto.offset.reset=earliest
-    enable.auto.commit=false
-    max.poll.records=500
-    fetch.min.bytes=1
-    fetch.max.wait.ms=500
-    
-    # Security configuration (disabled for pre-prod)
-    security.protocol=PLAINTEXT
+    # Add resource specifications for controller containers
+    {{- if .Values.kafka.cluster.controller.resources }}
+    kafkaContainer:
+      resources:
+        {{- if .Values.kafka.cluster.controller.resources.requests }}
+        requests:
+          {{- if .Values.kafka.cluster.controller.resources.requests.memory }}
+          memory: {{ .Values.kafka.cluster.controller.resources.requests.memory }}
+          {{- end }}
+          {{- if .Values.kafka.cluster.controller.resources.requests.cpu }}
+          cpu: {{ .Values.kafka.cluster.controller.resources.requests.cpu }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.kafka.cluster.controller.resources.limits }}
+        limits:
+          {{- if .Values.kafka.cluster.controller.resources.limits.memory }}
+          memory: {{ .Values.kafka.cluster.controller.resources.limits.memory }}
+          {{- end }}
+          {{- if .Values.kafka.cluster.controller.resources.limits.cpu }}
+          cpu: {{ .Values.kafka.cluster.controller.resources.limits.cpu }}
+          {{- end }}
+        {{- end }}
+    {{- end }}
 
-  # KRaft specific information
-  kraft-info.md: |
-    # Kafka KRaft Mode Configuration
+---
+# Kafka Broker Node Pool (KRaft)
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaNodePool
+metadata:
+  name: {{ .Values.kafka.cluster.broker.name }}
+  namespace: {{ .Values.kafka.namespace }}
+  labels:
+    strimzi.io/cluster: {{ .Values.kafka.cluster.name }}
+    app.kubernetes.io/name: {{ .Values.kafka.cluster.broker.name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: kafka-broker
+    environment: {{ .Values.global.environment }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "8"
+spec:
+  replicas: {{ .Values.kafka.cluster.broker.replicas }}
+  roles:
+  {{- range .Values.kafka.cluster.broker.roles }}
+  - {{ . }}
+  {{- end }}
+  storage:
+    type: {{ .Values.kafka.cluster.broker.storage.type }}
+    volumes:
+    {{- range .Values.kafka.cluster.broker.storage.volumes }}
+    - id: {{ .id }}
+      type: {{ .type }}
+      size: {{ .size }}
+      {{- if .kraftMetadata }}
+      kraftMetadata: {{ .kraftMetadata }}
+      {{- end }}
+      deleteClaim: {{ .deleteClaim }}
+    {{- end }}
+  
+  # Pod template with affinity, tolerations, and resources
+  template:
+    pod:
+      {{- if .Values.kafka.cluster.broker.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.kafka.cluster.broker.terminationGracePeriodSeconds }}
+      {{- end }}
+      
+      {{- if .Values.kafka.cluster.broker.affinity }}
+      affinity:
+        {{- if .Values.kafka.cluster.broker.affinity.nodeAffinity }}
+        nodeAffinity:
+          {{- if .Values.kafka.cluster.broker.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution }}
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            {{- range .Values.kafka.cluster.broker.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms }}
+            - matchExpressions:
+              {{- range .matchExpressions }}
+              - key: {{ .key }}
+                operator: {{ .operator }}
+                {{- if .values }}
+                values:
+                {{- range .values }}
+                - {{ . | quote }}
+                {{- end }}
+                {{- end }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
+      
+      {{- if .Values.kafka.cluster.broker.tolerations }}
+      tolerations:
+      {{- range .Values.kafka.cluster.broker.tolerations }}
+      - key: {{ .key | quote }}
+        operator: {{ .operator }}
+        {{- if .value }}
+        value: {{ .value | quote }}
+        {{- end }}
+        effect: {{ .effect }}
+        {{- if .tolerationSeconds }}
+        tolerationSeconds: {{ .tolerationSeconds }}
+        {{- end }}
+      {{- end }}
+      {{- end }}
     
-    ## Overview
-    This Kafka cluster is running in KRaft mode (Kafka Raft) which eliminates the need for Apache Zookeeper.
+    # Add resource specifications for broker containers
+    {{- if .Values.kafka.cluster.broker.resources }}
+    kafkaContainer:
+      resources:
+        {{- if .Values.kafka.cluster.broker.resources.requests }}
+        requests:
+          {{- if .Values.kafka.cluster.broker.resources.requests.memory }}
+          memory: {{ .Values.kafka.cluster.broker.resources.requests.memory }}
+          {{- end }}
+          {{- if .Values.kafka.cluster.broker.resources.requests.cpu }}
+          cpu: {{ .Values.kafka.cluster.broker.resources.requests.cpu }}
+          {{- end }}
+        {{- end }}
+        {{- if .Values.kafka.cluster.broker.resources.limits }}
+        limits:
+          {{- if .Values.kafka.cluster.broker.resources.limits.memory }}
+          memory: {{ .Values.kafka.cluster.broker.resources.limits.memory }}
+          {{- end }}
+          {{- if .Values.kafka.cluster.broker.resources.limits.cpu }}
+          cpu: {{ .Values.kafka.cluster.broker.resources.limits.cpu }}
+          {{- end }}
+        {{- end }}
+    {{- end }}
+
+---
+# Kafka Cluster (KRaft Mode)
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: {{ .Values.kafka.cluster.name }}
+  namespace: {{ .Values.kafka.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.kafka.cluster.name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: kafka-cluster
+    environment: {{ .Values.global.environment }}
+  annotations:
+    {{- range $key, $value := .Values.kafka.cluster.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    argocd.argoproj.io/sync-wave: "8"
+spec:
+  # Kafka configuration (KRaft mode with KafkaNodePools - no replicas/storage here)
+  kafka:
+    version: {{ .Values.kafka.cluster.version }}
+    metadataVersion: {{ .Values.kafka.cluster.metadataVersion }}
     
-    ## Architecture
-    - **Controller Nodes**: {{ .Values.kafka.cluster.controller.replicas }} replicas handling metadata
-    - **Broker Nodes**: {{ .Values.kafka.cluster.broker.replicas }} replicas handling client requests
-    - **Storage**: JBOD (Just a Bunch of Disks) with multiple volumes per broker
-    
-    ## Benefits of KRaft
-    - Simplified architecture (no Zookeeper dependency)
-    - Better scalability and performance
-    - Faster metadata operations
-    - Reduced operational complexity
-    
-    ## Connection Details
-    - Bootstrap servers: {{ .Values.kafka.cluster.name }}-kafka-bootstrap.{{ .Values.kafka.namespace }}.svc.cluster.local:9092
-    - TLS port: 9093 (if TLS is enabled)
-    - Plain port: 9092
+    # Listener configuration
+    listeners:
+    {{- range .Values.kafka.cluster.kafka.listeners }}
+    - name: {{ .name }}
+      port: {{ .port }}
+      type: {{ .type }}
+      tls: {{ .tls }}
+      #authentication:
+      #type: scram-sha-512
+    {{- end }}
+
+    metricsConfig:
+    type: jmxPrometheusExporter
+    valueFrom:
+      configMapKeyRef:
+        key: {{ .Values.kafka.metricsConfig.key }}
+        name: {{ .Values.kafka.metricsConfig.name }}    
+
+    # Kafka broker configuration
+    config:
+      {{- range $key, $value := .Values.kafka.cluster.kafka.config }}
+      {{- if or (kindIs "float64" $value) (kindIs "int" $value) (kindIs "int64" $value) }}
+      {{ $key }}: {{ $value | int }}
+      {{- else }}
+      {{ $key }}: {{ $value | quote }}
+      {{- end }}
+      {{- end }}
+  
+  # Entity Operator configuration
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
+  
+  {{- if .Values.kafka.cruiseControl.enabled }}
+  # Cruise Control configuration for cluster rebalancing
+  cruiseControl:
+    resources:
+      {{- if .Values.kafka.cruiseControl.resources.requests }}
+      requests:
+        {{- if .Values.kafka.cruiseControl.resources.requests.memory }}
+        memory: {{ .Values.kafka.cruiseControl.resources.requests.memory }}
+        {{- end }}
+        {{- if .Values.kafka.cruiseControl.resources.requests.cpu }}
+        cpu: {{ .Values.kafka.cruiseControl.resources.requests.cpu }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.kafka.cruiseControl.resources.limits }}
+      limits:
+        {{- if .Values.kafka.cruiseControl.resources.limits.memory }}
+        memory: {{ .Values.kafka.cruiseControl.resources.limits.memory }}
+        {{- end }}
+        {{- if .Values.kafka.cruiseControl.resources.limits.cpu }}
+        cpu: {{ .Values.kafka.cruiseControl.resources.limits.cpu }}
+        {{- end }}
+      {{- end }}
+    config:
+      {{- range $key, $value := .Values.kafka.cruiseControl.config }}
+      {{- if or (kindIs "float64" $value) (kindIs "int" $value) (kindIs "int64" $value) }}
+      {{ $key }}: {{ $value | int }}
+      {{- else }}
+      {{ $key }}: {{ $value | quote }}
+      {{- end }}
+      {{- end }}
+  {{- end }}
 {{- end }}
