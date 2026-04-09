@@ -1,8 +1,3 @@
-oc patch console.streamshub.github.com uat-console \
--n uat-kafka -p '{"metadata":{"finalizers":[]}}' --type=merge
-++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
 apiVersion: console.streamshub.github.com/v1alpha1
 kind: Console
 metadata:
@@ -17,8 +12,10 @@ spec:
       namespace: uat-kafka
       listener: plain
 
-      # ✅ NO credentials (match DEV)
-      
+      credentials:
+        kafkaUser:
+          name: epay-user
+
       properties:
         values:
           - name: security.protocol
@@ -47,7 +44,6 @@ spec:
           - name: request.timeout.ms
             value: '30000'
 
-  # ✅ SAME as DEV (key fix)
   metricsSources:
     - name: k8s
       type: openshift-monitoring
