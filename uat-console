@@ -1,5 +1,29 @@
 oc patch console uat-console -n uat-kafka -p '{"metadata":{"finalizers":[]}}' --type=merge
 oc delete console uat-console -n uat-kafka
+[osuser@bastion ~]$ oc get po -n uat-kafka
+NAME                                                READY   STATUS             RESTARTS        AGE
+uat-console-console-deployment-799778c866-7ndxd     2/2     Running            0               3m56s
+uat-console-prometheus-deployment-7df6545f-42jcp    0/1     ImagePullBackOff   0               20s
+uat-kafka-cluster-broker-0                          1/1     Running            0               34d
+uat-kafka-cluster-broker-1                          1/1     Running            0               34d
+uat-kafka-cluster-broker-2                          1/1     Running            0               76d
+uat-kafka-cluster-controller-3                      1/1     Running            0               76d
+uat-kafka-cluster-controller-4                      1/1     Running            0               76d
+uat-kafka-cluster-controller-5                      1/1     Running            0               76d
+uat-kafka-cluster-cruise-control-85b7474f57-wkt48   1/1     Running            190 (34d ago)   76d
+uat-kafka-cluster-entity-operator-668845cdc-pzmh5   2/2     Running            0               76d
+uat-kafka-mirror-maker-mirrormaker2-0               0/1     Pending            0               105d
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc patch console uat-console -n uat-kafka -p '{"metadata":{"finalizers":[]}}' --type=merge
+Error from server (NotFound): consoles.config.openshift.io "uat-console" not found
+[osuser@bastion ~]$
+[osuser@bastion ~]$ oc patch console uat-console-console-deployment-799778c866-7ndxd  -n uat-kafka -p '{"metadata":{"finalizers":[]}}' --type=merge
+Error from server (NotFound): consoles.config.openshift.io "uat-console-console-deployment-799778c866-7ndxd" not found
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$
+[osuser@bastion ~]$
 
 ++++++++++++++++++++++++++++++++++++++++++++++++++
 
