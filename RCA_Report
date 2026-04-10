@@ -1,0 +1,81 @@
+Dear Team,
+
+Please find below the Root Cause Analysis (RCA) for the transaction issue observed in the production environment.
+
+---
+
+**1. Incident Details**
+
+* **Application:** Transaction Service
+* **Namespace:** prod-dc-transaction
+* **Affected Pods:**
+
+  * txn-transactionservice-6c6c8474d5-w7ql9
+  * txn-transactionservice-6c6c8474d5-skzbw
+* **Date:** 10-Apr-2026
+* **Start Time:** ~11:21 AM IST
+
+---
+
+**2. Issue Description**
+During the mentioned time window, transaction APIs (specifically token access APIs) started failing. The failures were due to inability of the application to acquire database connections, resulting in request timeouts.
+
+---
+
+**3. Error Observed**
+"Unable to acquire JDBC Connection - HikariPool-1 - Connection is not available, request timed out after 30000ms (total=150, active=150, idle=0, waiting=30)"
+
+---
+
+**4. Impact**
+
+* Transaction processing was impacted
+* API requests experienced timeouts and failures
+* End-user transactions were delayed/unsuccessful during the incident window
+
+---
+
+**5. Root Cause**
+The issue occurred due to exhaustion of the database connection pool (HikariCP).
+
+* All configured connections (150) were fully utilized
+* No idle connections were available
+* Incoming requests were queued and eventually timed out
+
+This condition was likely triggered by a combination of high load and slower database response time, leading to delayed release of connections.
+
+---
+
+**6. Immediate Actions Taken**
+
+* Restarted affected transaction service pods to clear stuck connections
+* Increased resource allocation (CPU/Memory) for transaction and payment services
+* Verified application stability post-restart
+
+---
+
+**7. Resolution Status**
+Post the above actions, the system stabilized and transaction processing resumed successfully with no further connection timeout errors observed.
+
+---
+
+**8. Preventive Measures**
+
+* Fine-tuning of HikariCP connection pool parameters
+* Enabling connection leak detection
+* Database performance analysis (slow queries, locks)
+* Implementation of monitoring and alerts for connection pool usage
+* Evaluating auto-scaling for transaction services
+
+---
+
+**9. Conclusion**
+The incident was caused by temporary exhaustion of database connections in the application layer, leading to transaction failures. The issue has been resolved, and preventive measures are being implemented to avoid recurrence.
+
+---
+
+Please let us know if any additional details are required.
+
+Regards,
+[Your Name]
+[Your Team / Project Name]
