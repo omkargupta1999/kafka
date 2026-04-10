@@ -97,4 +97,57 @@ Now p[lease prepare a official RCA to share it to bank.Please let me know if you
 Error: Error in handleDBException Unable to acquire JDBC Connection [HikariPool-1 - Connection is not available, request timed out after 30000ms (total=150, active=150, idle=0, waiting=30)]
 
 
+-----------------------------------------------------------------------------
+Earlier Resources Details for transaction and payment services:
+
+txn-transactionservice:
+
+resources:
+  requests:
+    memory: "2Gi"
+    cpu: "1000m"
+  limits:
+    memory: "4Gi"
+    cpu: "2000m"
+
+payment-paymentservice :
+
+resources:
+  requests:
+    memory: "2Gi"
+    cpu: "1000m"
+  limits:
+    memory: "4Gi"
+    cpu: "2000m"
+
+
+------------
+
+Current Resources Details for transaction and payment services:
+
+txn-transactionservice:
+
+resources:
+  requests:
+    memory: "3Gi"
+    cpu: "2000m"
+  limits:
+    memory: "4Gi"
+    cpu: "3000m"
+
+payment-paymentservice :
+
+resources:
+  requests:
+    memory: "3Gi"
+    cpu: "2000m"
+  limits:
+    memory: "4Gi"
+    cpu: "3000m"
+
+
+And We also we have restarted the pod around 12:43 PM We have taken the restart of the transaction services.
+
+
+
 
