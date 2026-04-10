@@ -79,3 +79,132 @@ Please let us know if any additional details are required.
 Regards,
 [Your Name]
 [Your Team / Project Name]
+
+
+_______________________________________________________________________________
+
+
+
+Dear Team,
+
+Please find the updated Root Cause Analysis (RCA) for the transaction issue observed in the production environment.
+
+---
+
+**1. Incident Details**
+
+* **Application:** Transaction Service
+* **Namespace:** prod-dc-transaction
+* **Affected Pods:**
+
+  * txn-transactionservice-6c6c8474d5-w7ql9
+  * txn-transactionservice-6c6c8474d5-skzbw
+* **Date:** 10-Apr-2026
+
+---
+
+**2. Timeline (IST)**
+
+* **~11:21 AM:** Issue started – Transaction APIs began failing
+* **11:21 AM – 12:40 PM:** Continuous connection timeout errors observed
+* **12:43 PM:** Restart of transaction service pods performed
+* **Post 12:45 PM:** Resource scaling applied for transaction & payment services
+* **After actions:** Services stabilized and transactions processed successfully
+
+---
+
+**3. Issue Description**
+Transaction APIs (specifically token access APIs) failed due to inability of the application to acquire database connections, resulting in request timeouts.
+
+---
+
+**4. Error Observed**
+"Unable to acquire JDBC Connection - HikariPool-1 - Connection is not available, request timed out after 30000ms (total=150, active=150, idle=0, waiting=30)"
+
+---
+
+**5. Impact**
+
+* Transaction processing was impacted
+* API requests experienced timeouts and failures
+* End-user transactions were delayed/unsuccessful during the incident window
+
+---
+
+**6. Root Cause**
+The issue occurred due to exhaustion of the database connection pool (HikariCP):
+
+* All configured connections (150) were fully utilized
+* No idle connections were available
+* Incoming requests were queued and timed out
+
+This was likely triggered due to high load and/or slower database response time, causing delayed release of connections.
+
+---
+
+**7. Immediate Actions Taken**
+
+**a) Pod Restart**
+
+* Transaction service pods were restarted at **12:43 PM**
+* This cleared stuck connections and reset the connection pool
+
+**b) Resource Scaling**
+
+**Earlier Resource Configuration:**
+
+*Transaction Service (txn-transactionservice)*
+
+* Requests: CPU 1000m, Memory 2Gi
+* Limits: CPU 2000m, Memory 4Gi
+
+*Payment Service (payment-paymentservice)*
+
+* Requests: CPU 1000m, Memory 2Gi
+* Limits: CPU 2000m, Memory 4Gi
+
+---
+
+**Updated Resource Configuration:**
+
+*Transaction Service (txn-transactionservice)*
+
+* Requests: CPU 2000m, Memory 3Gi
+* Limits: CPU 3000m, Memory 4Gi
+
+*Payment Service (payment-paymentservice)*
+
+* Requests: CPU 2000m, Memory 3Gi
+* Limits: CPU 3000m, Memory 4Gi
+
+---
+
+**8. Resolution Status**
+
+* Post restart and resource scaling, the system stabilized
+* Database connections normalized
+* Transactions are now processing successfully without errors
+
+---
+
+**9. Preventive Measures**
+
+* Fine-tuning of HikariCP connection pool parameters
+* Enabling connection leak detection
+* Database performance analysis (slow queries, locks)
+* Implementation of monitoring/alerts for connection pool usage
+* Evaluating auto-scaling (HPA) for services
+
+---
+
+**10. Conclusion**
+The incident was caused by temporary exhaustion of database connections in the application layer, leading to transaction failures. The issue has been resolved through pod restart and resource scaling, and preventive measures are being implemented to avoid recurrence.
+
+---
+
+Please let us know if any further details or clarifications are required.
+
+Regards,
+[Your Name]
+[Your Team / Project Name]
+
