@@ -1,21 +1,50 @@
-	
-Epay:
-	- Application
-		- Frontends
-		- Backend:
-			- Epay_Admin_Service ( Application Codes  are there in this folder )
-		- Config:
-			- Epay_Backend_Config:
-				- dev:
-					- epay_admin_service/application.properties
-			- Epay_Frontend_Config
-	- Infra:
-		- DevOps:
-			- ci-templates (Here we have complete CI logic to trigger the pipeline from scratch)
-			- deployment (Here we have complete helm charts by environment wise (dev, sit, uat) and .gitlab-ci.yaml )
-			
-			
-			
-			
-			
-Here in our case we have to access this application.properties details from Config folder which is required by our admin_service helm charts 
+Running with gitlab-runner 17.8.0 (e4f782b3)
+  on DC-Gitlab-Runner rMTQxLq3, system ID: s_948d0ccb739a
+Resolving secrets
+Preparing the "docker" executor
+00:05
+Using Docker executor with image registry.dev.sbiepay.sbi:8443/ubi9/ochelm:03122024 ...
+Using helper image:  dev-registry-route-quay-enterprise.apps.dev.sbiepay.sbi/microservices/library/gitlab-runner-helper:latest  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.8.0 )
+Using locally found image version due to "if-not-present" pull policy
+Using docker image sha256:c95744588b6d7e170a6866854932de40eaf1b5ed229ed818cba6a87a1f885773 for dev-registry-route-quay-enterprise.apps.dev.sbiepay.sbi/microservices/library/gitlab-runner-helper:latest with digest dev-registry-route-quay-enterprise.apps.dev.sbiepay.sbi/microservices/library/gitlab-runner-helper@sha256:ebbf1c21e4272ae1f8c18b034d390809c836c2fc68c0f0f6d3a5aff9760aabf5 ...
+Using helper image:  dev-registry-route-quay-enterprise.apps.dev.sbiepay.sbi/microservices/library/gitlab-runner-helper:latest  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.8.0 )
+Using docker image sha256:c95744588b6d7e170a6866854932de40eaf1b5ed229ed818cba6a87a1f885773 for dev-registry-route-quay-enterprise.apps.dev.sbiepay.sbi/microservices/library/gitlab-runner-helper:latest with digest dev-registry-route-quay-enterprise.apps.dev.sbiepay.sbi/microservices/library/gitlab-runner-helper@sha256:ebbf1c21e4272ae1f8c18b034d390809c836c2fc68c0f0f6d3a5aff9760aabf5 ...
+Using locally found image version due to "if-not-present" pull policy
+Using docker image sha256:e35c3559b44abd0dfdbb0d2452de990630985a9f95782c3f92357d62e1f6db71 for registry.dev.sbiepay.sbi:8443/ubi9/ochelm:03122024 with digest registry.dev.sbiepay.sbi:8443/ubi9/ochelm@sha256:f3dea1ca55cf5f37fb762cce33f16f409e63c9ad14aa203c83963ff73244c54c ...
+Preparing environment
+00:03
+Using helper image:  dev-registry-route-quay-enterprise.apps.dev.sbiepay.sbi/microservices/library/gitlab-runner-helper:latest  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.8.0 )
+Using docker image sha256:c95744588b6d7e170a6866854932de40eaf1b5ed229ed818cba6a87a1f885773 for dev-registry-route-quay-enterprise.apps.dev.sbiepay.sbi/microservices/library/gitlab-runner-helper:latest with digest dev-registry-route-quay-enterprise.apps.dev.sbiepay.sbi/microservices/library/gitlab-runner-helper@sha256:ebbf1c21e4272ae1f8c18b034d390809c836c2fc68c0f0f6d3a5aff9760aabf5 ...
+Running on runner-rmtqxlq3-project-155-concurrent-0 via Gitlab-DC-Runr...
+Getting source from Git repository
+00:03
+$ git config --global http.proxy $HTTP_PROXY; git config --global https.proxy $HTTPS_PROXY; git config --global no.proxy $NO_PROXY
+Fetching changes...
+Initialized empty Git repository in /tmp/builds/epay/infra/devops/deployment/.git/
+Created fresh repository.
+Checking out 75f9f00a as detached HEAD (ref is main)...
+Skipping Git submodules setup
+Executing "step_script" stage of the job script
+00:04
+Using docker image sha256:e35c3559b44abd0dfdbb0d2452de990630985a9f95782c3f92357d62e1f6db71 for registry.dev.sbiepay.sbi:8443/ubi9/ochelm:03122024 with digest registry.dev.sbiepay.sbi:8443/ubi9/ochelm@sha256:f3dea1ca55cf5f37fb762cce33f16f409e63c9ad14aa203c83963ff73244c54c ...
+$ set -eo pipefail # collapsed multi-line command
+Using namespace: dev-admin
+DEV_TOKEN
+Logging into OpenShift cluster...
+WARNING: Using insecure TLS client config. Setting this option is not supported!
+Logged into "https://api.dev.sbiepay.sbi:6443" as "system:serviceaccount:dev-sbiepay:cicd-sa" using the token provided.
+You have access to 206 projects, the list has been suppressed. You can list all projects with 'oc projects'
+Using project "default".
+Welcome! See 'oc help' to get started.
+Successfully switched to namespace dev-admin
+$ if [ "$SKIP_PIPELINE" = "true" ]; then # collapsed multi-line command
+Deploying "admin" to dev-admin...
+Chart path: /tmp/builds/epay/infra/devops/deployment/dev/charts/epay_admin_service
+Executing: helm upgrade --install "admin" /tmp/builds/epay/infra/devops/deployment/dev/charts/epay_admin_service   --namespace dev-admin   --history-max 10   --timeout 15m   -f /tmp/builds/epay/infra/devops/deployment/dev/charts/epay_admin_service/values.yaml   --set-file applicationProperties=epay_backend_config/dev/epay_admin_service/application.properties   --reset-values
+Error: failed parsing --set-file data: open epay_backend_config/dev/epay_admin_service/application.properties: no such file or directory
+Error: Helm deployment failed
+Last 5 revisions:
+Error: release name is invalid: "admin"
+Cleaning up project directory and file based variables
+00:02
+ERROR: Job failed: exit code 1
