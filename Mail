@@ -1,56 +1,65 @@
-Drill Switchover Activity steps:
+C:\Users\v1021577\Downloads>jf.exe --version
+jf version 2.82.0
 
+C:\Users\v1021577\Downloads>
+C:\Users\v1021577\Downloads>jf.exe rt sample.txt
+panic: Failed to load iphlpapi.dll: Access is denied.
 
-DNS Switchover from DC to DR.
-Stooped the application at DC side.
-Database switchover from DC to DR.
-Perform the Kafka Clean-up Activity at DC side.
-Swapped the routes details in Git-lab of both DC and DR.
-Brought up the application at DR side.
-Check the application status and Kafka.
+goroutine 51 [running]:
+syscall.(*LazyProc).mustFind(...)
+        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/syscall/dll_windows.go:270syscall.(*LazyProc).Addr(...)
+        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/syscall/dll_windows.go:277internal/syscall/windows.GetAdaptersAddresses(0x0, 0x90, 0x0, 0xc000509b58?, 0x1027639?)
+        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/internal/syscall/windows/zsyscall_windows.go:252 +0xa6
+net.adapterAddresses()
+        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/interface_windows.go:24 +0x59
+net.dnsReadConfig({0x1?, 0xfc99bb?})
+        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/dnsconfig_windows.go:24 +0xa5
+net.(*resolverConfig).init(0x54ceda0)
+        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/dnsclient_unix.go:377 +0x28
+sync.(*Once).doSlow(0xf?, 0xd?)
+        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/sync/once.go:78 +0xab
+sync.(*Once).Do(...)
+        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/sync/once.go:69
+net.(*resolverConfig).tryUpdate(0x54ceda0, {0x325bbac, 0x10})
+        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/dnsclient_unix.go:389 +0x59
+net.getSystemDNSConfig(...)
+        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/dnsclient_unix.go:369
+net.(*Resolver).lookupIP.func1()
+        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/lookup_windows.go:131 +0x133
+net.(*Resolver).lookupIP.func2()
+        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/lookup_windows.go:172 +0x22
+created by net.(*Resolver).lookupIP in goroutine 50
+        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/lookup_windows.go:171 +0x209
 
+C:\Users\v1021577\Downloads>jf.exe c add
+Enter a unique server identifier: omkar
+JFrog Platform URL: https://artifactory.jfrog.sbi
+JFrog access token:
+16:27:20 [Warn] couldn't extract payload from Access Token.
+The provided access token is not a valid JWT, probably a reference token.
+Some package managers only support basic authentication which requires also a username.
+If you plan to work with one of those package managers, please provide a username.
+JFrog username (optional): v1021577
 
-[osuser@bastion ~]$ oc apply -f prod-dc-rns.yaml
-namespace/prod-dc-rns created
-Error from server (NotFound): error when creating "prod-dc-rns.yaml": namespaces "prod-dc-rns\u00a0" not found
-Error from server (NotFound): error when creating "prod-dc-rns.yaml": namespaces "prod-dc-rns\u00a0" not found
-[osuser@bastion ~]$
-[osuser@bastion ~]$
-[osuser@bastion ~]$ cat prod-dc-rns.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: prod-dc-rns
-  labels:
-    eip: prod-dc-cluster
-    dynatrace.com/inject: "true"
-    istio-discovery: prod-dc-istio
-    istio.io/rev: prod-dc-istio
----
-#Role and Role-binding for epay_devops group in prod-dc-rns namespace
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: pod-delete-rollout
-  namespace: prod-dc-rns 
-rules:
-  - apiGroups: [""]
-    resources: ["pods"]
-    verbs: ["get", "list", "delete"]
-  - apiGroups: ["apps"]
-    resources: ["deployments"]
-    verbs: ["get", "list", "update", "patch"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: bind-pod-delete-rollout
-  namespace: prod-dc-rns 
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: pod-delete-rollout
-subjects:
-  - kind: Group
-    name: EPAY_OCP_DEVOPS
-    apiGroup: rbac.authorization.k8s.io
+C:\Users\v1021577\Downloads>jf.exe c add
+Enter a unique server identifier: omkar
+JFrog Platform URL [https://artifactory.jfrog.sbi/]:
+JFrog access token:
+16:28:17 [Warn] couldn't extract payload from Access Token.
+The provided access token is not a valid JWT, probably a reference token.
+Some package managers only support basic authentication which requires also a username.
+If you plan to work with one of those package managers, please provide a username.
+JFrog username (optional): v1021577
+
+C:\Users\v1021577\Downloads>jf.exe c add
+Enter a unique server identifier: omkar
+JFrog Platform URL:
+JFrog username [v1021577]: Kalyan2026$$
+JFrog password or Reference Token:
+16:29:19 [Info] Trace ID for JFrog Platform logs: e0b065f5dd1f34a9
+16:29:19 [Error] The following error was received while trying to encrypt your password: Get "artifactory/api/security/encryptedPassword": unsupported protocol scheme ""
+The received error indicates an invalid URL: "artifactory/api/security/encryptedPassword", Please ensure the URL includes a valid scheme like 'http://' or 'https://'.
+
+C:\Users\v1021577\Downloads>
+C:\Users\v1021577\Downloads>
+C:\Users\v1021577\Downloads>
