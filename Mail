@@ -1,63 +1,51 @@
-C:\Users\v1021577\Downloads>jf c add
-Enter a unique server identifier: Omkar
-JFrog Platform URL:  https://artifactory.jfrog.sbi
-JFrog Artifactory URL: https://artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-gradle/
-JFrog username: v1021577
-JFrog password or Reference Token:
-panic: Failed to load iphlpapi.dll: Access is denied.
+resources:
+  requests:
+    memory: "2Gi"
+    cpu: "1000m"
+  limits:
+    memory: "4Gi"
+    cpu: "2000m"
+ingress: {}
 
-goroutine 68 [running]:
-syscall.(*LazyProc).mustFind(...)
-        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/syscall/dll_windows.go:270
-syscall.(*LazyProc).Addr(...)
-        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/syscall/dll_windows.go:277
-internal/syscall/windows.GetAdaptersAddresses(0x0, 0x90, 0x0, 0xc0009b1b58?, 0x1027639?)
-        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/internal/syscall/windows/zsyscall_windows.go:252 +0xa6
-net.adapterAddresses()
-        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/interface_windows.go:24 +0x59
-net.dnsReadConfig({0x1?, 0xfc99bb?})
-        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/dnsconfig_windows.go:24 +0xa5
-net.(*resolverConfig).init(0x54ceda0)
-        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/dnsclient_unix.go:377 +0x28
-sync.(*Once).doSlow(0x16?, 0x14?)
-        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/sync/once.go:78 +0xab
-sync.(*Once).Do(...)
-        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/sync/once.go:69
-net.(*resolverConfig).tryUpdate(0x54ceda0, {0x325bbac, 0x10})
-        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/dnsclient_unix.go:389 +0x59
-net.getSystemDNSConfig(...)
-        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/dnsclient_unix.go:369
-net.(*Resolver).lookupIP.func1()
-        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/lookup_windows.go:131 +0x133
-net.(*Resolver).lookupIP.func2()
-        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/lookup_windows.go:172 +0x22
-created by net.(*Resolver).lookupIP in goroutine 67
-        /var/jenkins_home/tools/org.jenkinsci.plugins.golang.GolangInstallation/go-1.24.6/src/net/lookup_windows.go:171 +0x209
+# Enable health probes for proper HPA functioning
+readinessProbe:
+  enabled: false
+  httpGet:
+    path: "/api/transaction/v1/actuator/health/readiness"
+    port: 9092
+    scheme: HTTP
+  initialDelaySeconds: 60
+  periodSeconds: 10
 
-C:\Users\v1021577\Downloads>jf rt ping
-17:21:13 [Info] Trace ID for JFrog Platform logs: 83145bdb4b8868d7
-17:21:13 [Error] Get "artifactory/api/system/ping": unsupported protocol scheme ""
-The received error indicates an invalid URL: "artifactory/api/system/ping", Please ensure the URL includes a valid scheme like 'http://' or 'https://'.
+livenessProbe:
+  enabled: false
+  httpGet:
+    path: "/api/transaction/v1/actuator/health/liveness"
+    port: 9092
+    scheme: HTTP
+  initialDelaySeconds: 30
+  periodSeconds: 10
 
+## HPA Configuration
+hpa:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
 
-C:\Users\v1021577\Downloads>jf rt repo-list
-'jf rt repo-list' is not a jf command. See --help
-
-C:\Users\v1021577\Downloads>
-C:\Users\v1021577\Downloads>jf rt repo-list
-'jf rt repo-list' is not a jf command. See --help
-
-C:\Users\v1021577\Downloads>
-C:\Users\v1021577\Downloads>
-C:\Users\v1021577\Downloads>
-C:\Users\v1021577\Downloads>jf rt repo-list
-'jf rt repo-list' is not a jf command. See --help
-
-C:\Users\v1021577\Downloads>
-C:\Users\v1021577\Downloads>jf rt repo-list
-'jf rt repo-list' is not a jf command. See --help
-
-C:\Users\v1021577\Downloads>jf rt ping
-17:22:35 [Info] Trace ID for JFrog Platform logs: 57ed3d3d0e5117b3
-17:22:35 [Error] Get "artifactory/api/system/ping": unsupported protocol scheme ""
-The received error indicates an invalid URL: "artifactory/api/system/ping", Please ensure the URL includes a valid scheme like 'http://' or 'https://'.
+autoscaling:
+  enabled: true
