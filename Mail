@@ -13,7 +13,60 @@ RUN update-ca-trust extract
 
 # Verify jfrog cli
 RUN jf --version
+===================================================
 
+
+Below is error we are still getting .....
+
+Running with gitlab-runner 17.9.2 (14c5775c)
+  on dc_runner_55 Wz1c0kGRX, system ID: s_300da9d7588c
+Resolving secrets
+Preparing the "docker" executor
+00:04
+Using Docker executor with image artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v8 ...
+Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
+Using locally found image version due to "if-not-present" pull policy
+Using docker image sha256:4511164d4b592f8cb69c7ffe5cb2df5d1909c1e7924081721495a61e4b03f657 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
+Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
+Using docker image sha256:4511164d4b592f8cb69c7ffe5cb2df5d1909c1e7924081721495a61e4b03f657 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
+Authenticating with credentials from $DOCKER_AUTH_CONFIG
+Pulling docker image artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v8 ...
+Using docker image sha256:4f0b01ddee0568792d966d5551c98aab3db0a56a476719c1569aece8ddeeea19 for artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v8 with digest artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21@sha256:e0f1ebd4c16fe744082145d8656511888a8dec0d3093bf7b998e64e6bf62f666 ...
+Preparing environment
+00:00
+Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
+Using docker image sha256:4511164d4b592f8cb69c7ffe5cb2df5d1909c1e7924081721495a61e4b03f657 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
+Running on runner-wz1c0kgrx-project-1960-concurrent-0 via PE3DSOPGrunners4...
+Getting source from Git repository
+00:07
+Fetching changes with git depth set to 20...
+Initialized empty Git repository in /builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.git/
+Created fresh repository.
+Checking out 31b7ca24 as detached HEAD (ref is feature_ci)...
+Skipping Git submodules setup
+Executing "step_script" stage of the job script
+00:02
+Using docker image sha256:4f0b01ddee0568792d966d5551c98aab3db0a56a476719c1569aece8ddeeea19 for artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v8 with digest artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21@sha256:e0f1ebd4c16fe744082145d8656511888a8dec0d3093bf7b998e64e6bf62f666 ...
+$ jf config add \ # collapsed multi-line command
+09:17:56 [Warn] failed while trying to check latest JFrog CLI version: couldn't get latest JFrog CLI latest version info from GitHub API: Get "https://api.github.com/repos/jfrog/jfrog-cli/releases/latest": dial tcp: lookup api.github.com on 10.0.2.3:53: no such host
+$ jf config use epay-server
+09:17:56 [Info] Using server ID 'epay-server' ([MASKED])
+$ jf rt ping
+09:17:56 [Warn] (Attempt 1) - Failure occurred while sending GET request to [MASKED]artifactory/api/system/ping: Get "[MASKED]artifactory/api/system/ping": tls: failed to verify certificate: x509: certificate signed by unknown authority
+09:17:56 [Warn] (Attempt 1) - Failure occurred while sending GET request to [MASKED]artifactory/api/system/version: Get "[MASKED]artifactory/api/system/version": tls: failed to verify certificate: x509: certificate signed by unknown authority
+09:17:57 [Warn] (Attempt 2) - Failure occurred while sending GET request to [MASKED]artifactory/api/system/version: Get "[MASKED]artifactory/api/system/version": tls: failed to verify certificate: x509: certificate signed by unknown authority
+09:17:57 [Warn] (Attempt 2) - Failure occurred while sending GET request to [MASKED]artifactory/api/system/ping: Get "[MASKED]artifactory/api/system/ping": tls: failed to verify certificate: x509: certificate signed by unknown authority
+09:17:57 [Warn] (Attempt 3) - Failure occurred while sending GET request to [MASKED]artifactory/api/system/ping: Get "[MASKED]artifactory/api/system/ping": tls: failed to verify certificate: x509: certificate signed by unknown authority
+09:17:57 [Warn] (Attempt 3) - Failure occurred while sending GET request to [MASKED]artifactory/api/system/version: Get "[MASKED]artifactory/api/system/version": tls: failed to verify certificate: x509: certificate signed by unknown authority
+09:17:57 [Warn] (Attempt 4) - Failure occurred while sending GET request to [MASKED]artifactory/api/system/version: Get "[MASKED]artifactory/api/system/version": tls: failed to verify certificate: x509: certificate signed by unknown authority
+09:17:57 [Info] executor timeout after 3 attempts with 0 milliseconds wait intervals
+09:17:57 [Warn] (Attempt 4) - Failure occurred while sending GET request to [MASKED]artifactory/api/system/ping: Get "[MASKED]artifactory/api/system/ping": tls: failed to verify certificate: x509: certificate signed by unknown authority
+09:17:57 [Info] executor timeout after 3 attempts with 0 milliseconds wait intervals
+09:17:57 [Info] Trace ID for JFrog Platform logs: 3324062ebca5b684
+09:17:57 [Error] Get "[MASKED]artifactory/api/system/ping": tls: failed to verify certificate: x509: certificate signed by unknown authority
+Cleaning up project directory and file based variables
+00:00
+ERROR: Job failed: exit code 1
 
 
 
