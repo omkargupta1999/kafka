@@ -13,3 +13,26 @@ RUN update-ca-trust extract
 
 
 Now we suggest how to we add jfrog cli in our existing docker images which we dont have Dockerfile.
+
+
+
++++++++++++++++++++++++++++++++++++
+
+FROM artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-docker-virtual/ubi9/gradle-8.9-jdk-21
+
+# Add JFrog CLI + cert
+COPY jfrog.crt /tmp/jfrog.crt
+COPY jf /usr/local/bin/jf
+
+# Permissions (important)
+RUN chmod +x /usr/local/bin/jf
+
+# Validate CLI
+RUN jf --version
+
+# Add cert to trust store (UBI uses update-ca-trust)
+RUN update-ca-trust force-enable
+RUN cp /tmp/jfrog.crt /etc/pki/ca-trust/source/anchors/
+RUN update-ca-trust extract
+
+======================================================================
