@@ -1,4 +1,45 @@
-We have this gradle docker images and now we have to add below jfrog cli in our existing gradle images ..but we don't have axisting images Dockerfile.
+[osuser@bastion Gradle]$ docker build -t gradle-8.9-jdk-21-jfrog .
+bash: docker: command not found...
+Failed to search for file: /run/media/addmitam/RHEL-8-8-0-BaseOS-x86_64/BaseOS was not found
+[osuser@bastion Gradle]$
+[osuser@bastion Gradle]$ podman  build -t gradle-8.9-jdk-21-jfrog .
+STEP 1/8: FROM registry.dev.sbiepay.sbi:8443/ubi9/gradle-8.9-jdk-21:v6
+STEP 2/8: COPY jfrog.crt /tmp/jfrog.crt
+--> ea103d31e138
+STEP 3/8: COPY jf /usr/local/bin/jf
+--> 5648833c1078
+STEP 4/8: RUN chmod +x /usr/local/bin/jf
+WARN[0005] Failed to mount subscriptions, skipping entry in /usr/share/containers/mounts.conf: getting host subscription data: failed to read subscriptions from "/usr/share/rhel/secrets": open /usr/share/rhel/secrets/redhat.repo: permission denied
+--> 895a00c12f44
+STEP 5/8: RUN jf --version
+WARN[0008] Failed to mount subscriptions, skipping entry in /usr/share/containers/mounts.conf: getting host subscription data: failed to read subscriptions from "/usr/share/rhel/secrets": open /usr/share/rhel/secrets/redhat.repo: permission denied
+jf version 2.85.0
+--> b67cf6dfbfd2
+STEP 6/8: RUN update-ca-trust force-enable
+WARN[0010] Failed to mount subscriptions, skipping entry in /usr/share/containers/mounts.conf: getting host subscription data: failed to read subscriptions from "/usr/share/rhel/secrets": open /usr/share/rhel/secrets/redhat.repo: permission denied
+Warning: unknown command: 'force-enable', see 'update-ca-trust --help' for usage.
+
+Proceeding with extraction anyway for backwards compatibility.
+--> 33a1ea97ec00
+STEP 7/8: RUN cp /tmp/jfrog.crt /etc/pki/ca-trust/source/anchors/
+WARN[0014] Failed to mount subscriptions, skipping entry in /usr/share/containers/mounts.conf: getting host subscription data: failed to read subscriptions from "/usr/share/rhel/secrets": open /usr/share/rhel/secrets/redhat.repo: permission denied
+--> 633e8de9ea5a
+STEP 8/8: RUN update-ca-trust extract
+WARN[0015] Failed to mount subscriptions, skipping entry in /usr/share/containers/mounts.conf: getting host subscription data: failed to read subscriptions from "/usr/share/rhel/secrets": open /usr/share/rhel/secrets/redhat.repo: permission denied
+COMMIT gradle-8.9-jdk-21-jfrog
+--> 0969f20b7804
+Successfully tagged localhost/gradle-8.9-jdk-21-jfrog:latest
+0969f20b7804fca7fa8413cc097516afbfb24dec3cfedd6d7a003e0d23321903
+
+
+
+
+
+
+
+
+====================================
+=We have this gradle docker images and now we have to add below jfrog cli in our existing gradle images ..but we don't have axisting images Dockerfile.
 
 
 artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-docker-virtual/ubi9/gradle-8.9-jdk-21
