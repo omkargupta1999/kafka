@@ -1,3 +1,222 @@
+You’ve done the Dockerfile part correctly 👍 — but this confirms one thing very clearly:
+
+👉 **Your certificate is still not trusted because it’s incomplete (missing CA chain)**
+Not a Dockerfile issue anymore.
+
+---
+
+# 🔴 What’s ACTUALLY wrong
+
+You are copying:
+
+```dockerfile
+COPY jfrog.crt /etc/pki/ca-trust/source/anchors/
+```
+
+But that `jfrog.crt` is **most likely only the server cert**, not:
+
+* ❌ Root CA
+* ❌ Intermediate CA
+
+👉 So Java/Go (JFrog CLI) still says:
+
+```
+x509: certificate signed by unknown authority
+```
+
+---
+
+# ✅ Fix (REAL SOLUTION – not workaround)
+
+## Step 1: Extract FULL certificate chain
+
+Run this from ANY machine that can reach Artifactory:
+
+```bash
+openssl s_client -showcerts -connect <your-artifactory-host>:443 </dev/null
+```
+
+Example:
+
+```bash
+openssl s_client -showcerts -connect artifactory.jfrog.sbi:443 </dev/null
+```
+
+---
+
+## Step 2: You will see something like:
+
+```
+-----BEGIN CERTIFICATE-----
+(server cert)
+-----END CERTIFICATE-----
+
+-----BEGIN CERTIFICATE-----
+(intermediate CA)
+-----END CERTIFICATE-----
+
+-----BEGIN CERTIFICATE-----
+(root CA)
+-----END CERTIFICATE-----
+```
+
+---
+
+## Step 3: Combine ALL into ONE file
+
+Create:
+
+```bash
+vi jfrog-chain.crt
+```
+
+Paste:
+
+```
+-----BEGIN CERTIFICATE-----
+(server cert)
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+(intermediate CA)
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+(root CA)
+-----END CERTIFICATE-----
+```
+
+👉 Order matters:
+
+```
+server → intermediate → root
+```
+
+---
+
+## Step 4: Update Dockerfile
+
+```dockerfile
+FROM registry.dev.sbiepay.sbi:8443/ubi9/gradle-8.9-jdk-21:v6
+
+COPY jf /usr/local/bin/jf
+RUN chmod +x /usr/local/bin/jf
+
+# Use FULL CHAIN (important)
+COPY jfrog-chain.crt /etc/pki/ca-trust/source/anchors/jfrog.crt
+
+RUN update-ca-trust extract
+
+RUN jf --version
+```
+
+---
+
+## Step 5: Rebuild + push again
+
+```bash
+podman build -t gradle-jfrog:v9 .
+podman push ...
+```
+
+---
+
+# 🔍 MUST VERIFY BEFORE PIPELINE
+
+Run this locally:
+
+```bash
+podman run -it gradle-jfrog:v9 bash
+```
+
+Then:
+
+```bash
+curl -v https://<your-artifactory>/artifactory/api/system/ping
+```
+
+---
+
+### ✅ Expected:
+
+```
+HTTP/1.1 200 OK
+```
+
+---
+
+### ❌ If still failing:
+
+Then your cert chain is wrong → we debug further.
+
+---
+
+# ⚠️ Why your current approach fails
+
+Even though you did:
+
+```dockerfile
+update-ca-trust extract
+```
+
+👉 Trust store works ONLY if:
+
+* cert is valid
+* AND chain is complete
+
+Right now:
+
+```
+You trust a certificate…
+…but not the authority that signed it
+```
+
+---
+
+# 🚨 Quick Temporary Workaround (only if blocked)
+
+If pipeline is urgent:
+
+```yaml
+script:
+  - jf config add --insecure-tls=true
+```
+
+OR:
+
+```bash
+export JFROG_CLI_INSECURE_TLS=true
+```
+
+👉 This will PASS immediately
+❌ But insecure (don’t keep long-term)
+
+---
+
+# 🧠 Final Diagnosis
+
+| Component      | Status                     |
+| -------------- | -------------------------- |
+| Dockerfile     | ✅ Correct                  |
+| JFrog CLI      | ✅ Installed                |
+| Cert placement | ✅ Correct                  |
+| Cert content   | ❌ WRONG (incomplete chain) |
+| Pipeline       | ❌ Failing                  |
+
+---
+
+# 👉 If you want fast resolution
+
+Paste output of:
+
+```bash
+openssl s_client -showcerts -connect artifactory.jfrog.sbi:443 </dev/null
+```
+
+I’ll **build the exact correct `jfrog-chain.crt` for you** (this is where 99% people mess up).
+
+
+
+===========================================================================
+
 FROM registry.dev.sbiepay.sbi:8443/ubi9/gradle-8.9-jdk-21:v6
 
 COPY jfrog.crt /tmp/jfrog.crt
