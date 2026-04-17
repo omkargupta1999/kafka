@@ -1,3 +1,26 @@
+FROM registry.dev.sbiepay.sbi:8443/ubi9/gradle-8.9-jdk-21:v6
+
+COPY jfrog.crt /tmp/jfrog.crt
+COPY jf /usr/local/bin/jf
+
+RUN chmod +x /usr/local/bin/jf
+
+# Add cert properly
+RUN cp /tmp/jfrog.crt /etc/pki/ca-trust/source/anchors/
+
+# Update trust store
+RUN update-ca-trust extract
+
+# Verify jfrog cli
+RUN jf --version
+
+
+
+
+
+
+==============================================================================
+
 Running with gitlab-runner 17.9.2 (14c5775c)
   on dc_runner_80 KtJCK3d-w, system ID: s_37748334dac5
 Resolving secrets
