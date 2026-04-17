@@ -1,3 +1,13 @@
+[osuser@bastion Gradle]$ curl -k -u v1021577:token https://artifactory.jfrog.sbi/artifactory/itepaypg-sbiepay2-gradle-virtual/org/springframework/boot/spring-boot-gradle-plugin/3.3.10/
+{
+  "errors" : [ {
+    "status" : 404,
+    "message" : "{\"error\":\"children items not found on all virtual repos\"}"
+  } ]
+
+
+
+================================================
 [osuser@bastion Gradle]$ curl -u v1021577:token https://artifactory.jfrog.sbi/artifactory/itepaypg-sbiepay2-gradle-virtual/org/springframework/boot/spring-boot-gradle-plugin/3.3.10/
 curl: (60) SSL certificate problem: self signed certificate in certificate chain
 More details here: https://curl.haxx.se/docs/sslcerts.html
