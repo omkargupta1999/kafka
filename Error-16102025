@@ -1,3 +1,5 @@
+build.gradle ----------------
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version "${spring_boot}"
@@ -23,12 +25,13 @@ repositories {
     flatDir {
         dirs "libs"
     }
-    maven {
-        url "https://artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-gradle-virtual/"
-        credentials {
-            username = System.getenv("CI_USERNAME")
-            password = System.getenv("CI_JOB_TOKEN")
-        }
+        maven {
+            url "https://artifactory.jfrog.sbi:443/artifactory/devsecops-gradle-virtual/"
+
+            credentials {
+                username = "V1021577"
+                password = "token"
+            }
     }
 }
 
@@ -69,3 +72,37 @@ tasks.named('test') {
 bootJar {
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 }
+
+
+settings.gradle ------------------
+
+
+pluginManagement {
+    repositories {
+        maven {
+            url "https://artifactory.jfrog.sbi:443/artifactory/devsecops-gradle-virtual/"
+
+            credentials {
+                username = "V1021577"
+                password = "token"
+            }
+        }
+
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        maven {
+            url "https://artifactory.jfrog.sbi:443/artifactory/devsecops-gradle-virtual/"
+
+            credentials {
+                username = "V1021577"
+                password = "token"
+            }
+        }
+    }
+}
+
+rootProject.name = 'epay_admin_service'
