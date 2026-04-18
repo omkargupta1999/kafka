@@ -1,130 +1,69 @@
-[osuser@bastion ~]$ curl -k -u V1021577:token https://artifactory.jfrog.sbi/artifactory/devsecops-gradle-virtual/org/springframework/boot/org.springframework.boot.gradle.plugin/3.3.10/
-<!DOCTYPE html>
-<html>
-<head><meta name="robots" content="noindex" />
-<title>Index of devsecops-gradle-virtual/org/springframework/boot/org.springframework.boot.gradle.plugin/3.3.10</title>
-</head>
-<body>
-<h1>Index of devsecops-gradle-virtual/org/springframework/boot/org.springframework.boot.gradle.plugin/3.3.10</h1>
-<pre>Name                                               Last modified      Size</pre><hr/>
-<pre><a href="../">../</a>
-<a href="org.springframework.boot.gradle.plugin-3.3.10.pom">org.springframework.boot.gradle.plugin-3.3.10.pom</a>   20-Mar-2025 14:22  1.69 KB
-</pre>
-<hr/><address style="font-size:small;">Artifactory/7.117.17 Server</address></body></html>[osuser@bastion ~]$
-
-
-
-
-===========================
-curl -k -u V1021577:token \
-https://artifactory.jfrog.sbi/artifactory/devsecops-gradle-virtual/org/springframework/boot/org.springframework.boot.gradle.plugin/3.3.10/
-
-===================
-build.gradle ----------------
-
-plugins {
-    id 'java'
-    id 'org.springframework.boot' version "${spring_boot}"
-    id 'io.spring.dependency-management' version "${dependency_plugin}"
-}
-
-group = 'com.epay.admin'
-version = "${version}"
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-repositories {
-    flatDir {
-        dirs "libs"
-    }
-        maven {
-            url "https://artifactory.jfrog.sbi:443/artifactory/devsecops-gradle-virtual/"
-
-            credentials {
-                username = "V1021577"
-                password = "token"
-            }
-    }
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${swagger}"
-    implementation "com.oracle.database.jdbc:ojdbc11:${oracle_driver}"
-
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-
-    implementation "net.bytebuddy:byte-buddy:${bytebuddy}"
-    implementation "org.modelmapper:modelmapper:${modelmapper}"
-    implementation "javax.persistence:javax.persistence-api:${javax_persistence}"
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.liquibase:liquibase-core'
-
-    // SBI Utilities
-    implementation 'name:logging-service-1.0-SNAPSHOT'
-    implementation 'name:cache-management-service-0.0.1'
-
-    // Mapstruct
-    implementation "org.mapstruct:mapstruct:${mapstruct}"
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct}"
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    implementation "org.springframework.boot:spring-boot-starter-webflux"
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
-bootJar {
-    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
-}
-
-
-settings.gradle ------------------
-
-
-pluginManagement {
-    repositories {
-        maven {
-            url "https://artifactory.jfrog.sbi:443/artifactory/devsecops-gradle-virtual/"
-
-            credentials {
-                username = "V1021577"
-                password = "token"
-            }
-        }
-
-    }
-}
-
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        maven {
-            url "https://artifactory.jfrog.sbi:443/artifactory/devsecops-gradle-virtual/"
-
-            credentials {
-                username = "V1021577"
-                password = "token"
-            }
-        }
-    }
-}
-
-rootProject.name = 'epay_admin_service'
+2026-04-18T11:50:39.806+0000 [DEBUG] [org.apache.http.impl.conn.PoolingHttpClientConnectionManager] Connection released: [id: 1][route: {s}->https://artifactory.jfrog.sbi:443][total available: 0; route allocated: 0 of 20; total allocated: 0 of 20]
+2026-04-18T11:50:39.808+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Download https://artifactory.jfrog.sbi:443/artifactory/devsecops-gradle-virtual/org/springframework/boot/org.springframework.boot.gradle.plugin/3.3.10/org.springframework.boot.gradle.plugin-3.3.10.pom' completed
+2026-04-18T11:50:39.816+0000 [DEBUG] [org.gradle.api.internal.artifacts.ivyservice.resolveengine.oldresult.TransientConfigurationResultsBuilder] Flushing resolved configuration data in Binary store in /root/.gradle/.tmp/gradle6556121391132519073.bin. Wrote root 3.
+2026-04-18T11:50:39.831+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Resolve dependencies of detachedConfiguration1' completed
+2026-04-18T11:50:39.836+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Resolve files of configuration 'detachedConfiguration1'' completed
+2026-04-18T11:50:39.839+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Apply build file 'build.gradle' to root project 'epay_admin_service'' completed
+2026-04-18T11:50:39.840+0000 [DEBUG] [org.gradle.configuration.project.BuildScriptProcessor] Timing: Running the build script took 1.205 secs
+2026-04-18T11:50:39.843+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Notify afterEvaluate listeners of :' completed
+2026-04-18T11:50:39.844+0000 [DEBUG] [org.gradle.internal.resources.AbstractTrackedResourceLock] Daemon worker: released lock on state of build :
+2026-04-18T11:50:39.844+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Completing Build operation 'Configure project :'
+2026-04-18T11:50:39.845+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Configure project :' completed
+2026-04-18T11:50:39.845+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Completing Build operation 'Configure build'
+2026-04-18T11:50:39.846+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Configure build' completed
+2026-04-18T11:50:39.847+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Finish root build tree' started
+2026-04-18T11:50:39.854+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Completing Build operation 'Finish root build tree'
+2026-04-18T11:50:39.855+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Finish root build tree' completed
+2026-04-18T11:50:39.867+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] 
+2026-04-18T11:50:39.868+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] FAILURE: Build failed with an exception.
+2026-04-18T11:50:39.868+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] 
+2026-04-18T11:50:39.868+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] * Where:
+2026-04-18T11:50:39.869+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] Build file '/builds/itepaypg-sbiepay2/application/backend/epay_admin_service/build.gradle' line: 3
+2026-04-18T11:50:39.869+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] 
+2026-04-18T11:50:39.869+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] * What went wrong:
+2026-04-18T11:50:39.870+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] Plugin [id: 'org.springframework.boot', version: '3.3.10'] was not found in any of the following sources:
+2026-04-18T11:50:39.870+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] 
+2026-04-18T11:50:39.871+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] - Gradle Core Plugins (plugin is not in 'org.gradle' namespace)
+2026-04-18T11:50:39.871+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] - Included Builds (No included builds contain this plugin)
+2026-04-18T11:50:39.872+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] - Plugin Repositories (could not resolve plugin artifact 'org.springframework.boot:org.springframework.boot.gradle.plugin:3.3.10')
+2026-04-18T11:50:39.872+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter]   Searched in the following repositories:
+2026-04-18T11:50:39.872+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter]     Gradle Central Plugin Repository
+2026-04-18T11:50:39.873+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter]     maven(https://artifactory.jfrog.sbi:443/artifactory/devsecops-gradle-virtual/)
+2026-04-18T11:50:39.873+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] 
+2026-04-18T11:50:39.873+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] * Try:
+2026-04-18T11:50:39.874+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] > Run with --stacktrace option to get the stack trace.
+2026-04-18T11:50:39.874+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] > Run with --scan to get full insights.
+2026-04-18T11:50:39.875+0000 [ERROR] [org.gradle.internal.buildevents.BuildExceptionReporter] > Get more help at https://help.gradle.org.
+2026-04-18T11:50:39.875+0000 [ERROR] [org.gradle.internal.buildevents.BuildResultLogger] 
+2026-04-18T11:50:39.876+0000 [ERROR] [org.gradle.internal.buildevents.BuildResultLogger] BUILD FAILED in 7s
+2026-04-18T11:50:39.880+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Build finished for file system watching' started
+2026-04-18T11:50:39.883+0000 [INFO] [org.gradle.internal.watch.registry.impl.WatchableHierarchies] Some of the file system contents retained in the virtual file system are on file systems that Gradle doesn't support watching. The relevant state was discarded to ensure changes to these locations are properly detected. You can override this by explicitly enabling file system watching.
+2026-04-18T11:50:39.887+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Completing Build operation 'Build finished for file system watching'
+2026-04-18T11:50:39.888+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Build finished for file system watching' completed
+2026-04-18T11:50:39.894+0000 [DEBUG] [org.gradle.cache.internal.LockOnDemandCrossProcessCacheAccess] Releasing file lock for cache directory md-supplier (/root/.gradle/caches/8.9/md-supplier)
+2026-04-18T11:50:39.895+0000 [DEBUG] [org.gradle.cache.internal.DefaultFileLockManager] Releasing lock on cache directory md-supplier (/root/.gradle/caches/8.9/md-supplier).
+2026-04-18T11:50:39.897+0000 [DEBUG] [org.gradle.cache.internal.LockOnDemandCrossProcessCacheAccess] Releasing file lock for Build Output Cleanup Cache (/builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle/buildOutputCleanup)
+2026-04-18T11:50:39.897+0000 [DEBUG] [org.gradle.cache.internal.DefaultFileLockManager] Releasing lock on Build Output Cleanup Cache (/builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle/buildOutputCleanup).
+2026-04-18T11:50:39.899+0000 [DEBUG] [org.gradle.cache.internal.LockOnDemandCrossProcessCacheAccess] Releasing file lock for cache directory md-rule (/root/.gradle/caches/8.9/md-rule)
+2026-04-18T11:50:39.899+0000 [DEBUG] [org.gradle.cache.internal.DefaultFileLockManager] Releasing lock on cache directory md-rule (/root/.gradle/caches/8.9/md-rule).
+2026-04-18T11:50:39.903+0000 [DEBUG] [org.gradle.api.internal.artifacts.ivyservice.resolveengine.store.CachedStoreFactory] Resolution result cache closed. Cache reads: 0, disk reads: 0 (avg: 0.0 secs, total: 0.0 secs)
+2026-04-18T11:50:39.904+0000 [DEBUG] [org.gradle.api.internal.artifacts.ivyservice.resolveengine.store.CachedStoreFactory] Resolution result cache closed. Cache reads: 0, disk reads: 0 (avg: 0.0 secs, total: 0.0 secs)
+2026-04-18T11:50:39.905+0000 [DEBUG] [org.gradle.api.internal.artifacts.ivyservice.resolveengine.store.ResolutionResultsStoreFactory] Deleted 2 resolution results binary files in 0.003 secs
+2026-04-18T11:50:39.906+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Completing Build operation 'Run build'
+2026-04-18T11:50:39.907+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Run build' completed
+2026-04-18T11:50:39.908+0000 [DEBUG] [org.gradle.internal.resources.AbstractTrackedResourceLock] Daemon worker: released lock on worker lease
+2026-04-18T11:50:39.947+0000 [DEBUG] [org.gradle.deployment.internal.DefaultDeploymentRegistry] Stopping 0 deployment handles
+2026-04-18T11:50:39.947+0000 [DEBUG] [org.gradle.deployment.internal.DefaultDeploymentRegistry] Stopped deployment handles
+2026-04-18T11:50:39.948+0000 [DEBUG] [org.gradle.cache.internal.LockOnDemandCrossProcessCacheAccess] Releasing file lock for file hash cache (/builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle/8.9/fileHashes)
+2026-04-18T11:50:39.948+0000 [DEBUG] [org.gradle.cache.internal.DefaultFileLockManager] Releasing lock on file hash cache (/builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle/8.9/fileHashes).
+2026-04-18T11:50:39.949+0000 [DEBUG] [org.gradle.cache.internal.LockOnDemandCrossProcessCacheAccess] Releasing file lock for checksums cache (/builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle/8.9/checksums)
+2026-04-18T11:50:39.950+0000 [DEBUG] [org.gradle.cache.internal.DefaultFileLockManager] Releasing lock on checksums cache (/builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle/8.9/checksums).
+2026-04-18T11:50:39.951+0000 [DEBUG] [org.gradle.cache.internal.DefaultCacheCoordinator] Cache VCS Checkout Cache (/builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle/vcs-1) was closed 0 times.
+2026-04-18T11:50:39.952+0000 [DEBUG] [org.gradle.cache.internal.DefaultCacheCoordinator] Cache VCS metadata (/builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle/8.9/vcsMetadata) was closed 0 times.
+2026-04-18T11:50:39.952+0000 [DEBUG] [org.gradle.cache.internal.DefaultCacheCoordinator] Cache Compressed Files Expansion Cache (/builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle/8.9/expanded) was closed 0 times.
+2026-04-18T11:50:39.953+0000 [DEBUG] [org.gradle.cache.internal.DefaultCacheCoordinator] Cache dependencies-accessors (/builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle/8.9/dependencies-accessors) was closed 0 times.
+2026-04-18T11:50:39.955+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Deleting unused version-specific caches in /builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle' started
+2026-04-18T11:50:39.966+0000 [DEBUG] [org.gradle.cache.internal.VersionSpecificCacheCleanupAction] Processed version-specific caches at /builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle for cleanup in 0.009 secs
+2026-04-18T11:50:39.966+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Completing Build operation 'Deleting unused version-specific caches in /builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle'
+2026-04-18T11:50:39.967+0000 [DEBUG] [org.gradle.internal.operations.DefaultBuildOperationRunner] Build operation 'Deleting unused version-specific caches in /builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.gradle' completed
+2026-04-18T11:50:39.976+0000 [DEBUG] [org.gradle.launcher.daemon.server.exec.ExecuteBuild] The daemon has finished executing the build.
