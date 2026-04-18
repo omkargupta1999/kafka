@@ -1,101 +1,106 @@
-Build.gradle ---------------
+pluginManagement {
+    repositories {
+        maven {
+            url "https://artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-gradle-virtual/"
+            credentials {
+                username = System.getenv("CI_USERNAME")
+                password = System.getenv("CI_JOB_TOKEN")
+            }
+        }
+        // ❌ Do NOT use mavenCentral() or gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        maven {
+            url "https://artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-gradle-virtual/"
+            credentials {
+                username = System.getenv("CI_USERNAME")
+                password = System.getenv("CI_JOB_TOKEN")
+            }
+        }
+    }
+}
+
+rootProject.name = 'epay_admin_service'
+
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++Build.gradle+++++++++++++
+
+
 
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version "${spring_boot}"
-	id 'io.spring.dependency-management' version "${dependency_plugin}"
+    id 'java'
+    id 'org.springframework.boot' version "${spring_boot}"
+    id 'io.spring.dependency-management' version "${dependency_plugin}"
 }
 
 group = 'com.epay.admin'
 version = "${version}"
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	// mavenCentral()
-	flatDir {
-		dirs "libs"
-	}
-	/*maven {
-		url "https://artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-gradle-virtual/"
-		credentials(PasswordCredentials) {
-            username = project.findProperty("gitlab.username")?: System.getenv("CI_USERNAME")
-            password = project.findProperty("gitlab.token")?: System.getenv("CI_JOB_TOKEN")
+    flatDir {
+        dirs "libs"
+    }
+    maven {
+        url "https://artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-gradle-virtual/"
+        credentials {
+            username = System.getenv("CI_USERNAME")
+            password = System.getenv("CI_JOB_TOKEN")
         }
-        authentication {
-            basic(BasicAuthentication)
-        }
-	}*/
-	maven {
-		url 'https://artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-gradle-virtual/'
-		//'https://artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-gradle-virtual/'
-		//'https://artifactory.jfrog.sbi:443/artifactory/devsecops-gradle-virtual'
-		credentials {
-			username = "system.getenv("JFROG_USER")"
-			password = "system.getenv("JFROG_PASSWORD")"
-		}
-	}
+    }
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${swagger}"
-	implementation "com.oracle.database.jdbc:ojdbc11:${oracle_driver}"
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${swagger}"
+    implementation "com.oracle.database.jdbc:ojdbc11:${oracle_driver}"
 
     compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	implementation "net.bytebuddy:byte-buddy:${bytebuddy}"
-	implementation "org.modelmapper:modelmapper:${modelmapper}"
-	implementation "javax.persistence:javax.persistence-api:${javax_persistence}"
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.liquibase:liquibase-core'
+    annotationProcessor 'org.projectlombok:lombok'
 
-	//SBI Utilities
-	implementation 'name:logging-service-1.0-SNAPSHOT'
-	implementation 'name:cache-management-service-0.0.1'
+    implementation "net.bytebuddy:byte-buddy:${bytebuddy}"
+    implementation "org.modelmapper:modelmapper:${modelmapper}"
+    implementation "javax.persistence:javax.persistence-api:${javax_persistence}"
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.liquibase:liquibase-core'
 
-	//Mapstruct
-	implementation "org.mapstruct:mapstruct:${mapstruct}"
-	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct}"
+    // SBI Utilities
+    implementation 'name:logging-service-1.0-SNAPSHOT'
+    implementation 'name:cache-management-service-0.0.1'
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Mapstruct
+    implementation "org.mapstruct:mapstruct:${mapstruct}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct}"
 
-	implementation "org.springframework.boot:spring-boot-starter-webflux"
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    implementation "org.springframework.boot:spring-boot-starter-webflux"
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 bootJar {
-	duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 }
-
-+++++++++++++++++++++++++++++++++++++++
-
-settings.gradle---------------
-
-
-pluginManagement {
-    repositories {
-        mavenCentral()
-    }
-}
-rootProject.name = 'epay_admin_service'
-
-
-
