@@ -1,38 +1,66 @@
-FROM registry.access.redhat.com/ubi9/openjdk-21
-
-USER root
-
-RUN mkdir -p /app
-WORKDIR /app
-
-# ✅ FIX: Copy Gradle correctly into /app/gradle
-COPY gradle-8.9/ /app/gradle/
-
-# ✅ Correct Gradle path
-ENV GRADLE_HOME=/app/gradle
-ENV PATH=$PATH:$GRADLE_HOME/bin
-
-# Copy gradle.properties
-COPY ./gradle.properties /app/gradle/
-
-# ✅ REMOVE proxy settings
-RUN sed -i '/systemProp.http.proxyHost/d' /app/gradle/gradle.properties && \
-    sed -i '/systemProp.http.proxyPort/d' /app/gradle/gradle.properties && \
-    sed -i '/systemProp.https.proxyHost/d' /app/gradle/gradle.properties && \
-    sed -i '/systemProp.https.proxyPort/d' /app/gradle/gradle.properties
-
-# Permissions
-RUN chmod -R 777 /app/
-
-# Debug (optional)
-RUN ls -lrth /app/
-RUN ls -lrth /app/gradle/
-
-# ❌ Do NOT copy application (for reusable image)
-# COPY ./epay_transaction_service/ /app/
-
-# ❌ Do NOT run bootRun (CI will control execution)
-# ENTRYPOINT ["gradle", "bootRun", "--debug"]
-
-# ✅ Default entrypoint for CI
-ENTRYPOINT ["gradle"]
+Running with gitlab-runner 17.9.2 (14c5775c)
+  on dc_runner_79 6v7R1SqDv, system ID: s_37748334dac5
+Resolving secrets
+Preparing the "docker" executor
+00:05
+Using Docker executor with image artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v4 ...
+Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
+Using locally found image version due to "if-not-present" pull policy
+Using docker image sha256:4511164d4b592f8cb69c7ffe5cb2df5d1909c1e7924081721495a61e4b03f657 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
+Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
+Using docker image sha256:4511164d4b592f8cb69c7ffe5cb2df5d1909c1e7924081721495a61e4b03f657 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
+Authenticating with credentials from $DOCKER_AUTH_CONFIG
+Pulling docker image artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v4 ...
+Using docker image sha256:5a3e7b90a5b5161357591ca2ab36d7022360e465022aaafd2383dea80a79dadf for artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v4 with digest artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21@sha256:609a9f335e21d9367e24b4dea9c7716929b786b2024e70cd779473e62247d5ac ...
+Preparing environment
+00:00
+Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
+Using docker image sha256:4511164d4b592f8cb69c7ffe5cb2df5d1909c1e7924081721495a61e4b03f657 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
+Running on runner-6v7r1sqdv-project-1960-concurrent-0 via PE3DSOPGRUNNERS5...
+Getting source from Git repository
+00:02
+Fetching changes with git depth set to 20...
+Initialized empty Git repository in /builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.git/
+Created fresh repository.
+Checking out c19e111f as detached HEAD (ref is feature_ci)...
+Skipping Git submodules setup
+Executing "step_script" stage of the job script
+00:04
+Using docker image sha256:5a3e7b90a5b5161357591ca2ab36d7022360e465022aaafd2383dea80a79dadf for artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v4 with digest artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21@sha256:609a9f335e21d9367e24b4dea9c7716929b786b2024e70cd779473e62247d5ac ...
+Welcome to Gradle 8.9!
+Here are the highlights of this release:
+ - Enhanced Error and Warning Messages
+ - IDE Integration Improvements
+ - Daemon JVM Information
+For more details see https://docs.gradle.org/8.9/release-notes.html
+Starting a Gradle Daemon (subsequent builds will be faster)
+FAILURE: Build failed with an exception.
+* What went wrong:
+The specified settings file '/app/if [ -x /usr/local/bin/bash ]; then
+	exec /usr/local/bin/bash 
+elif [ -x /usr/bin/bash ]; then
+	exec /usr/bin/bash 
+elif [ -x /bin/bash ]; then
+	exec /bin/bash 
+elif [ -x /usr/local/bin/sh ]; then
+	exec /usr/local/bin/sh 
+elif [ -x /usr/bin/sh ]; then
+	exec /usr/bin/sh 
+elif [ -x /bin/sh ]; then
+	exec /bin/sh 
+elif [ -x /busybox/sh ]; then
+	exec /busybox/sh 
+else
+	echo shell not found
+	exit 1
+fi
+' does not exist.
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+BUILD FAILED in 3s
+Cleaning up project directory and file based variables
+00:01
+ERROR: Job failed: exit code 1
