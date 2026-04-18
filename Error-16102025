@@ -1,2 +1,77 @@
-curl -k -u user:token \
-https://artifactory.../org/springframework/boot/spring-boot-gradle-plugin/3.3.10/
+[root@42dd7e2fb1a3 gradle]# curl -k -u V1021301:token https://artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-gradle-virtual/org/springframework/boot/org.springframework.boot.gradle.plugin/3.3.10/
+{
+  "errors" : [ {
+    "status" : 404,
+    "message" : "{\"error\":\"children items not found on all virtual repos\"}"
+  } ]
+}[root@42dd7e2fb1a3 gradle]#
+[root@42dd7e2fb1a3 gradle]# curl -k -u V1021301:token https://artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-gradle-virtual/org/springframework/boot/
+<!DOCTYPE html>
+<html>
+<head><meta name="robots" content="noindex" />
+<title>Index of itepaypg-sbiepay2-gradle-virtual/org/springframework/boot</title>
+</head>
+<body>
+<h1>Index of itepaypg-sbiepay2-gradle-virtual/org/springframework/boot</h1>
+<pre>Name                                        Last modified      Size</pre><hr/>
+<pre><a href="../">../</a>
+<a href="spring-boot/">spring-boot/</a>                                 09-Apr-2026 13:26    -
+<a href="spring-boot-actuator/">spring-boot-actuator/</a>                        09-Apr-2026 13:27    -
+<a href="spring-boot-actuator-autoconfigure/">spring-boot-actuator-autoconfigure/</a>          09-Apr-2026 13:27    -
+<a href="spring-boot-autoconfigure/">spring-boot-autoconfigure/</a>                   09-Apr-2026 13:26    -
+<a href="spring-boot-buildpack-platform/">spring-boot-buildpack-platform/</a>              09-Apr-2026 13:27    -
+<a href="spring-boot-configuration-processor/">spring-boot-configuration-processor/</a>         09-Apr-2026 13:27    -
+<a href="spring-boot-data-commons/">spring-boot-data-commons/</a>                    16-Apr-2026 15:44    -
+<a href="spring-boot-data-jpa/">spring-boot-data-jpa/</a>                        16-Apr-2026 15:44    -
+<a href="spring-boot-dependencies/">spring-boot-dependencies/</a>                    09-Apr-2026 13:26    -
+<a href="spring-boot-devtools/">spring-boot-devtools/</a>                        09-Apr-2026 15:50    -
+<a href="spring-boot-health/">spring-boot-health/</a>                          16-Apr-2026 11:51    -
+<a href="spring-boot-hibernate/">spring-boot-hibernate/</a>                       16-Apr-2026 15:44    -
+<a href="spring-boot-http-converter/">spring-boot-http-converter/</a>                  16-Apr-2026 11:51    -
+<a href="spring-boot-jackson/">spring-boot-jackson/</a>                         16-Apr-2026 11:51    -
+<a href="spring-boot-jdbc/">spring-boot-jdbc/</a>                            16-Apr-2026 11:51    -
+<a href="spring-boot-jpa/">spring-boot-jpa/</a>                             16-Apr-2026 15:44    -
+<a href="spring-boot-loader-tools/">spring-boot-loader-tools/</a>                    09-Apr-2026 13:27    -
+<a href="spring-boot-maven-plugin/">spring-boot-maven-plugin/</a>                    09-Apr-2026 13:26    -
+<a href="spring-boot-micrometer-metrics/">spring-boot-micrometer-metrics/</a>              16-Apr-2026 11:51    -
+<a href="spring-boot-micrometer-observation/">spring-boot-micrometer-observation/</a>          16-Apr-2026 11:51    -
+<a href="spring-boot-persistence/">spring-boot-persistence/</a>                     16-Apr-2026 11:51    -
+<a href="spring-boot-security/">spring-boot-security/</a>                        16-Apr-2026 11:51    -
+<a href="spring-boot-servlet/">spring-boot-servlet/</a>                         16-Apr-2026 11:51    -
+<a href="spring-boot-sql/">spring-boot-sql/</a>                             16-Apr-2026 11:51    -
+<a href="spring-boot-starter/">spring-boot-starter/</a>                         09-Apr-2026 13:27    -
+<a href="spring-boot-starter-actuator/">spring-boot-starter-actuator/</a>                09-Apr-2026 13:27    -
+<a href="spring-boot-starter-aop/">spring-boot-starter-aop/</a>                     13-Apr-2026 17:24    -
+<a href="spring-boot-starter-cache/">spring-boot-starter-cache/</a>                   09-Apr-2026 15:38    -
+<a href="spring-boot-starter-data-jpa/">spring-boot-starter-data-jpa/</a>                13-Apr-2026 14:45    -
+<a href="spring-boot-starter-data-r2dbc/">spring-boot-starter-data-r2dbc/</a>              09-Apr-2026 14:24    -
+<a href="spring-boot-starter-data-rest/">spring-boot-starter-data-rest/</a>               17-Apr-2026 19:14    -
+<a href="spring-boot-starter-jackson/">spring-boot-starter-jackson/</a>                 16-Apr-2026 11:51    -
+<a href="spring-boot-starter-jdbc/">spring-boot-starter-jdbc/</a>                    13-Apr-2026 17:24    -
+<a href="spring-boot-starter-json/">spring-boot-starter-json/</a>                    09-Apr-2026 13:27    -
+<a href="spring-boot-starter-logging/">spring-boot-starter-logging/</a>                 09-Apr-2026 13:27    -
+<a href="spring-boot-starter-mail/">spring-boot-starter-mail/</a>                    09-Apr-2026 13:27    -
+<a href="spring-boot-starter-micrometer-metrics/">spring-boot-starter-micrometer-metrics/</a>      16-Apr-2026 11:51    -
+<a href="spring-boot-starter-oauth2-resource-server/">spring-boot-starter-oauth2-resource-server/</a>  09-Apr-2026 13:27    -
+<a href="spring-boot-starter-parent/">spring-boot-starter-parent/</a>                  09-Apr-2026 15:38    -
+<a href="spring-boot-starter-reactor-netty/">spring-boot-starter-reactor-netty/</a>           09-Apr-2026 15:38    -
+<a href="spring-boot-starter-security/">spring-boot-starter-security/</a>                09-Apr-2026 13:27    -
+<a href="spring-boot-starter-test/">spring-boot-starter-test/</a>                    09-Apr-2026 13:27    -
+<a href="spring-boot-starter-thymeleaf/">spring-boot-starter-thymeleaf/</a>               17-Apr-2026 19:13    -
+<a href="spring-boot-starter-tomcat/">spring-boot-starter-tomcat/</a>                  09-Apr-2026 13:27    -
+<a href="spring-boot-starter-tomcat-runtime/">spring-boot-starter-tomcat-runtime/</a>          16-Apr-2026 11:51    -
+<a href="spring-boot-starter-undertow/">spring-boot-starter-undertow/</a>                09-Apr-2026 13:26    -
+<a href="spring-boot-starter-validation/">spring-boot-starter-validation/</a>              09-Apr-2026 15:38    -
+<a href="spring-boot-starter-web/">spring-boot-starter-web/</a>                     09-Apr-2026 13:27    -
+<a href="spring-boot-starter-webflux/">spring-boot-starter-webflux/</a>                 09-Apr-2026 15:38    -
+<a href="spring-boot-test/">spring-boot-test/</a>                            09-Apr-2026 13:27    -
+<a href="spring-boot-test-autoconfigure/">spring-boot-test-autoconfigure/</a>              09-Apr-2026 13:27    -
+<a href="spring-boot-tomcat/">spring-boot-tomcat/</a>                          16-Apr-2026 11:51    -
+<a href="spring-boot-tools/">spring-boot-tools/</a>                           13-Apr-2026 14:45    -
+<a href="spring-boot-transaction/">spring-boot-transaction/</a>                     16-Apr-2026 11:51    -
+<a href="spring-boot-validation/">spring-boot-validation/</a>                      16-Apr-2026 11:51    -
+<a href="spring-boot-web-server/">spring-boot-web-server/</a>                      16-Apr-2026 11:51    -
+<a href="spring-boot-webmvc/">spring-boot-webmvc/</a>                          16-Apr-2026 11:51    -
+</pre>
+<hr/><address style="font-size:small;">Artifactory/7.117.17 Server</address></body></html>[root@42dd7e2fb1a3 gradle]#
+[root@42dd7e2fb1a3 gradle]#
