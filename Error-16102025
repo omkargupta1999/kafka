@@ -1,16 +1,19 @@
-What to do (Step-by-step)
-🔧 Step 1: Create remote repo in Artifactory
-Type: Remote
-Name: gradle-plugins-remote
-URL:
-https://plugins.gradle.org/m2/
-🔧 Step 2: Add to virtual repo
+buildscript {
+    repositories {
+        maven {
+            url "https://artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-gradle-virtual"
+            credentials {
+                username = System.getenv("JFROG_USER")
+                password = System.getenv("JFROG_PASSWORD")
+            }
+        }
+    }
 
-Add this into:
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot}"
+    }
+}
 
-itepaypg-sbiepay2-gradle-virtual
-
-👉 Ensure:
-
-It is included
-Order doesn’t block it
+apply plugin: "org.springframework.boot"
+apply plugin: "io.spring.dependency-management"
+apply plugin: "java"
