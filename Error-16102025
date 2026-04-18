@@ -1,7 +1,74 @@
-[root@42dd7e2fb1a3 gradle]#
 [root@42dd7e2fb1a3 gradle]# env | grep -i proxy
 JBOSS_CONTAINER_JAVA_PROXY_MODULE=/opt/jboss/container/java/proxy
 [root@42dd7e2fb1a3 gradle]#
 [root@42dd7e2fb1a3 gradle]# ps -ef | grep java
 bash: ps: command not found
 [root@42dd7e2fb1a3 gradle]#
+[root@42dd7e2fb1a3 gradle]# gradle build --info
+Initialized native services in: /root/.gradle/native
+Initialized jansi services in: /root/.gradle/native
+
+Welcome to Gradle 8.9!
+
+Here are the highlights of this release:
+ - Enhanced Error and Warning Messages
+ - IDE Integration Improvements
+ - Daemon JVM Information
+
+For more details see https://docs.gradle.org/8.9/release-notes.html
+
+Received JVM installation metadata from '/usr/lib/jvm/java-21-openjdk-21.0.5.0.11-2.el9.x86_64': {JAVA_HOME=/usr/lib/jvm/java-21-openjdk-21.0.5.0.11-2.el9.x86_64, JAVA_VERSION=21.0.5, JAVA_VENDOR=Red Hat, Inc., RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=21.0.5+11-LTS, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=21.0.5+11-LTS, VM_VENDOR=Red Hat, Inc., OS_ARCH=amd64}
+Removing 0 daemon stop events from registry
+Starting a Gradle Daemon (subsequent builds will be faster)
+Starting process 'Gradle build daemon'. Working directory: /root/.gradle/daemon/8.9 Command: /usr/lib/jvm/java-21-openjdk-21.0.5.0.11-2.el9.x86_64/bin/java --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED -XX:MaxMetaspaceSize=384m -XX:+HeapDumpOnOutOfMemoryError -Xms256m -Xmx512m -Dfile.encoding=UTF-8 -Duser.country -Duser.language=en -Duser.variant -cp /app/gradle/lib/gradle-daemon-main-8.9.jar -javaagent:/app/gradle/lib/agents/gradle-instrumentation-agent-8.9.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 8.9
+Successfully started process 'Gradle build daemon'
+An attempt to start the daemon took 1.985 secs.
+The client will now receive all logging from the daemon (pid: 56). The daemon log file: /root/.gradle/daemon/8.9/daemon-56.out.log
+Starting build in new daemon [memory: 512 MiB]
+Using 4 worker leases.
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Directory '/app/gradle' does not contain a Gradle build.
+
+A Gradle build's root directory should contain one of the possible settings files: settings.gradle, settings.gradle.kts, settings.gradle.dcl.It may also contain one of the possible build files: build.gradle, build.gradle.kts, build.gradle.dcl.
+
+To create a new Gradle build in this directory run 'gradle init'
+
+For more information about the 'init' task, please refer to https://docs.gradle.org/8.9/userguide/build_init_plugin.html in the Gradle documentation.
+
+For more details on creating a Gradle build, please refer to https://docs.gradle.org/8.9/userguide/tutorial_using_tasks.html in the Gradle documentation.
+
+* Try:
+> Run gradle init to create a new Gradle build in this directory.
+> Run with --stacktrace option to get the stack trace.
+> Run with --debug option to get more log output.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 6s
+[root@42dd7e2fb1a3 gradle]#
+[root@42dd7e2fb1a3 gradle]#
+[root@42dd7e2fb1a3 gradle]#
+[root@42dd7e2fb1a3 gradle]#
+[root@42dd7e2fb1a3 gradle]#
+[root@42dd7e2fb1a3 gradle]# gradle build --info | grep -i proxy
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Directory '/app/gradle' does not contain a Gradle build.
+
+A Gradle build's root directory should contain one of the possible settings files: settings.gradle, settings.gradle.kts, settings.gradle.dcl.It may also contain one of the possible build files: build.gradle, build.gradle.kts, build.gradle.dcl.
+
+To create a new Gradle build in this directory run 'gradle init'
+
+For more information about the 'init' task, please refer to https://docs.gradle.org/8.9/userguide/build_init_plugin.html in the Gradle documentation.
+
+For more details on creating a Gradle build, please refer to https://docs.gradle.org/8.9/userguide/tutorial_using_tasks.html in the Gradle documentation.
+
+* Try:
+> Run gradle init to create a new Gradle build in this directory.
+> Run with --stacktrace option to get the stack trace.
+> Run with --debug option to get more log output.
+> Get more help at https://help.gradle.org.
