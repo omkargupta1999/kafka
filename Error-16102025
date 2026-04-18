@@ -1,74 +1,73 @@
-[root@42dd7e2fb1a3 gradle]# env | grep -i proxy
-JBOSS_CONTAINER_JAVA_PROXY_MODULE=/opt/jboss/container/java/proxy
-[root@42dd7e2fb1a3 gradle]#
-[root@42dd7e2fb1a3 gradle]# ps -ef | grep java
-bash: ps: command not found
-[root@42dd7e2fb1a3 gradle]#
-[root@42dd7e2fb1a3 gradle]# gradle build --info
-Initialized native services in: /root/.gradle/native
-Initialized jansi services in: /root/.gradle/native
-
+Running with gitlab-runner 17.9.2 (14c5775c)
+  on dc_runner_54 zFOGPH9mk, system ID: s_300da9d7588c
+Resolving secrets
+Preparing the "docker" executor
+00:14
+Using Docker executor with image artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v5 ...
+Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
+Using locally found image version due to "if-not-present" pull policy
+Using docker image sha256:4511164d4b592f8cb69c7ffe5cb2df5d1909c1e7924081721495a61e4b03f657 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
+Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
+Using docker image sha256:4511164d4b592f8cb69c7ffe5cb2df5d1909c1e7924081721495a61e4b03f657 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
+Authenticating with credentials from $DOCKER_AUTH_CONFIG
+Pulling docker image artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v5 ...
+Using docker image sha256:ddea399d0136164da0aaacb8c71810c7ca302ba46e6a8cd64553712a51fccacb for artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v5 with digest artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21@sha256:185b300595fe73012b874864be31f396bfc1b76becf797755fac83d30c4dde95 ...
+Preparing environment
+00:02
+Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
+Using docker image sha256:4511164d4b592f8cb69c7ffe5cb2df5d1909c1e7924081721495a61e4b03f657 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
+Running on runner-zfogph9mk-project-1960-concurrent-0 via PE3DSOPGrunners3...
+Getting source from Git repository
+00:04
+Fetching changes with git depth set to 20...
+Initialized empty Git repository in /builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.git/
+Created fresh repository.
+Checking out b7de8ba8 as detached HEAD (ref is feature_ci)...
+Skipping Git submodules setup
+Executing "step_script" stage of the job script
+00:14
+Using docker image sha256:ddea399d0136164da0aaacb8c71810c7ca302ba46e6a8cd64553712a51fccacb for artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v5 with digest artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21@sha256:185b300595fe73012b874864be31f396bfc1b76becf797755fac83d30c4dde95 ...
+$ pwd
+/builds/itepaypg-sbiepay2/application/backend/epay_admin_service
+$ ls -la
+total 32
+drwxrwxrwx 5 root root  184 Apr 18 07:52 .
+drwxrwxrwx 4 root root   62 Apr 18 07:52 ..
+drwxrwxrwx 6 root root  128 Apr 18 07:52 .git
+-rw-rw-rw- 1 root root   58 Apr 18 07:52 .gitignore
+-rw-rw-rw- 1 root root  208 Apr 18 07:52 .gitlab-ci.yml
+-rw-rw-rw- 1 root root  467 Apr 18 07:52 Dockerfile
+-rw-rw-rw- 1 root root 6226 Apr 18 07:52 README.md
+-rw-rw-rw- 1 root root 2554 Apr 18 07:52 build.gradle
+-rw-rw-rw- 1 root root  355 Apr 18 07:52 gradle.properties
+drwxrwxrwx 2 root root   88 Apr 18 07:52 libs
+-rw-rw-rw- 1 root root  115 Apr 18 07:52 settings.gradle
+drwxrwxrwx 3 root root   18 Apr 18 07:52 src
+$ if [ -n "$VERSION" ]; then # collapsed multi-line command
+version v-feature_ci-20260418075210
 Welcome to Gradle 8.9!
-
 Here are the highlights of this release:
  - Enhanced Error and Warning Messages
  - IDE Integration Improvements
  - Daemon JVM Information
-
 For more details see https://docs.gradle.org/8.9/release-notes.html
-
-Received JVM installation metadata from '/usr/lib/jvm/java-21-openjdk-21.0.5.0.11-2.el9.x86_64': {JAVA_HOME=/usr/lib/jvm/java-21-openjdk-21.0.5.0.11-2.el9.x86_64, JAVA_VERSION=21.0.5, JAVA_VENDOR=Red Hat, Inc., RUNTIME_NAME=OpenJDK Runtime Environment, RUNTIME_VERSION=21.0.5+11-LTS, VM_NAME=OpenJDK 64-Bit Server VM, VM_VERSION=21.0.5+11-LTS, VM_VENDOR=Red Hat, Inc., OS_ARCH=amd64}
-Removing 0 daemon stop events from registry
 Starting a Gradle Daemon (subsequent builds will be faster)
-Starting process 'Gradle build daemon'. Working directory: /root/.gradle/daemon/8.9 Command: /usr/lib/jvm/java-21-openjdk-21.0.5.0.11-2.el9.x86_64/bin/java --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens=java.base/java.nio.charset=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED -XX:MaxMetaspaceSize=384m -XX:+HeapDumpOnOutOfMemoryError -Xms256m -Xmx512m -Dfile.encoding=UTF-8 -Duser.country -Duser.language=en -Duser.variant -cp /app/gradle/lib/gradle-daemon-main-8.9.jar -javaagent:/app/gradle/lib/agents/gradle-instrumentation-agent-8.9.jar org.gradle.launcher.daemon.bootstrap.GradleDaemon 8.9
-Successfully started process 'Gradle build daemon'
-An attempt to start the daemon took 1.985 secs.
-The client will now receive all logging from the daemon (pid: 56). The daemon log file: /root/.gradle/daemon/8.9/daemon-56.out.log
-Starting build in new daemon [memory: 512 MiB]
-Using 4 worker leases.
-
 FAILURE: Build failed with an exception.
-
+* Where:
+Build file '/builds/itepaypg-sbiepay2/application/backend/epay_admin_service/build.gradle' line: 3
 * What went wrong:
-Directory '/app/gradle' does not contain a Gradle build.
-
-A Gradle build's root directory should contain one of the possible settings files: settings.gradle, settings.gradle.kts, settings.gradle.dcl.It may also contain one of the possible build files: build.gradle, build.gradle.kts, build.gradle.dcl.
-
-To create a new Gradle build in this directory run 'gradle init'
-
-For more information about the 'init' task, please refer to https://docs.gradle.org/8.9/userguide/build_init_plugin.html in the Gradle documentation.
-
-For more details on creating a Gradle build, please refer to https://docs.gradle.org/8.9/userguide/tutorial_using_tasks.html in the Gradle documentation.
-
+Plugin [id: 'org.springframework.boot', version: '3.3.10'] was not found in any of the following sources:
+- Gradle Core Plugins (plugin is not in 'org.gradle' namespace)
+- Included Builds (No included builds contain this plugin)
+- Plugin Repositories (could not resolve plugin artifact 'org.springframework.boot:org.springframework.boot.gradle.plugin:3.3.10')
+  Searched in the following repositories:
+    MavenRepo
 * Try:
-> Run gradle init to create a new Gradle build in this directory.
 > Run with --stacktrace option to get the stack trace.
-> Run with --debug option to get more log output.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
 > Get more help at https://help.gradle.org.
-
-BUILD FAILED in 6s
-[root@42dd7e2fb1a3 gradle]#
-[root@42dd7e2fb1a3 gradle]#
-[root@42dd7e2fb1a3 gradle]#
-[root@42dd7e2fb1a3 gradle]#
-[root@42dd7e2fb1a3 gradle]#
-[root@42dd7e2fb1a3 gradle]# gradle build --info | grep -i proxy
-
-FAILURE: Build failed with an exception.
-
-* What went wrong:
-Directory '/app/gradle' does not contain a Gradle build.
-
-A Gradle build's root directory should contain one of the possible settings files: settings.gradle, settings.gradle.kts, settings.gradle.dcl.It may also contain one of the possible build files: build.gradle, build.gradle.kts, build.gradle.dcl.
-
-To create a new Gradle build in this directory run 'gradle init'
-
-For more information about the 'init' task, please refer to https://docs.gradle.org/8.9/userguide/build_init_plugin.html in the Gradle documentation.
-
-For more details on creating a Gradle build, please refer to https://docs.gradle.org/8.9/userguide/tutorial_using_tasks.html in the Gradle documentation.
-
-* Try:
-> Run gradle init to create a new Gradle build in this directory.
-> Run with --stacktrace option to get the stack trace.
-> Run with --debug option to get more log output.
-> Get more help at https://help.gradle.org.
+BUILD FAILED in 11s
+Cleaning up project directory and file based variables
+00:01
+ERROR: Job failed: exit code 1
