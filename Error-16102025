@@ -1,19 +1,71 @@
-buildscript {
-    repositories {
-        maven {
-            url "https://artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-gradle-virtual"
-            credentials {
-                username = System.getenv("JFROG_USER")
-                password = System.getenv("JFROG_PASSWORD")
-            }
-        }
-    }
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version "${spring_boot}"
+    id 'io.spring.dependency-management' version "${dependency_plugin}"
+}
 
-    dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot}"
+group = 'com.epay.admin'
+version = "${version}"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
-apply plugin: "org.springframework.boot"
-apply plugin: "io.spring.dependency-management"
-apply plugin: "java"
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    flatDir {
+        dirs "libs"
+    }
+    maven {
+        url "https://artifactory.jfrog.sbi:443/artifactory/itepaypg-sbiepay2-gradle-virtual/"
+        credentials {
+            username = System.getenv("CI_USERNAME")
+            password = System.getenv("CI_JOB_TOKEN")
+        }
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${swagger}"
+    implementation "com.oracle.database.jdbc:ojdbc11:${oracle_driver}"
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation "net.bytebuddy:byte-buddy:${bytebuddy}"
+    implementation "org.modelmapper:modelmapper:${modelmapper}"
+    implementation "javax.persistence:javax.persistence-api:${javax_persistence}"
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.liquibase:liquibase-core'
+
+    // SBI Utilities
+    implementation 'name:logging-service-1.0-SNAPSHOT'
+    implementation 'name:cache-management-service-0.0.1'
+
+    // Mapstruct
+    implementation "org.mapstruct:mapstruct:${mapstruct}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct}"
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation "org.springframework.boot:spring-boot-starter-webflux"
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+bootJar {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}
