@@ -1,3 +1,34 @@
+FROM registry.access.redhat.com/ubi9/openjdk-21
+
+USER root
+
+# Working directory (GitLab will mount repo here)
+WORKDIR /workspace
+
+# Copy Gradle distribution
+COPY gradle-8.9/ /opt/gradle/
+
+# Set Gradle environment
+ENV GRADLE_HOME=/opt/gradle
+ENV PATH=$PATH:$GRADLE_HOME/bin
+
+# 🔥 IMPORTANT: Do NOT copy gradle.properties (removes proxy issue completely)
+
+# Optional: create Gradle cache directory
+RUN mkdir -p /root/.gradle
+
+# Default entrypoint (CI will pass commands)
+ENTRYPOINT ["gradle"]
+
+
+=====================================================================================
+
+
+
+
+
+
+
 
 
 
