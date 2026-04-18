@@ -1,3 +1,7 @@
+curl -k -u V1021577:token \
+https://artifactory.jfrog.sbi/artifactory/devsecops-gradle-virtual/org/springframework/boot/org.springframework.boot.gradle.plugin/3.3.10/
+
+===================
 build.gradle ----------------
 
 plugins {
