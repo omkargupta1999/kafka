@@ -1,15 +1,7 @@
-[osuser@bastion ~]$ podman run -it --entrypoint /bin/bash  registry.dev.sbiepay.sbi:8443/ubi9/gradle-8.9-jdk-21:v5
-WARN[0000] Failed to mount subscriptions, skipping entry in /usr/share/containers/mounts.conf: getting host subscription data: failed to read subscriptions from "/usr/share/rhel/secrets": open /usr/share/rhel/secrets/redhat.repo: permission denied
-[root@42dd7e2fb1a3 app]# ls
-gradle
-[root@42dd7e2fb1a3 app]# cd gradle/
-[root@42dd7e2fb1a3 gradle]# ls
-LICENSE  NOTICE  README  bin  gradle.properties  init.d  lib
 [root@42dd7e2fb1a3 gradle]#
-[root@42dd7e2fb1a3 gradle]# cat gradle.properties
-#systemProp.http.proxyHost=serverswg.sbi.co.in
-#systemProp.http.proxyPort=80
-#systemProp.https.proxyHost=serverswg.sbi.co.in
-#systemProp.https.proxyPort=9090
-#systemProp.javax.net.ssl.trustStore=/etc/pki/tls/certs/cacerts
-#systemProp.javax.net.ssl.trustStoreType=pkcs12
+[root@42dd7e2fb1a3 gradle]# env | grep -i proxy
+JBOSS_CONTAINER_JAVA_PROXY_MODULE=/opt/jboss/container/java/proxy
+[root@42dd7e2fb1a3 gradle]#
+[root@42dd7e2fb1a3 gradle]# ps -ef | grep java
+bash: ps: command not found
+[root@42dd7e2fb1a3 gradle]#
