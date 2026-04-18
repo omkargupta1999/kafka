@@ -1,183 +1,31 @@
-[osuser@bastion ~]$ oc exec -it websitefe-epay-website-645c99fc-vg6cl -n dev-frontend sh
-kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
-sh-5.1$ cat /usr/share/nginx/html/transactiontracking/index.html
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/assets/sbi_images-EBidvxNX.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Transaction Tracking</title>
-    <script type="module" crossorigin src="/assets/index-COjTgxmU.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-OtJTgJWN.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
-</html>
-
- [osuser@bastion ~]$ oc get gw -n dev-istio-system epay-dev-gateway -o yaml
-apiVersion: networking.istio.io/v1beta1
-kind: Gateway
-metadata:
-  annotations:
-    meta.helm.sh/release-name: common
-    meta.helm.sh/release-namespace: default
-  creationTimestamp: "2025-04-11T09:00:32Z"
-  generation: 3
-  labels:
-    app.kubernetes.io/managed-by: Helm
-  name: epay-dev-gateway
-  namespace: dev-istio-system
-  resourceVersion: "426894719"
-  uid: 2df33901-3611-4207-8534-b5c8db718831
-spec:
-  selector:
-    istio: ingressgateway
-  servers:
-  - hosts:
-    - dev.epay.sbi
-    port:
-      name: http
-      number: 80
-      protocol: HTTP
-
-
-
-
-
-
-
-
-
-
-https://dev.epay.sbi/transactiontracking  After hitting this URL its redirecting to http://dev.epay.sbi:8080/transactiontracking/   and giving error and not accessible this Page ..
-
-[osuser@bastion ~]$ oc get po -n dev-frontend
-NAME                                                      READY   STATUS    RESTARTS   AGE
-integration-5bf7d8cbc8-2l7pn                              2/2     Running   0          5d20h
-maintenancefe-maintenance-frontend-54695fc794-d8tvt       2/2     Running   0          9d
-merchantfe-merchant-frontend-bd8d8bd4d-bb6dr              2/2     Running   0          14d
-merchantsimulator-epaymerchantsimulater-9cbd5d47c-hqvwh   2/2     Running   0          60d
-merchantsimulator-epaymerchantsimulater-9cbd5d47c-s4frf   2/2     Running   0          20d
-transactionfe-transaction-frontend-5b5ccf4c94-c2msw       2/2     Running   0          27h
-websitefe-epay-website-645c99fc-rv252                     2/2     Running   0          8m51s
-[osuser@bastion ~]$
-[osuser@bastion ~]$ oc get svc -n dev-frontend
-NAME                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
-integration                               ClusterIP   172.30.120.167   <none>        8080/TCP,8443/TCP   5d20h
-maintenancefe-maintenance-frontend        ClusterIP   172.30.94.239    <none>        8080/TCP            13d
-merchantfe-merchant-frontend              ClusterIP   172.30.34.35     <none>        8080/TCP            91d
-merchantsimulator-epaymerchantsimulater   ClusterIP   172.30.48.37     <none>        8080/TCP            201d
-transactionfe-transaction-frontend        ClusterIP   172.30.236.239   <none>        8080/TCP            201d
-websitefe-epay-website                    ClusterIP   172.30.30.126    <none>        8080/TCP            42h
-[osuser@bastion ~]$
-[osuser@bastion ~]$ oc get vs -n dev-frontend dev-epay-website-epay-website -o yaml
-Warning: short name "vs" could also match lower priority resource volumesnapshots.snapshot.storage.k8s.io
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
-  annotations:
-    meta.helm.sh/release-name: websitefe
-    meta.helm.sh/release-namespace: dev-frontend
-  creationTimestamp: "2025-10-28T15:23:28Z"
-  generation: 5
-  labels:
-    app.kubernetes.io/managed-by: Helm
-  name: dev-epay-website-epay-website
-  namespace: dev-frontend
-  resourceVersion: "482093864"
-  uid: 9ab283d6-43c9-45e0-94c9-6c83af842ebc
-spec:
-  gateways:
-  - dev-istio-system/epay-dev-gateway
-  hosts:
-  - dev.epay.sbi
-  http:
-  - match:
-    - uri:
-        prefix: /transactiontracking
-    route:
-    - destination:
-        host: websitefe-epay-website
-        port:
-          number: 8080
-
-http {
-
-    log_format main 'ACCESS: $remote_addr - $remote_user [$time_local] '
-                  '"$request" $status $body_bytes_sent '
-                  '"$http_referer" "$http_user_agent"';
-				  
-	# Access logs go to STDOUT
-    access_log /dev/stdout main;
-	
-	#Error logs go to STDERR
-    error_log /dev/stderr warn;
-
-    include       mime.types;
-
-    set_real_ip_from    0.0.0.0/0;
-    real_ip_recursive   on;
-    real_ip_header      X-Forwarded-For;  
-
-    limit_req_zone      $binary_remote_addr zone=mylimit:10m rate=10r/s;
-    limit_conn_zone     $binary_remote_addr zone=limitperip:10m;
-
-    ## Start: Size Limits & Buffer Overflows ##
-    client_body_buffer_size 1k;
-    client_header_buffer_size 1k;
-    client_max_body_size 1m;  
-    large_client_header_buffers 2 1k;  
-    ## END: Size Limits & Buffer Overflows ##
-
-    client_header_timeout 10s;
-    client_body_timeout 10s;
-
-    server {
-        listen 8080;
-        server_name localhost;
-
-        root /usr/share/nginx/html;
-
-        limit_req zone=mylimit burst=70 nodelay;
-        limit_conn limitperip 10;
-
-        if ($request_method !~ ^(GET|HEAD|POST)$) {
-            return 444;
-        }
-
-        server_tokens off;
-
-        keepalive_timeout 15s;  
-        keepalive_requests 10000;
-
-        # CSP Headers
-        add_header Content-Security-Policy "default-src 'self' https: ; script-src 'self' ; object-src 'none' ; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com ; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com ; img-src 'self' blob: data: ; base-uri 'self' ; connect-src 'self' https://dev.epay.sbi ; media-src 'self' data:;" always;
-
-        # Security Headers
-        add_header X-Frame-Options "SAMEORIGIN" always;  
-        add_header X-Content-Type-Options "nosniff" always;
-        add_header X-XSS-Protection "1; mode=block" always;
-
-        location /transactiontracking/ {
-            index index.html index.htm;
-            alias /usr/share/nginx/html/transactiontracking/;
-            try_files $uri $uri/ /transactiontracking/index.html;
-            #   index  index.html index.htm;
-            #   try_files $uri  $uri/ /index.html;
-        }
-
-        error_page 500 502 503 504 /50x.html;
-        location = /50x.html {
-            root /usr/share/nginx/html/transactiontracking;
-        }
-
-        location ~ /\. {
-            deny all;
-            return 404;
-        }
-    }
-}
-
-events {}
+unning with gitlab-runner 17.9.2 (14c5775c)
+  on dc_runner_80 KtJCK3d-w, system ID: s_37748334dac5
+Resolving secrets
+Preparing the "docker" executor
+00:01
+Using Docker executor with image artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v3 ...
+Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
+Using locally found image version due to "if-not-present" pull policy
+Using docker image sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
+Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
+Using docker image sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
+Using locally found image version due to "if-not-present" pull policy
+Using docker image sha256:17e1717974533670174b7638557f162d8aaf114a6fbea71734dd1393a32400d1 for artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v3 with digest artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21@sha256:17e1717974533670174b7638557f162d8aaf114a6fbea71734dd1393a32400d1 ...
+Preparing environment
+00:01
+Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
+Using docker image sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
+Running on runner-ktjck3d-w-project-1960-concurrent-0 via PE3DSOPGRUNNERS6...
+Getting source from Git repository
+00:02
+Fetching changes with git depth set to 20...
+Initialized empty Git repository in /builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.git/
+Created fresh repository.
+Checking out 1bed4b4a as detached HEAD (ref is feature_ci)...
+Skipping Git submodules setup
+Executing "step_script" stage of the job script
+00:01
+Using docker image sha256:17e1717974533670174b7638557f162d8aaf114a6fbea71734dd1393a32400d1 for artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v3 with digest artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21@sha256:17e1717974533670174b7638557f162d8aaf114a6fbea71734dd1393a32400d1 ...
+Cleaning up project directory and file based variables
+00:00
+ERROR: Job failed (system failure): Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: exec: "gradle": executable file not found in $PATH (exec.go:77:0s)
