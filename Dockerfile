@@ -2,6 +2,32 @@ FROM registry.access.redhat.com/ubi9/openjdk-21
 
 USER root
 
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY gradle-8.9/ /app/
+ENV GRADLE_HOME=/app/gradle
+ENV PATH=$PATH:$GRADLE_HOME/bin
+
+COPY ./gradle.properties /app/gradle/
+
+RUN chmod -R 777 /app/
+
+# No application copy
+# No bootRun
+
+ENTRYPOINT ["gradle"]
+
+
+
+=====================================================
+
+
+
+FROM registry.access.redhat.com/ubi9/openjdk-21
+
+USER root
+
 # Working directory (GitLab will mount repo here)
 WORKDIR /workspace
 
