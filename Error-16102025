@@ -1,31 +1,38 @@
-unning with gitlab-runner 17.9.2 (14c5775c)
-  on dc_runner_80 KtJCK3d-w, system ID: s_37748334dac5
-Resolving secrets
-Preparing the "docker" executor
-00:01
-Using Docker executor with image artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v3 ...
-Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
-Using locally found image version due to "if-not-present" pull policy
-Using docker image sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
-Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
-Using docker image sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
-Using locally found image version due to "if-not-present" pull policy
-Using docker image sha256:17e1717974533670174b7638557f162d8aaf114a6fbea71734dd1393a32400d1 for artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v3 with digest artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21@sha256:17e1717974533670174b7638557f162d8aaf114a6fbea71734dd1393a32400d1 ...
-Preparing environment
-00:01
-Using helper image:  artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2  (overridden, default would be  registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-v17.9.2 )
-Using docker image sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 for artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper:x86_64-v17.9.2 with digest artifactory.jfrog.sbi:443/dso-base-image/gitlab-runner-helper/gitlab-runner-helper@sha256:47dfd72820e9c3b93c84dcdc2e689ba1236880b4c01de59bbf0a26f9e72b2a35 ...
-Running on runner-ktjck3d-w-project-1960-concurrent-0 via PE3DSOPGRUNNERS6...
-Getting source from Git repository
-00:02
-Fetching changes with git depth set to 20...
-Initialized empty Git repository in /builds/itepaypg-sbiepay2/application/backend/epay_admin_service/.git/
-Created fresh repository.
-Checking out 1bed4b4a as detached HEAD (ref is feature_ci)...
-Skipping Git submodules setup
-Executing "step_script" stage of the job script
-00:01
-Using docker image sha256:17e1717974533670174b7638557f162d8aaf114a6fbea71734dd1393a32400d1 for artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21:v3 with digest artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-8.9-jdk-21@sha256:17e1717974533670174b7638557f162d8aaf114a6fbea71734dd1393a32400d1 ...
-Cleaning up project directory and file based variables
-00:00
-ERROR: Job failed (system failure): Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: exec: "gradle": executable file not found in $PATH (exec.go:77:0s)
+FROM registry.access.redhat.com/ubi9/openjdk-21
+
+USER root
+
+RUN mkdir -p /app
+WORKDIR /app
+
+# ✅ FIX: Copy Gradle correctly into /app/gradle
+COPY gradle-8.9/ /app/gradle/
+
+# ✅ Correct Gradle path
+ENV GRADLE_HOME=/app/gradle
+ENV PATH=$PATH:$GRADLE_HOME/bin
+
+# Copy gradle.properties
+COPY ./gradle.properties /app/gradle/
+
+# ✅ REMOVE proxy settings
+RUN sed -i '/systemProp.http.proxyHost/d' /app/gradle/gradle.properties && \
+    sed -i '/systemProp.http.proxyPort/d' /app/gradle/gradle.properties && \
+    sed -i '/systemProp.https.proxyHost/d' /app/gradle/gradle.properties && \
+    sed -i '/systemProp.https.proxyPort/d' /app/gradle/gradle.properties
+
+# Permissions
+RUN chmod -R 777 /app/
+
+# Debug (optional)
+RUN ls -lrth /app/
+RUN ls -lrth /app/gradle/
+
+# ❌ Do NOT copy application (for reusable image)
+# COPY ./epay_transaction_service/ /app/
+
+# ❌ Do NOT run bootRun (CI will control execution)
+# ENTRYPOINT ["gradle", "bootRun", "--debug"]
+
+# ✅ Default entrypoint for CI
+ENTRYPOINT ["gradle"]
