@@ -1,3 +1,21 @@
+[osuser@bastion ~]$ curl -k -u V1021577:token https://artifactory.jfrog.sbi/artifactory/devsecops-gradle-virtual/org/springframework/boot/org.springframework.boot.gradle.plugin/3.3.10/
+<!DOCTYPE html>
+<html>
+<head><meta name="robots" content="noindex" />
+<title>Index of devsecops-gradle-virtual/org/springframework/boot/org.springframework.boot.gradle.plugin/3.3.10</title>
+</head>
+<body>
+<h1>Index of devsecops-gradle-virtual/org/springframework/boot/org.springframework.boot.gradle.plugin/3.3.10</h1>
+<pre>Name                                               Last modified      Size</pre><hr/>
+<pre><a href="../">../</a>
+<a href="org.springframework.boot.gradle.plugin-3.3.10.pom">org.springframework.boot.gradle.plugin-3.3.10.pom</a>   20-Mar-2025 14:22  1.69 KB
+</pre>
+<hr/><address style="font-size:small;">Artifactory/7.117.17 Server</address></body></html>[osuser@bastion ~]$
+
+
+
+
+===========================
 curl -k -u V1021577:token \
 https://artifactory.jfrog.sbi/artifactory/devsecops-gradle-virtual/org/springframework/boot/org.springframework.boot.gradle.plugin/3.3.10/
 
