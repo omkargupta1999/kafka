@@ -1,40 +1,31 @@
-FROM registry.access.redhat.com/ubi9/openjdk-21:latest
+.build:
+  stage: build
+  tags: 
+    - common_runner
 
-USER root
+  image: 
+    name: artifactory.jfrog.sbi:443/itepaypg-sbiepay2-docker-local/custom-ci/gradle-9.3.0-jdk-21:v4
 
-# Install unzip (used for gradle setup)
-RUN dnf install -y unzip || true
+#    pull_policy: always  
+  script:
+    - unset http_proxy
+    - unset https_proxy
+    - unset HTTP_proxy
+    - unset HTTPS_proxy
+    - pwd
+    - ls -la
+    - |
+      if [ -n "$VERSION" ]; then
+        echo "version ${VERSION}"
+        gradle build -x test -Pversion=${VERSION} --info
+      else
+        gradle build -x test --info
 
-# Create gradle directory
-RUN mkdir -p /opt/gradle/
-
-# Copy Gradle distribution
-COPY gradle-8.9/ /opt/gradle/
-
-# Set Gradle environment
-ENV GRADLE_HOME=/opt/gradle
-ENV PATH=$PATH:$GRADLE_HOME/bin
-
-# Copy gradle.properties (custom config)
-COPY gradle.properties /opt/gradle/
-
-# Set permissions
-RUN chmod -R 777 /opt/gradle
-
-# Copy certificate (for internal SSL trust)
-COPY gitlab.epay.sbi.crt /tmp/
-
-# Import certificate into Java truststore
-RUN keytool -import -trustcacerts \
-    -file /tmp/gitlab.epay.sbi.crt \
-    -keystore /usr/lib/jvm/java-21/lib/security/cacerts \
-    -alias SBI-GITLAB \
-    -storepass changeit -noprompt
-
-# Set working directory
-WORKDIR /app
-
-# Default command
-CMD ["bash"]
-
-=====================================
+      fi
+    - ls -lrth
+    - ls -lrth build/libs
+  artifacts:
+    paths:
+      - build/libs
+    when: on_success 
+    expire_in: 1 week
