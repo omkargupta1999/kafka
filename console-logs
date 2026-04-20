@@ -1,40 +1,5 @@
-[osuser@bastion ~]$ oc get svc int-console-console-service -n int-kafka -o yaml
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    javaoperatorsdk.io/previous: 2770b898-15bf-4688-a90f-3e7d0b130358
-  creationTimestamp: "2025-11-11T14:47:36Z"
-  labels:
-    app.kubernetes.io/managed-by: streamshub-console-operator
-    app.kubernetes.io/name: console
-  name: int-console-console-service
-  namespace: int-kafka
-  ownerReferences:
-  - apiVersion: console.streamshub.github.com/v1alpha1
-    kind: Console
-    name: int-console
-    uid: 9764fe9a-5a5b-487b-b21d-9407893873ae
-  resourceVersion: "497085397"
-  uid: 30d52935-5f6b-4c4b-ac92-9ca3bae99ee1
-spec:
-  clusterIP: 172.30.117.202
-  clusterIPs:
-  - 172.30.117.202
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-  - IPv4
-  ipFamilyPolicy: SingleStack
-  ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 3000
-  selector:
-    app.kubernetes.io/instance: int-console-console-deployment
-  sessionAffinity: None
-  type: ClusterIP
-status:
-  loadBalancer: {}
-[osuser@bastion ~]$ oc get pod int-console-console-deployment-774c8f485d-zk4jr -n  int-kafka --show-labels
-NAME                                              READY   STATUS    RESTARTS   AGE   LABELS
-int-console-console-deployment-774c8f485d-zk4jr   2/2     Running   0          88d   app.kubernetes.io/instance=int-console-console-deployment,pod-template-hash=774c8f485d
+[osuser@bastion ~]$ oc get endpoints int-console-console-service -n int-kafka
+NAME                          ENDPOINTS          AGE
+int-console-console-service   172.16.34.9:3000   159d
+[osuser@bastion ~]$
+
