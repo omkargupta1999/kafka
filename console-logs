@@ -1,5 +1,110 @@
-[osuser@bastion ~]$ oc get endpoints int-console-console-service -n int-kafka
-NAME                          ENDPOINTS          AGE
-int-console-console-service   172.16.34.9:3000   159d
-[osuser@bastion ~]$
+Resource not found
+Resource not found: Requested Kafka cluster uZLHZxS_TNukRSVvDYkOjA does not exist or is not configured (4041)
 
+
+_______________________________
+
+
+apiVersion: console.streamshub.github.com/v1alpha1
+kind: Console
+metadata:
+  annotations:
+    meta.helm.sh/release-name: epay-common
+    meta.helm.sh/release-namespace: int-epay-common
+  resourceVersion: '714463561'
+  name: int-console
+  uid: 9764fe9a-5a5b-487b-b21d-9407893873ae
+  creationTimestamp: '2025-11-11T12:23:30Z'
+  generation: 3
+  managedFields:
+    - apiVersion: console.streamshub.github.com/v1alpha1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:meta.helm.sh/release-name': {}
+            'f:meta.helm.sh/release-namespace': {}
+          'f:finalizers':
+            'v:"consoles.console.streamshub.github.com/finalizer"': {}
+          'f:labels':
+            'f:app.kubernetes.io/managed-by': {}
+        'f:status':
+          'f:conditions': {}
+          'f:observedGeneration': {}
+      manager: consolereconciler
+      operation: Apply
+      subresource: status
+      time: '2026-04-20T11:27:44Z'
+    - apiVersion: console.streamshub.github.com/v1alpha1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:finalizers':
+            .: {}
+            'v:"consoles.console.streamshub.github.com/finalizer"': {}
+      manager: fabric8-kubernetes-client
+      operation: Update
+      time: '2025-11-11T12:23:30Z'
+    - apiVersion: console.streamshub.github.com/v1alpha1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:status': {}
+      manager: fabric8-kubernetes-client
+      operation: Update
+      subresource: status
+      time: '2025-12-19T12:37:09Z'
+    - apiVersion: console.streamshub.github.com/v1alpha1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:meta.helm.sh/release-name': {}
+            'f:meta.helm.sh/release-namespace': {}
+          'f:labels':
+            .: {}
+            'f:app.kubernetes.io/managed-by': {}
+        'f:spec':
+          .: {}
+          'f:hostname': {}
+          'f:kafkaClusters': {}
+          'f:metricsSources': {}
+      manager: helm
+      operation: Update
+      time: '2026-04-20T11:27:23Z'
+  namespace: int-kafka
+  finalizers:
+    - consoles.console.streamshub.github.com/finalizer
+  labels:
+    app.kubernetes.io/managed-by: Helm
+spec:
+  hostname: int-kafkaconsole.apps.dev.sbiepay.sbi
+  kafkaClusters:
+    - adminProperties:
+        values: []
+        valuesFrom: []
+      consumerProperties:
+        values: []
+        valuesFrom: []
+      credentials:
+        kafkaUser:
+          name: epay-user
+      listener: plain
+      name: int-kafka-cluster
+      namespace: int-kafka
+      producerProperties:
+        values: []
+        valuesFrom: []
+      properties:
+        values: []
+        valuesFrom: []
+  metricsSources:
+    - name: k8s
+      type: openshift-monitoring
+status:
+  conditions:
+    - lastTransitionTime: '2026-04-20T11:27:44.842377092Z'
+      message: All resources ready
+      status: 'True'
+      type: Ready
+  observedGeneration: 3
