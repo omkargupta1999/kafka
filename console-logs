@@ -1,110 +1,24 @@
-Resource not found
-Resource not found: Requested Kafka cluster uZLHZxS_TNukRSVvDYkOjA does not exist or is not configured (4041)
-
-
-_______________________________
-
-
-apiVersion: console.streamshub.github.com/v1alpha1
-kind: Console
-metadata:
-  annotations:
-    meta.helm.sh/release-name: epay-common
-    meta.helm.sh/release-namespace: int-epay-common
-  resourceVersion: '714463561'
-  name: int-console
-  uid: 9764fe9a-5a5b-487b-b21d-9407893873ae
-  creationTimestamp: '2025-11-11T12:23:30Z'
-  generation: 3
-  managedFields:
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            'f:meta.helm.sh/release-name': {}
-            'f:meta.helm.sh/release-namespace': {}
-          'f:finalizers':
-            'v:"consoles.console.streamshub.github.com/finalizer"': {}
-          'f:labels':
-            'f:app.kubernetes.io/managed-by': {}
-        'f:status':
-          'f:conditions': {}
-          'f:observedGeneration': {}
-      manager: consolereconciler
-      operation: Apply
-      subresource: status
-      time: '2026-04-20T11:27:44Z'
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:finalizers':
-            .: {}
-            'v:"consoles.console.streamshub.github.com/finalizer"': {}
-      manager: fabric8-kubernetes-client
-      operation: Update
-      time: '2025-11-11T12:23:30Z'
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:status': {}
-      manager: fabric8-kubernetes-client
-      operation: Update
-      subresource: status
-      time: '2025-12-19T12:37:09Z'
-    - apiVersion: console.streamshub.github.com/v1alpha1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            .: {}
-            'f:meta.helm.sh/release-name': {}
-            'f:meta.helm.sh/release-namespace': {}
-          'f:labels':
-            .: {}
-            'f:app.kubernetes.io/managed-by': {}
-        'f:spec':
-          .: {}
-          'f:hostname': {}
-          'f:kafkaClusters': {}
-          'f:metricsSources': {}
-      manager: helm
-      operation: Update
-      time: '2026-04-20T11:27:23Z'
-  namespace: int-kafka
-  finalizers:
-    - consoles.console.streamshub.github.com/finalizer
-  labels:
-    app.kubernetes.io/managed-by: Helm
-spec:
-  hostname: int-kafkaconsole.apps.dev.sbiepay.sbi
-  kafkaClusters:
-    - adminProperties:
-        values: []
-        valuesFrom: []
-      consumerProperties:
-        values: []
-        valuesFrom: []
-      credentials:
-        kafkaUser:
-          name: epay-user
-      listener: plain
-      name: int-kafka-cluster
-      namespace: int-kafka
-      producerProperties:
-        values: []
-        valuesFrom: []
-      properties:
-        values: []
-        valuesFrom: []
-  metricsSources:
-    - name: k8s
-      type: openshift-monitoring
-status:
-  conditions:
-    - lastTransitionTime: '2026-04-20T11:27:44.842377092Z'
-      message: All resources ready
-      status: 'True'
-      type: Ready
-  observedGeneration: 3
+2026-04-20 11:34:47,101 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-04-20 11:34:47,203 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-04-20 11:34:47,205 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 3ms 210
+2026-04-20 11:34:47,208 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 4ms 210
+2026-04-20 11:34:47,209 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-04-20 11:34:47,239 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-04-20 11:34:47,389 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-04-20 11:34:47,389 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 2ms 210
+2026-04-20 11:34:47,392 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 2ms 210
+2026-04-20 11:34:47,392 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 3ms 210
+2026-04-20 11:34:47,413 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-04-20 11:34:55,528 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 3ms 210
+2026-04-20 11:34:55,528 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 3ms 210
+2026-04-20 11:34:55,528 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 3ms 210
+2026-04-20 11:34:55,529 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 4ms 210
+2026-04-20 11:34:55,548 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 4ms 210
+2026-04-20 11:35:04,492 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA/topics?fields%5Btopics%5D=status&filter%5Bvisibility%5D=eq%2Cexternal&page%5Bsize%5D=1 HTTP/1.1" 404 3ms 210
+2026-04-20 11:35:04,493 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-0) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA/consumerGroups?fields%5BconsumerGroups%5D=state HTTP/1.1" 404 3ms 210
+2026-04-20 11:35:04,493 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-2) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 4ms 210
+2026-04-20 11:35:04,493 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-3) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2Cmetrics HTTP/1.1" 404 4ms 210
+2026-04-20 11:35:04,526 INFO [io.qua.htt.access-log] (vert.x-eventloop-thread-4) ANONYMOUS 127.0.0.1 - "GET /api/kafkas/uZLHZxS_TNukRSVvDYkOjA?fields%5Bkafkas%5D=name%2Cnamespace%2CcreationTimestamp%2Cstatus%2CkafkaVersion%2Cnodes%2Clisteners%2Cconditions%2CnodePools%2CcruiseControlEnabled HTTP/1.1" 404 4ms 210
+2026-04-20 11:35:41,145 INFO [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 14ms 395
+2026-04-20 11:37:06,159 INFO [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 16ms 395
+2026-04-20 11:38:06,219 INFO [io.qua.htt.access-log] (executor-thread-1) ANONYMOUS 127.0.0.1 - "GET /api/kafkas?fields%5Bkafkas%5D=name%2Cnamespace%2CkafkaVersion HTTP/1.1" 200 10ms 395
