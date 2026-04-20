@@ -1,92 +1,40 @@
-[osuser@bastion ~]$ oc get pods
-NAME                                                 READY   STATUS    RESTARTS        AGE
-int-console-console-deployment-774c8f485d-zk4jr      2/2     Running   0               88d
-int-kafka-cluster-broker-0                           1/1     Running   0               45d
-int-kafka-cluster-broker-1                           1/1     Running   0               88d
-int-kafka-cluster-broker-2                           1/1     Running   1 (36d ago)     88d
-int-kafka-cluster-controller-3                       1/1     Running   0               88d
-int-kafka-cluster-controller-4                       1/1     Running   0               88d
-int-kafka-cluster-controller-5                       1/1     Running   0               88d
-int-kafka-cluster-cruise-control-7558ff4cdc-kn6p2    1/1     Running   179 (39h ago)   88d
-int-kafka-cluster-entity-operator-79699cdd59-z47jk   2/2     Running   5 (88d ago)     88d
-int-kafka-mirror-maker-mirrormaker2-0                0/1     Pending   0               117d
-[osuser@bastion ~]$ oc get int-console-console-deployment-774c8f485d-zk4jr -n int-kafka
-error: the server doesn't have a resource type "int-console-console-deployment-774c8f485d-zk4jr"
-[osuser@bastion ~]$ oc get route int-console-console-deployment-774c8f485d-zk4jr -n int-kafka
-Error from server (NotFound): routes.route.openshift.io "int-console-console-deployment-774c8f485d-zk4jr" not found
-[osuser@bastion ~]$ oc get route  -n int-kafka
-NAME                                HOST/PORT                                                  PATH   SERVICES                      PORT    TERMINATION     WILDCARD
-int-console-console-ingress-g9k7k   int-kafkaconsole.apps.integration.sbiepay.sbiuat.bank.in          int-console-console-service   <all>   edge/Redirect   None
-[osuser@bastion ~]$
-[osuser@bastion ~]$ oc get route  -n int-kafka int-console-console-ingress-g9k7k -o yaml
-apiVersion: route.openshift.io/v1
-kind: Route
+[osuser@bastion ~]$ oc get svc int-console-console-service -n int-kafka -o yaml
+apiVersion: v1
+kind: Service
 metadata:
   annotations:
-    javaoperatorsdk.io/previous: d5deddef-995f-40a1-917e-1425f8b7f4c0,497085412
-    nginx.ingress.kubernetes.io/backend-protocol: HTTP
-    route.openshift.io/termination: edge
-  creationTimestamp: "2025-11-13T10:31:06Z"
+    javaoperatorsdk.io/previous: 2770b898-15bf-4688-a90f-3e7d0b130358
+  creationTimestamp: "2025-11-11T14:47:36Z"
   labels:
     app.kubernetes.io/managed-by: streamshub-console-operator
     app.kubernetes.io/name: console
-  name: int-console-console-ingress-g9k7k
+  name: int-console-console-service
   namespace: int-kafka
   ownerReferences:
-  - apiVersion: networking.k8s.io/v1
-    controller: true
-    kind: Ingress
-    name: int-console-console-ingress
-    uid: 7d12001a-2dce-4828-97be-b6f5a39162c9
-  resourceVersion: "499280123"
-  uid: d8f6530a-a1ac-497c-bacf-5a1ff401746f
+  - apiVersion: console.streamshub.github.com/v1alpha1
+    kind: Console
+    name: int-console
+    uid: 9764fe9a-5a5b-487b-b21d-9407893873ae
+  resourceVersion: "497085397"
+  uid: 30d52935-5f6b-4c4b-ac92-9ca3bae99ee1
 spec:
-  host: int-kafkaconsole.apps.integration.sbiepay.sbiuat.bank.in
-  tls:
-    insecureEdgeTerminationPolicy: Redirect
-    termination: edge
-  to:
-    kind: Service
-    name: int-console-console-service
-    weight: 100
-  wildcardPolicy: None
+  clusterIP: 172.30.117.202
+  clusterIPs:
+  - 172.30.117.202
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 3000
+  selector:
+    app.kubernetes.io/instance: int-console-console-deployment
+  sessionAffinity: None
+  type: ClusterIP
 status:
-  ingress:
-  - conditions:
-    - lastTransitionTime: "2025-11-13T10:31:06Z"
-      status: "True"
-      type: Admitted
-    host: int-kafkaconsole.apps.integration.sbiepay.sbiuat.bank.in
-    routerCanonicalHostname: router-default.apps.dev.sbiepay.sbi
-    routerName: default
-    wildcardPolicy: None
-[osuser@bastion ~]$
-[osuser@bastion ~]$ oc get route  -n int-kafka
-NAME                                HOST/PORT                                                  PATH   SERVICES                      PORT    TERMINATION     WILDCARD
-int-console-console-ingress-g9k7k   int-kafkaconsole.apps.integration.sbiepay.sbiuat.bank.in          int-console-console-service   <all>   edge/Redirect   None
-[osuser@bastion ~]$
-[osuser@bastion ~]$
-[osuser@bastion ~]$ oc describe po int-console-console-ingress-g9k7k -n int-kafka
-Error from server (NotFound): pods "int-console-console-ingress-g9k7k" not found
-[osuser@bastion ~]$
-[osuser@bastion ~]$
-[osuser@bastion ~]$
-[osuser@bastion ~]$ oc describe route  int-console-console-ingress-g9k7k -n int-kafka
-Name:                   int-console-console-ingress-g9k7k
-Namespace:              int-kafka
-Created:                5 months ago
-Labels:                 app.kubernetes.io/managed-by=streamshub-console-operator
-                        app.kubernetes.io/name=console
-Annotations:            javaoperatorsdk.io/previous=d5deddef-995f-40a1-917e-1425f8b7f4c0,497085412
-                        nginx.ingress.kubernetes.io/backend-protocol=HTTP
-                        route.openshift.io/termination=edge
-Requested Host:         int-kafkaconsole.apps.integration.sbiepay.sbiuat.bank.in
-                           exposed on router default (host router-default.apps.dev.sbiepay.sbi) 5 months ago
-Path:                   <none>
-TLS Termination:        edge
-Insecure Policy:        Redirect
-Endpoint Port:          <all endpoint ports>
-
-Service:        int-console-console-service
-Weight:         100 (100%)
-Endpoints:      <none>
+  loadBalancer: {}
+[osuser@bastion ~]$ oc get pod int-console-console-deployment-774c8f485d-zk4jr -n  int-kafka --show-labels
+NAME                                              READY   STATUS    RESTARTS   AGE   LABELS
+int-console-console-deployment-774c8f485d-zk4jr   2/2     Running   0          88d   app.kubernetes.io/instance=int-console-console-deployment,pod-template-hash=774c8f485d
