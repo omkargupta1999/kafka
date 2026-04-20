@@ -1,5 +1,1 @@
-[osuser@bastion ~]$ oc get endpoints int-console-console-service -n int-kafka
-NAME                          ENDPOINTS          AGE
-int-console-console-service   172.16.34.9:3000   159d
-[osuser@bastion ~]$
-
+hostname: int-kafkaconsole.apps.dev.sbiepay.sbi
