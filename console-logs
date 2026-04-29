@@ -1,1094 +1,938 @@
-int-kafka-values.yaml
+amq-streams-console-operator-pod-previous-logs
 
 
 
-## ================================================================
-# EPay Common Chart - int Environment Configuration
-# ================================================================
-# Global values for all charts
-global:
-  environment: int
-  clusterDomain: integration.sbiepay.sbiuat.bank.in
-  imageRegistry: registry.dev.epay.sbi:8443
-  imagePullSecrets: microservices-int-pull-secret
-  storageClass: trident-csi
-# ================================================================
-# Service Mesh 3.0 Configuration (int Instance) 
-# ================================================================#
-serviceMesh:
-  enabled: true
-  # Core Istio Control Plane
-  controlPlane:
-    name: "int-istio"
-    namespace: "int-istio-system"
-    version: "v1.24-latest"
-    updateStrategy: "InPlace"
-    meshId: "int-mesh"
-    network: "int-network"
-    # Discovery selector for namespace scoping
-    discoverySelector:
-      key: "istio-discovery"
-      value: "int-istio"
-  # CNI Configuration
-  cni:
-    enabled: false
-    createResource: false
-    name: "default"
-    namespace: "istio-cni"
-    excludeNamespaces:
-      - int-istio-system
-      - int-istio-cni
-      - kube-system
-      - openshift-system
-      - openshift-operators
-      - openshift-monitoring
-      - openshift-user-workload-monitoring
-  # Gateway Configuration (One-time mesh-wide)
-  gateway:
-    # Istio Gateway resource
-    istioGateway:
-      name: "int-gateway"
-      namespace: "int-istio-system"
-      hosts:
-        - "integration.sbiepay.sbiuat.bank.in"
-      port: 8080
-    # Gateway Deployment and Service
-    deployment:
-      name: "int-istio-gateway"
-      namespace: "int-istio-system"
-      replicas: 1
-      selector: "int-istio-gateway"
-      revision: "int-istio"
-      resources:
-        requests:
-          cpu: "100m"
-          memory: "128Mi"
-        limits:
-          cpu: "2000m"
-          memory: "1024Mi"
-    # Gateway Service
-    service:
-      name: "int-istio-gateway-service"
-      type: ClusterIP
-      ports:
-        status: 15021
-        http: 8080
-        https: 8443
-    # OpenShift Route
-    route:
-      name: "int-istio-gateway-route"
-      enabled: true
-      host: "integration.sbiepay.sbiuat.bank.in"
-      tls:
-        termination: "edge"
-        insecureEdgeTerminationPolicy: "None"
-  # Service Mesh HPA Configuration (Environment-level)
-  hpa:
-    enabled: true
-    # Istio Control Plane HPA
-    istiod:
-      enabled: true
-      minReplicas: 2
-      maxReplicas: 5
-      targetCPUUtilizationPercentage: 70
-      targetMemoryUtilizationPercentage: 80
-      behavior:
-        scaleUp:
-          stabilizationWindowSeconds: 60
-          policies:
-            - type: "Percent"
-              value: 50
-              periodSeconds: 30
-        scaleDown:
-          stabilizationWindowSeconds: 300
-          policies:
-            - type: "Percent"
-              value: 10
-              periodSeconds: 60
-    # Istio Gateway HPA
-    gateway:
-      enabled: true
-      minReplicas: 2
-      maxReplicas: 6
-      targetCPUUtilizationPercentage: 70
-      targetMemoryUtilizationPercentage: 80
-      behavior:
-        scaleUp:
-          stabilizationWindowSeconds: 60
-          policies:
-            - type: "Percent"
-              value: 100
-              periodSeconds: 15
-        scaleDown:
-          stabilizationWindowSeconds: 300
-          policies:
-            - type: "Percent"
-              value: 10
-              periodSeconds: 60
 
-# ================================================================
-# Infrastructure Services (One-time mesh-wide)
-# ================================================================
+INFO exec -a "java" java -Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -cp "." -jar /deployments/quarkus-run.jar 
+INFO running in /deployments
+__  ____  __  _____   ___  __ ____  ______ 
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
+2026-04-18 18:28:04,835 INFO  [io.qua.ope.run.OperatorProducer] (main) Quarkus Java Operator SDK extension 7.1.1.redhat-00002 (commit: bbd08ea) built on Mon Apr 07 13:41:33 UTC 2025
+2026-04-18 18:28:05,224 INFO  [io.jav.ope.Operator] (main) Registered reconciler: 'consolereconciler' for resource: 'class com.github.streamshub.console.api.v1alpha1.Console' for namespace(s): [all namespaces]
+2026-04-18 18:28:05,225 INFO  [io.qua.ope.run.AppEventListener] (main) Starting operator.
+2026-04-18 18:28:05,225 INFO  [io.jav.ope.Operator] (main) Operator SDK 5.0.4.redhat-00001 (commit: 2a58f2b) built on Thu Apr 03 15:50:23 UTC 2025 starting...
+2026-04-18 18:28:05,225 INFO  [io.jav.ope.Operator] (main) Client version: 7.1.0.redhat-00001
+2026-04-18 18:28:05,231 INFO  [io.jav.ope.pro.Controller] (Controller Starter for: consolereconciler) Starting 'consolereconciler' controller for reconciler: com.github.streamshub.console.ConsoleReconciler, resource: com.github.streamshub.console.api.v1alpha1.Console
+2026-04-18 18:28:09,047 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (InformerWrapper [consoles.console.streamshub.github.com/v1alpha1] 51) The client is using resource type 'consoles' with unstable version 'v1alpha1'
+2026-04-18 18:28:11,895 WARN  [io.ver.cor.imp.BlockedThreadChecker] (vertx-blocked-thread-checker) Thread Thread[vert.x-eventloop-thread-3,5,main] has been blocked for 2771 ms, time limit is 2000 ms: io.vertx.core.VertxException: Thread blocked
+	at java.base@17.0.16/java.lang.ClassLoader.defineClass0(Native Method)
+	at java.base@17.0.16/java.lang.System$2.defineClass(System.java:2324)
+	at java.base@17.0.16/java.lang.invoke.MethodHandles$Lookup$ClassDefiner.defineClass(MethodHandles.java:2439)
+	at java.base@17.0.16/java.lang.invoke.InvokerBytecodeGenerator.loadMethod(InvokerBytecodeGenerator.java:320)
+	at java.base@17.0.16/java.lang.invoke.InvokerBytecodeGenerator.generateCustomizedCode(InvokerBytecodeGenerator.java:752)
+	at java.base@17.0.16/java.lang.invoke.LambdaForm.compileToBytecode(LambdaForm.java:854)
+	at java.base@17.0.16/java.lang.invoke.DirectMethodHandle.makePreparedLambdaForm(DirectMethodHandle.java:305)
+	at java.base@17.0.16/java.lang.invoke.DirectMethodHandle.preparedLambdaForm(DirectMethodHandle.java:233)
+	at java.base@17.0.16/java.lang.invoke.DirectMethodHandle.preparedLambdaForm(DirectMethodHandle.java:218)
+	at java.base@17.0.16/java.lang.invoke.DirectMethodHandle.preparedLambdaForm(DirectMethodHandle.java:227)
+	at java.base@17.0.16/java.lang.invoke.DirectMethodHandle.make(DirectMethodHandle.java:108)
+	at java.base@17.0.16/java.lang.invoke.MethodHandles$Lookup.getDirectMethodCommon(MethodHandles.java:4004)
+	at java.base@17.0.16/java.lang.invoke.MethodHandles$Lookup.getDirectMethodNoSecurityManager(MethodHandles.java:3960)
+	at java.base@17.0.16/java.lang.invoke.MethodHandles$Lookup.getDirectMethodForConstant(MethodHandles.java:4204)
+	at java.base@17.0.16/java.lang.invoke.MethodHandles$Lookup.linkMethodHandleConstant(MethodHandles.java:4152)
+	at java.base@17.0.16/java.lang.invoke.MethodHandleNatives.linkMethodHandleConstant(MethodHandleNatives.java:615)
+	at io.fabric8.kubernetes.client.utils.Utils.schedule(Utils.java:521)
+	at io.fabric8.kubernetes.client.utils.Utils.scheduleWithVariableRate(Utils.java:512)
+	at io.fabric8.kubernetes.client.informers.impl.cache.Reflector.startWatcher(Reflector.java:238)
+	at io.fabric8.kubernetes.client.informers.impl.cache.Reflector.lambda$listSyncAndWatch$5(Reflector.java:139)
+	at io.fabric8.kubernetes.client.informers.impl.cache.Reflector$$Lambda$694/0x00007f0cbc5d7738.apply(Unknown Source)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.uniComposeStage(CompletableFuture.java:1187)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.thenCompose(CompletableFuture.java:2309)
+	at io.fabric8.kubernetes.client.informers.impl.cache.Reflector.lambda$listSyncAndWatch$6(Reflector.java:139)
+	at io.fabric8.kubernetes.client.informers.impl.cache.Reflector$$Lambda$661/0x00007f0cbc5c2918.apply(Unknown Source)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1150)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient.lambda$completeOrCancel$10(StandardHttpClient.java:141)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient$$Lambda$560/0x00007f0cbc48f170.accept(Unknown Source)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler.onBodyDone(ByteArrayBodyHandler.java:51)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler$$Lambda$629/0x00007f0cbc530d78.accept(Unknown Source)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest.lambda$consumeBytes$1(VertxHttpRequest.java:120)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest$$Lambda$627/0x00007f0cbc530000.handle(Unknown Source)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.http.impl.HttpEventHandler.handleEnd(HttpEventHandler.java:76)
+	at io.vertx.core.http.impl.HttpClientResponseImpl.handleEnd(HttpClientResponseImpl.java:250)
+	at io.vertx.core.http.impl.HttpClientRequestBase$$Lambda$623/0x00007f0cbc52ef28.handle(Unknown Source)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.lambda$new$0(Http1xClientConnection.java:424)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl$$Lambda$611/0x00007f0cbc5238d0.handle(Unknown Source)
+	at io.vertx.core.streams.impl.InboundBuffer.handleEvent(InboundBuffer.java:279)
+	at io.vertx.core.streams.impl.InboundBuffer.write(InboundBuffer.java:157)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.handleEnd(Http1xClientConnection.java:734)
+	at io.vertx.core.http.impl.Http1xClientConnection$$Lambda$633/0x00007f0cbc532460.handle(Unknown Source)
+	at io.vertx.core.impl.ContextImpl.lambda$execute$7(ContextImpl.java:329)
+	at io.vertx.core.impl.ContextImpl$$Lambda$665/0x00007f0cbc5c31f8.run(Unknown Source)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base@17.0.16/java.lang.Thread.run(Thread.java:840)
 
+2026-04-18 18:28:15,935 WARN  [io.ver.cor.imp.BlockedThreadChecker] (vertx-blocked-thread-checker) Thread Thread[vert.x-eventloop-thread-9,5,main] has been blocked for 2677 ms, time limit is 2000 ms: io.vertx.core.VertxException: Thread blocked
+	at java.base@17.0.16/jdk.internal.misc.Unsafe.park(Native Method)
+	at java.base@17.0.16/java.util.concurrent.locks.LockSupport.park(LockSupport.java:211)
+	at java.base@17.0.16/java.util.concurrent.locks.AbstractQueuedSynchronizer.acquire(AbstractQueuedSynchronizer.java:715)
+	at java.base@17.0.16/java.util.concurrent.locks.AbstractQueuedSynchronizer.acquire(AbstractQueuedSynchronizer.java:938)
+	at java.base@17.0.16/java.util.concurrent.locks.ReentrantLock$Sync.lock(ReentrantLock.java:153)
+	at java.base@17.0.16/java.util.concurrent.locks.ReentrantLock.lock(ReentrantLock.java:322)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCacheValueDeserializer(DeserializerCache.java:265)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache.findValueDeserializer(DeserializerCache.java:174)
+	at com.fasterxml.jackson.databind.DeserializationContext.findRootValueDeserializer(DeserializationContext.java:669)
+	at com.fasterxml.jackson.databind.ObjectReader._prefetchRootDeserializer(ObjectReader.java:2450)
+	at com.fasterxml.jackson.databind.ObjectReader.<init>(ObjectReader.java:194)
+	at com.fasterxml.jackson.databind.ObjectMapper._newReader(ObjectMapper.java:809)
+	at com.fasterxml.jackson.databind.ObjectMapper.readerFor(ObjectMapper.java:4379)
+	at io.fabric8.kubernetes.client.utils.KubernetesSerialization.unmarshal(KubernetesSerialization.java:257)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.lambda$handleResponse$0(OperationSupport.java:551)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport$$Lambda$561/0x00007f0cbc48f7a8.apply(Unknown Source)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient.lambda$completeOrCancel$10(StandardHttpClient.java:141)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient$$Lambda$560/0x00007f0cbc48f170.accept(Unknown Source)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler.onBodyDone(ByteArrayBodyHandler.java:51)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler$$Lambda$629/0x00007f0cbc530d78.accept(Unknown Source)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest.lambda$consumeBytes$1(VertxHttpRequest.java:120)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest$$Lambda$627/0x00007f0cbc530000.handle(Unknown Source)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.http.impl.HttpEventHandler.handleEnd(HttpEventHandler.java:76)
+	at io.vertx.core.http.impl.HttpClientResponseImpl.handleEnd(HttpClientResponseImpl.java:250)
+	at io.vertx.core.http.impl.HttpClientRequestBase$$Lambda$623/0x00007f0cbc52ef28.handle(Unknown Source)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.lambda$new$0(Http1xClientConnection.java:424)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl$$Lambda$611/0x00007f0cbc5238d0.handle(Unknown Source)
+	at io.vertx.core.streams.impl.InboundBuffer.handleEvent(InboundBuffer.java:279)
+	at io.vertx.core.streams.impl.InboundBuffer.write(InboundBuffer.java:157)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.handleEnd(Http1xClientConnection.java:734)
+	at io.vertx.core.http.impl.Http1xClientConnection$$Lambda$633/0x00007f0cbc532460.handle(Unknown Source)
+	at io.vertx.core.impl.ContextImpl.execute(ContextImpl.java:327)
+	at io.vertx.core.impl.ContextImpl.execute(ContextImpl.java:307)
+	at io.vertx.core.http.impl.Http1xClientConnection.handleResponseEnd(Http1xClientConnection.java:965)
+	at io.vertx.core.http.impl.Http1xClientConnection.handleHttpMessage(Http1xClientConnection.java:837)
+	at io.vertx.core.http.impl.Http1xClientConnection.handleMessage(Http1xClientConnection.java:799)
+	at io.vertx.core.net.impl.ConnectionBase.read(ConnectionBase.java:159)
+	at io.vertx.core.net.impl.VertxHandler.channelRead(VertxHandler.java:153)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:318)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.ssl.SslHandler.unwrap(SslHandler.java:1519)
+	at io.netty.handler.ssl.SslHandler.decodeJdkCompatible(SslHandler.java:1377)
+	at io.netty.handler.ssl.SslHandler.decode(SslHandler.java:1428)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:530)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:469)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:290)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:796)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base@17.0.16/java.lang.Thread.run(Thread.java:840)
 
-  # Traffic Management Configuration (Infrastructure level only)#
-  trafficManagement:
-    virtualServices:
-      enabled: true
-    destinationRules:
-      enabled: true
-  # Security Configuration (Infrastructure level only)
-  security:
-    authorizationPolicies:
-      enabled: true
-infrastructure:
-  # Infrastructure peer authentication (mesh-wide)
-  peerAuthentication:
-    # Disable mTLS for infrastructure components in int
-    kafka:
-      enabled: false
-      mtlsMode: "DISABLE"
-    gemfire:
-      enabled: true
-      mtlsMode: "DISABLE"
-    managementConsoles:
-      enabled: true
-      mtlsMode: "DISABLE"
+2026-04-18 18:28:15,949 WARN  [io.ver.cor.imp.BlockedThreadChecker] (vertx-blocked-thread-checker) Thread Thread[vert.x-eventloop-thread-13,5,main] has been blocked for 2808 ms, time limit is 2000 ms: io.vertx.core.VertxException: Thread blocked
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseTypeVariableSignature(SignatureParser.java:429)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseFieldTypeSignature(SignatureParser.java:285)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseFieldTypeSignature(SignatureParser.java:277)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseTypeArgument(SignatureParser.java:420)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseTypeArguments(SignatureParser.java:380)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parsePackageNameAndSimpleClassTypeSignature(SignatureParser.java:335)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseClassTypeSignature(SignatureParser.java:304)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseFieldTypeSignature(SignatureParser.java:283)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseFieldTypeSignature(SignatureParser.java:277)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseBounds(SignatureParser.java:523)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseFormalTypeParameter(SignatureParser.java:250)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseFormalTypeParameters(SignatureParser.java:234)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseZeroOrMoreFormalTypeParameters(SignatureParser.java:219)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseClassSignature(SignatureParser.java:212)
+	at java.base@17.0.16/sun.reflect.generics.parser.SignatureParser.parseClassSig(SignatureParser.java:156)
+	at java.base@17.0.16/sun.reflect.generics.repository.ClassRepository.parse(ClassRepository.java:57)
+	at java.base@17.0.16/sun.reflect.generics.repository.ClassRepository.parse(ClassRepository.java:41)
+	at java.base@17.0.16/sun.reflect.generics.repository.AbstractRepository.<init>(AbstractRepository.java:74)
+	at java.base@17.0.16/sun.reflect.generics.repository.GenericDeclRepository.<init>(GenericDeclRepository.java:51)
+	at java.base@17.0.16/sun.reflect.generics.repository.ClassRepository.<init>(ClassRepository.java:53)
+	at java.base@17.0.16/sun.reflect.generics.repository.ClassRepository.make(ClassRepository.java:70)
+	at java.base@17.0.16/java.lang.Class.getGenericInfo(Class.java:3263)
+	at java.base@17.0.16/java.lang.Class.getTypeParameters(Class.java:962)
+	at java.base@17.0.16/sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl.validateConstructorArguments(ParameterizedTypeImpl.java:56)
+	at java.base@17.0.16/sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl.<init>(ParameterizedTypeImpl.java:52)
+	at java.base@17.0.16/sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl.make(ParameterizedTypeImpl.java:100)
+	at java.base@17.0.16/sun.reflect.generics.factory.CoreReflectionFactory.makeParameterizedType(CoreReflectionFactory.java:105)
+	at java.base@17.0.16/sun.reflect.generics.visitor.Reifier.visitClassTypeSignature(Reifier.java:140)
+	at java.base@17.0.16/sun.reflect.generics.tree.ClassTypeSignature.accept(ClassTypeSignature.java:49)
+	at java.base@17.0.16/sun.reflect.generics.repository.ClassRepository.computeSuperclass(ClassRepository.java:104)
+	at java.base@17.0.16/sun.reflect.generics.repository.ClassRepository.getSuperclass(ClassRepository.java:86)
+	at java.base@17.0.16/java.lang.Class.getGenericSuperclass(Class.java:1028)
+	at com.fasterxml.jackson.databind.util.ClassUtil.getGenericSuperclass(ClassUtil.java:1368)
+	at com.fasterxml.jackson.databind.type.TypeFactory._resolveSuperClass(TypeFactory.java:1591)
+	at com.fasterxml.jackson.databind.type.TypeFactory._fromClass(TypeFactory.java:1554)
+	at com.fasterxml.jackson.databind.type.TypeFactory._fromAny(TypeFactory.java:1452)
+	at com.fasterxml.jackson.databind.type.TypeFactory._fromParamType(TypeFactory.java:1711)
+	at com.fasterxml.jackson.databind.type.TypeFactory._fromAny(TypeFactory.java:1456)
+	at com.fasterxml.jackson.databind.type.TypeFactory._resolveSuperInterfaces(TypeFactory.java:1608)
+	at com.fasterxml.jackson.databind.type.TypeFactory._fromClass(TypeFactory.java:1555)
+	at com.fasterxml.jackson.databind.type.TypeFactory._fromAny(TypeFactory.java:1452)
+	at com.fasterxml.jackson.databind.type.TypeFactory._fromParamType(TypeFactory.java:1711)
+	at com.fasterxml.jackson.databind.type.TypeFactory._fromAny(TypeFactory.java:1456)
+	at com.fasterxml.jackson.databind.type.TypeFactory.resolveMemberType(TypeFactory.java:822)
+	at com.fasterxml.jackson.databind.introspect.AnnotatedClass.resolveType(AnnotatedClass.java:233)
+	at com.fasterxml.jackson.databind.introspect.AnnotatedConstructor.getParameterType(AnnotatedConstructor.java:104)
+	at com.fasterxml.jackson.databind.introspect.AnnotatedWithParams.getParameter(AnnotatedWithParams.java:86)
+	at com.fasterxml.jackson.databind.introspect.PotentialCreator.introspectParamNames(PotentialCreator.java:89)
+	at com.fasterxml.jackson.databind.introspect.POJOPropertiesCollector._findCreatorsWithAnnotatedNames(POJOPropertiesCollector.java:973)
+	at com.fasterxml.jackson.databind.introspect.POJOPropertiesCollector._addCreatorsWithAnnotatedNames(POJOPropertiesCollector.java:952)
+	at com.fasterxml.jackson.databind.introspect.POJOPropertiesCollector._addCreators(POJOPropertiesCollector.java:692)
+	at com.fasterxml.jackson.databind.introspect.POJOPropertiesCollector.collectAll(POJOPropertiesCollector.java:451)
+	at com.fasterxml.jackson.databind.introspect.POJOPropertiesCollector.getPotentialCreators(POJOPropertiesCollector.java:229)
+	at com.fasterxml.jackson.databind.introspect.BasicBeanDescription.getPotentialCreators(BasicBeanDescription.java:348)
+	at com.fasterxml.jackson.databind.deser.BasicDeserializerFactory._constructDefaultValueInstantiator(BasicDeserializerFactory.java:251)
+	at com.fasterxml.jackson.databind.deser.BasicDeserializerFactory.findValueInstantiator(BasicDeserializerFactory.java:219)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerFactory.buildBeanDeserializer(BeanDeserializerFactory.java:262)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerFactory.createBeanDeserializer(BeanDeserializerFactory.java:151)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createDeserializer2(DeserializerCache.java:471)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createDeserializer(DeserializerCache.java:415)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCache2(DeserializerCache.java:317)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCacheValueDeserializer(DeserializerCache.java:284)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache.findValueDeserializer(DeserializerCache.java:174)
+	at com.fasterxml.jackson.databind.DeserializationContext.findNonContextualValueDeserializer(DeserializationContext.java:659)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.resolve(BeanDeserializerBase.java:552)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCache2(DeserializerCache.java:347)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCacheValueDeserializer(DeserializerCache.java:284)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache.findValueDeserializer(DeserializerCache.java:174)
+	at com.fasterxml.jackson.databind.DeserializationContext.findNonContextualValueDeserializer(DeserializationContext.java:659)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.resolve(BeanDeserializerBase.java:552)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCache2(DeserializerCache.java:347)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCacheValueDeserializer(DeserializerCache.java:284)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache.findValueDeserializer(DeserializerCache.java:174)
+	at com.fasterxml.jackson.databind.DeserializationContext.findNonContextualValueDeserializer(DeserializationContext.java:659)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.resolve(BeanDeserializerBase.java:552)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCache2(DeserializerCache.java:347)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCacheValueDeserializer(DeserializerCache.java:284)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache.findValueDeserializer(DeserializerCache.java:174)
+	at com.fasterxml.jackson.databind.DeserializationContext.findContextualValueDeserializer(DeserializationContext.java:636)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.createContextual(CollectionDeserializer.java:190)
+	at com.fasterxml.jackson.databind.deser.std.CollectionDeserializer.createContextual(CollectionDeserializer.java:30)
+	at com.fasterxml.jackson.databind.DeserializationContext.handlePrimaryContextualization(DeserializationContext.java:851)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.resolve(BeanDeserializerBase.java:563)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCache2(DeserializerCache.java:347)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCacheValueDeserializer(DeserializerCache.java:284)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache.findValueDeserializer(DeserializerCache.java:174)
+	at com.fasterxml.jackson.databind.DeserializationContext.findRootValueDeserializer(DeserializationContext.java:669)
+	at com.fasterxml.jackson.databind.ObjectReader._prefetchRootDeserializer(ObjectReader.java:2450)
+	at com.fasterxml.jackson.databind.ObjectReader.<init>(ObjectReader.java:194)
+	at com.fasterxml.jackson.databind.ObjectMapper._newReader(ObjectMapper.java:809)
+	at com.fasterxml.jackson.databind.ObjectMapper.readerFor(ObjectMapper.java:4379)
+	at io.fabric8.kubernetes.client.utils.KubernetesSerialization.unmarshal(KubernetesSerialization.java:257)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.lambda$handleResponse$0(OperationSupport.java:551)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport$$Lambda$561/0x00007f0cbc48f7a8.apply(Unknown Source)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient.lambda$completeOrCancel$10(StandardHttpClient.java:141)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient$$Lambda$560/0x00007f0cbc48f170.accept(Unknown Source)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler.onBodyDone(ByteArrayBodyHandler.java:51)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler$$Lambda$629/0x00007f0cbc530d78.accept(Unknown Source)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest.lambda$consumeBytes$1(VertxHttpRequest.java:120)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest$$Lambda$627/0x00007f0cbc530000.handle(Unknown Source)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.http.impl.HttpEventHandler.handleEnd(HttpEventHandler.java:76)
+	at io.vertx.core.http.impl.HttpClientResponseImpl.handleEnd(HttpClientResponseImpl.java:250)
+	at io.vertx.core.http.impl.HttpClientRequestBase$$Lambda$623/0x00007f0cbc52ef28.handle(Unknown Source)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.lambda$new$0(Http1xClientConnection.java:424)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl$$Lambda$611/0x00007f0cbc5238d0.handle(Unknown Source)
+	at io.vertx.core.streams.impl.InboundBuffer.handleEvent(InboundBuffer.java:279)
+	at io.vertx.core.streams.impl.InboundBuffer.write(InboundBuffer.java:157)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.handleEnd(Http1xClientConnection.java:734)
+	at io.vertx.core.http.impl.Http1xClientConnection$$Lambda$633/0x00007f0cbc532460.handle(Unknown Source)
+	at io.vertx.core.impl.ContextImpl.execute(ContextImpl.java:327)
+	at io.vertx.core.impl.ContextImpl.execute(ContextImpl.java:307)
+	at io.vertx.core.http.impl.Http1xClientConnection.handleResponseEnd(Http1xClientConnection.java:965)
+	at io.vertx.core.http.impl.Http1xClientConnection.handleHttpMessage(Http1xClientConnection.java:837)
+	at io.vertx.core.http.impl.Http1xClientConnection.handleMessage(Http1xClientConnection.java:799)
+	at io.vertx.core.net.impl.ConnectionBase.read(ConnectionBase.java:159)
+	at io.vertx.core.net.impl.VertxHandler.channelRead(VertxHandler.java:153)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:318)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.ssl.SslHandler.unwrap(SslHandler.java:1519)
+	at io.netty.handler.ssl.SslHandler.decodeJdkCompatible(SslHandler.java:1377)
+	at io.netty.handler.ssl.SslHandler.decode(SslHandler.java:1428)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:530)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:469)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:290)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:796)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base@17.0.16/java.lang.Thread.run(Thread.java:840)
 
-# ================================================================
-# Security Configuration
-# ================================================================
-security:
-  enabled: true
-  scc:
-    enabled: false
-    name: "epay-restricted-scc"
-    runAsUser:
-      uidRangeMin: 1000
-      uidRangeMax: 2000
-    seLinux:
-      level: "s0"
-    fsGroup:
-      min: 1000
-      max: 2000
-    supplementalGroups:
-      min: 1000
-      max: 2000
-    users: []
-    groups: []
-  # Security contexts for containers
-  podSecurityContext:
-    runAsNonRoot: true
-    runAsUser: 1001
-    runAsGroup: 1001
-    fsGroup: 1001
-    seccompProfile:
-      type: RuntimeDefault
-  containerSecurityContext:
-    allowPrivilegeEscalation: false
-    runAsNonRoot: true
-    runAsUser: 1001
-    runAsGroup: 1001
-    readOnlyRootFilesystem: false
-    capabilities:
-      drop:
-        - ALL
-  # Network policies for infrastructure
-  networkPolicies:
-    enabled: false
-  # Service accounts for infrastructure components
-  serviceAccounts:
-    enabled: false
-#
-# ================================================================#
-# GemFire Configuration (Simplified to match reference)
-# ================================================================
-gemfire:
-  enabled: false
-  namespace: "int-gemfire"
-
-  cluster:
-    name: "gemfire-int-system"
-    image: "registry.int.epay.sbi:8443/ubi9/pivotal-gemfire/vmware-gemfire:10.1.2"
-
-    locators:
-      terminationGracePeriodSeconds: 120
-      replicas: 3
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node-role.kubernetes.io/worker
-                    operator: Exists
-                  - key: workload-type
-                    operator: In
-                    values:
-                      - gemfire
-      tolerations:
-        - key: "workload-type"
-          operator: "Equal"
-          value: "gemfire"
-          effect: "NoSchedule"
-        - key: "node.kubernetes.io/disk-pressure"
-          operator: "Exists"
-          effect: "NoExecute"
-          tolerationSeconds: 300  
-
-    servers:
-      terminationGracePeriodSeconds: 120
-      replicas: 3
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: node-role.kubernetes.io/worker
-                    operator: Exists
-                  - key: workload-type
-                    operator: In
-                    values:
-                      - gemfire
-      tolerations:
-        - key: "workload-type"
-          operator: "Equal"
-          value: "gemfire"
-          effect: "NoSchedule"
-        - key: "node.kubernetes.io/disk-pressure"
-          operator: "Exists"
-          effect: "NoExecute"
-          tolerationSeconds: 300
-
-  managementConsole:
-    route:
-      enabled: true
-      host: "gemfire-management-console.apps.int.epay.sbi"
-      tls:
-        termination: "edge"
-        insecureEdgeTerminationPolicy: "Redirect"
-
-    enabled: true
-    name: int-gmc
-    image: registry.int.epay.sbi:8443/ubi9/gemfire-management-console/gemfire-management-console:latest
-    replicas: 1
-    port: 8080
-    pvcName: gemfire-data-int-gmc-0
-  env:
-    - name: server.port
-      value: "8080"
-    - name: GMC_WEBSOCKET_SENDBUFFERSIZELIMIT
-      value: "5120000"
-    - name: PROMETHEUS_SCRAPE_INTERVAL
-      value: "2s"
-  resources:
-    requests:
-      storage: 4Gi
-  volume:
-    name: gemfire-data
-    mountPath: /opt/gemfire/VMware_GemFire_Management_Console
-    storageClassName: trident-csi-retain
-    terminationGracePeriodSeconds: 120
-
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-                - key: node-role.kubernetes.io/worker
-                  operator: Exists
-                - key: workload-type
-                  operator: In
-                  values:
-                    - gemfire
-
-    tolerations:
-      - key: "workload-type"
-        operator: "Equal"
-        value: "gemfire"
-        effect: "NoSchedule"
-      - key: "node.kubernetes.io/disk-pressure"
-        operator: "Exists"
-        effect: "NoExecute"
-        tolerationSeconds: 300
-    # Route configuration
-    #route:
-    #  enabled: true
-    #  host: "gemfire-management-console.apps.int.epay.sbi"
-    #  tls:
-    #    termination: "edge"
-    #    insecureEdgeTerminationPolicy: "Redirect"
-
-# ================================================================#
-# Kafka Configuration (AMQ Streams - KRaft JBOD)
-# ================================================================
-kafka:
-  enabled: true
-  namespace: "int-kafka"
-  # Kafka Cluster Configuration (KRaft mode)
-  cluster:
-    name: "int-kafka-cluster"
-    version: "3.9.0"
-    metadataVersion: "3.9-IV0"
-    # Annotations
-    annotations:
-      strimzi.io/node-pools: "enabled"
-      strimzi.io/kraft: "enabled"
-    # Kafka configuration
-    kafka:
-      listeners:
-      - name: plain
-        port: 9092
-        type: internal
-        tls: false
-      - name: tls
-        port: 9093
-        type: internal
-        tls: true
-      config:
-        offsets.topic.replication.factor: 3
-        transaction.state.log.replication.factor: 3
-        transaction.state.log.min.isr: 2
-        default.replication.factor: 3
-        min.insync.replicas: 2
-        # PDF Recommendations - Additional config
-        acks: "all"
-        # Performance tuning
-        num.network.threads: 8
-        num.io.threads: 8
-        socket.send.buffer.bytes: 102400
-        socket.receive.buffer.bytes: 102400
-        socket.request.max.bytes: 104857600
-        log.retention.hours: 168
-        log.segment.bytes: 1073741824
-        log.retention.check.interval.ms: 300000
-        log.cleanup.policy: "delete"
-        compression.type: "producer"
-    # Controller node pool (PDF: At least 3, 4+ vCPU, 8GB+ RAM, 64GB+ disk)
-    controller:
-      name: "controller"
-      replicas: 3
-      roles:
-        - controller
-      # PDF Recommendation: Resource specifications for controllers
-      resources:
-        requests:
-          memory: "8Gi"
-          cpu: "4"
-        limits:
-          memory: "16Gi"
-          cpu: "8"
-      storage:
-        type: jbod
-        volumes:
-          - id: 0
-            type: persistent-claim
-            size: 100Gi  # Keep existing size to avoid warning
-            kraftMetadata: shared
-            deleteClaim: false
-      # PDF Recommendation: terminationGracePeriodSeconds >60s
-      terminationGracePeriodSeconds: 120
-      # # Node affinity for controllers
-      # affinity:
-      #   nodeAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #       nodeSelectorTerms:
-      #       - matchExpressions:
-      #         - key: node-role.kubernetes.io/worker
-      #           operator: Exists
-      #         - key: workload-type
-      #           operator: In
-      #           values: ["kafka"]
-      # # Tolerations for controllers
-      # tolerations:
-      #   - key: "workload-type"
-      #     operator: "Equal"
-      #     value: "kafka"
-      #     effect: "NoSchedule"
-      #   - key: "node.kubernetes.io/disk-pressure"
-      #     operator: "Exists"
-      #     effect: "NoExecute"
-      #     tolerationSeconds: 300
-    # Broker node pool (PDF: At least 3, 12+ vCPU, 64GB+ RAM, 1TB+ disk)
-    broker:
-      name: "broker"
-      replicas: 3
-      roles:
-        - broker
-      # PDF Recommendation: Resource specifications for brokers
-      resources:
-        requests:
-          memory: "64Gi"
-          cpu: "12"
-        limits:
-          memory: "128Gi"
-          cpu: "24"
-      storage:
-        type: jbod
-        volumes:
-          - id: 0
-            type: persistent-claim
-            size: 100Gi  # Keep existing size to avoid warning
-            kraftMetadata: shared
-            deleteClaim: false
-          - id: 1
-            type: persistent-claim
-            size: 100Gi  # Keep existing size to avoid warning
-            deleteClaim: false
-      # PDF Recommendation: terminationGracePeriodSeconds >60s
-      terminationGracePeriodSeconds: 120
-      # Node affinity for brokers
-      # affinity:
-      #   nodeAffinity:
-      #     requiredDuringSchedulingIgnoredDuringExecution:
-      #       nodeSelectorTerms:
-      #       - matchExpressions:
-      #         - key: node-role.kubernetes.io/worker
-      #           operator: Exists
-      #         - key: workload-type
-      #           operator: In
-      #           values: ["kafka"]
-      # # Tolerations for brokers
-      # tolerations:
-      #   - key: "workload-type"
-      #     operator: "Equal"
-      #     value: "kafka"
-      #     effect: "NoSchedule"
-      #   - key: "node.kubernetes.io/disk-pressure"
-      #     operator: "Exists"
-      #     effect: "NoExecute"
-      #     tolerationSeconds: 300
-      #   - key: "node.kubernetes.io/memory-pressure"
-      #     operator: "Exists"
-      #     effect: "NoExecute"
-      #     tolerationSeconds: 300
-  ###     
-  metricsConfig:
-    enabled: true 
-    key: kafka-metrics-config.yml
-    name: kafka-metrics 
-    clusterOperator:
-      path: /metrics
-      port: http
-    entityOperator:
-      path: /metrics
-      port: healthcheck
-    kafkaBridge:
-      path: /metrics
-      port: rest-api
-    kafkaResources:
-      path: /metrics
-      port: tcp-prometheus
-      
-  relabelings:
-    enabled: true
-    rules:
-      - sourceLabels: [__meta_kubernetes_pod_label_strimzi_io_.*]
-        separator: ;
-        regex: (.+)
-        replacement: $1
-        action: labelmap
-      - sourceLabels: [__meta_kubernetes_namespace]
-        separator: ;
-        regex: (.*)
-        targetLabel: namespace
-        replacement: $1
-        action: replace
-      - sourceLabels: [__meta_kubernetes_pod_name]
-        separator: ;
-        regex: (.*)
-        targetLabel: kubernetes_pod_name
-        replacement: $1
-        action: replace
-      - sourceLabels: [__meta_kubernetes_pod_node_name]
-        separator: ;
-        regex: (.*)
-        targetLabel: node_name
-        replacement: $1
-        action: replace
-      - sourceLabels: [__meta_kubernetes_pod_host_ip]
-        separator: ;
-        regex: (.*)
-        targetLabel: node_ip
-        replacement: $1
-        action: replace
+2026-04-18 18:28:16,130 WARN  [io.ver.cor.imp.BlockedThreadChecker] (vertx-blocked-thread-checker) Thread Thread[vert.x-eventloop-thread-10,5,main] has been blocked for 2638 ms, time limit is 2000 ms: io.vertx.core.VertxException: Thread blocked
+	at java.base@17.0.16/jdk.internal.misc.Unsafe.park(Native Method)
+	at java.base@17.0.16/java.util.concurrent.locks.LockSupport.park(LockSupport.java:211)
+	at java.base@17.0.16/java.util.concurrent.locks.AbstractQueuedSynchronizer.acquire(AbstractQueuedSynchronizer.java:715)
+	at java.base@17.0.16/java.util.concurrent.locks.AbstractQueuedSynchronizer.acquire(AbstractQueuedSynchronizer.java:938)
+	at java.base@17.0.16/java.util.concurrent.locks.ReentrantLock$Sync.lock(ReentrantLock.java:153)
+	at java.base@17.0.16/java.util.concurrent.locks.ReentrantLock.lock(ReentrantLock.java:322)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCacheValueDeserializer(DeserializerCache.java:265)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache.findValueDeserializer(DeserializerCache.java:174)
+	at com.fasterxml.jackson.databind.DeserializationContext.findRootValueDeserializer(DeserializationContext.java:669)
+	at com.fasterxml.jackson.databind.ObjectReader._prefetchRootDeserializer(ObjectReader.java:2450)
+	at com.fasterxml.jackson.databind.ObjectReader.<init>(ObjectReader.java:194)
+	at com.fasterxml.jackson.databind.ObjectMapper._newReader(ObjectMapper.java:809)
+	at com.fasterxml.jackson.databind.ObjectMapper.readerFor(ObjectMapper.java:4379)
+	at io.fabric8.kubernetes.client.utils.KubernetesSerialization.unmarshal(KubernetesSerialization.java:257)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.lambda$handleResponse$0(OperationSupport.java:551)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport$$Lambda$561/0x00007f0cbc48f7a8.apply(Unknown Source)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient.lambda$completeOrCancel$10(StandardHttpClient.java:141)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient$$Lambda$560/0x00007f0cbc48f170.accept(Unknown Source)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler.onBodyDone(ByteArrayBodyHandler.java:51)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler$$Lambda$629/0x00007f0cbc530d78.accept(Unknown Source)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base@17.0.16/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest.lambda$consumeBytes$1(VertxHttpRequest.java:120)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest$$Lambda$627/0x00007f0cbc530000.handle(Unknown Source)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.http.impl.HttpEventHandler.handleEnd(HttpEventHandler.java:76)
+	at io.vertx.core.http.impl.HttpClientResponseImpl.handleEnd(HttpClientResponseImpl.java:250)
+	at io.vertx.core.http.impl.HttpClientRequestBase$$Lambda$623/0x00007f0cbc52ef28.handle(Unknown Source)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.lambda$new$0(Http1xClientConnection.java:424)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl$$Lambda$611/0x00007f0cbc5238d0.handle(Unknown Source)
+	at io.vertx.core.streams.impl.InboundBuffer.handleEvent(InboundBuffer.java:279)
+	at io.vertx.core.streams.impl.InboundBuffer.write(InboundBuffer.java:157)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.handleEnd(Http1xClientConnection.java:734)
+	at io.vertx.core.http.impl.Http1xClientConnection$$Lambda$633/0x00007f0cbc532460.handle(Unknown Source)
+	at io.vertx.core.impl.ContextImpl.execute(ContextImpl.java:327)
+	at io.vertx.core.impl.ContextImpl.execute(ContextImpl.java:307)
+	at io.vertx.core.http.impl.Http1xClientConnection.handleResponseEnd(Http1xClientConnection.java:965)
+	at io.vertx.core.http.impl.Http1xClientConnection.handleHttpMessage(Http1xClientConnection.java:837)
+	at io.vertx.core.http.impl.Http1xClientConnection.handleMessage(Http1xClientConnection.java:799)
+	at io.vertx.core.net.impl.ConnectionBase.read(ConnectionBase.java:159)
+	at io.vertx.core.net.impl.VertxHandler.channelRead(VertxHandler.java:153)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:318)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.handler.ssl.SslHandler.unwrap(SslHandler.java:1519)
+	at io.netty.handler.ssl.SslHandler.decodeJdkCompatible(SslHandler.java:1377)
+	at io.netty.handler.ssl.SslHandler.decode(SslHandler.java:1428)
+	at io.netty.handler.codec.ByteToMessageDecoder.decodeRemovalReentryProtection(ByteToMessageDecoder.java:530)
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:469)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:290)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:796)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
 
 
 
-  # PDF Recommendation: Cruise Control for cluster rebalancing
-  cruiseControl:
-    enabled: true
-    name: "int-kafka-cruise-control"
-    resources:
-      requests:
-        memory: "2Gi"
-        cpu: "1"
-      limits:
-        memory: "4Gi"
-        cpu: "2"
-    config:
-      # Cruise Control configuration
-      default.goals: >
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.RackAwareGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.ReplicaCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.DiskCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkInboundCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.CpuCapacityGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.ReplicaDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.PotentialNwOutGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.DiskUsageDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkInboundUsageDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.NetworkOutboundUsageDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.CpuUsageDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.TopicReplicaDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.LeaderReplicaDistributionGoal,
-        com.linkedin.kafka.cruisecontrol.analyzer.goals.LeaderBytesInDistributionGoal
-      cpu.balance.threshold: "1.1"
-      disk.balance.threshold: "1.1"
-      network.inbound.balance.threshold: "1.1"
-      network.outbound.balance.threshold: "1.1"
-
-  # PDF Recommendation: Kafka Connect for database integration
-  kafkaConnect:
-    enabled: false
-    name: "int-kafka-connect"
-    replicas: 3
-    bootstrapServers: "int-kafka-cluster-kafka-bootstrap.int-kafka.svc.cluster.local:9093"
-    image: "epaynonprod-registry-quay-quay-enterprise.apps.integration.sbiepay.sbiuat.bank.in/redhatdefultimage/debeziumconnect:01"
-    imagePullSecrets: 
-       - microservices-int-pull-secret
-    resources:
-      requests:
-        memory: "4Gi"
-        cpu: "2"
-      limits:
-        memory: "8Gi"
-        cpu: "4"
-    config:
-      group:
-        id: "int-connect-cluster"
-      offset:
-        storage:
-          topic: "int-connect-cluster-offsets"
-        flush:
-          interval:
-            ms: 10000
-          timeout:
-            ms: 5000
-      config:
-        storage:
-          topic: "int-connect-cluster-configs"
-      status:
-        storage:
-          topic: "int-connect-cluster-status"
-    # Connectors configuration
-
-    connectors:
-      - name: "epay-oracle-source"
-        config:
-          connector:
-            class: "io.debezium.connector.oracle.OracleConnector"
-          table:
-            include:
-              list: "PAYAGGADMIN.BANKBRANCHES,PAYAGGADMIN.AGGMERCHGTWFEESTRUCTURE,PAYAGGADMIN.SERVICETAXSTRUCTURE,PAYAGGADMIN.AGGMERCHANTSERVICETAXMAPPING,PAYAGGADMIN.AGGMERCHANTHYBRIDFEESTRUCTURE"
-          database:
-            hostname: "EPAYDNSINTNEW.sbiepay.sbi"
-            port: "1524"
-            user: "PAYAGGADMIN"
-            password: "April_2025"
-            dbname: "epaydbpp"
-            server:
-              name: "epay-int-db"
-          decimal.handling.mode: string
-          schema.history.internal.skip.unparseable.ddl: "false"
-          schema.history.internal.kafka.topic: schema-changes.inventory
-          topic:
-             prefix: cdc-oracle-gemfire     
-          datetime:
-            handling.mode: string      
-          schema:
-            include:
-              list: PAYAGGADMIN
-            history:
-              internal:
-                kafka:
-                  bootstrap:
-                    servers: "int-kafka-cluster-kafka-bootstrap.int-kafka.svc.cluster.local:9093"  
-                topic: "epay-db-history"
-          include:
-            schema:
-              changes: true
-
-  # PDF Recommendation: MirrorMaker 2 for disaster recovery
-  mirrorMaker2:
-    enabled: true
-    name: "int-kafka-mirror-maker"
-    # Active/Passive setup for DR
-    clusters:
-      - alias: "source"
-        bootstrapServers: "int-kafka-cluster-kafka-bootstrap.int-kafka.svc.cluster.local:9092"
-      - alias: "target"
-        bootstrapServers: "dr-kafka-cluster-kafka-bootstrap.dr-kafka.svc.cluster.local:9092"
-    mirrors:
-      - sourceCluster: "source"
-        targetCluster: "target"
-        sourceConnector:
-          config:
-            replication.factor: 3
-            offset-syncs.topic.replication.factor: 3
-            sync.topic.acls.enabled: true
-            replication.policy.class: "org.apache.kafka.connect.mirror.IdentityReplicationPolicy"
-        heartbeatConnector:
-          config:
-            heartbeats.topic.replication.factor: 3
-        checkpointConnector:
-          config:
-            checkpoints.topic.replication.factor: 3
-        topicsPattern: ".*"
-        groupsPattern: ".*"
-    resources:
-      requests:
-        memory: "2Gi"
-        cpu: "1"
-      limits:
-        memory: "4Gi"
-        cpu: "2"
-
-  # Kafka Users for ePay application    
-  kafkaUser:
-    enabled: true
-    name: epay-user
-    namespace: int-kafka
-    cluster: int-kafka-cluster
-    authentication:
-      type: scram-sha-512  # Kafka Users for ePay application       
-  
-  console:
-    enabled: true
-    name: int-console
-    namespace: int-kafka
-    hostname: int-kafkaconsole.apps.integration.sbiepay.sbiuat.bank.in
-    credentials:
-      kafkaUser:
-        name: epay-user
-    listener: plain
-    kafkaClusters:
-      name: int-kafka-cluster 
-      namespace: int-kafka
 
 
-# Kafka Topics for ePay application
-topics:
-  - name: "int-connect-cluster-offsets"
-    partitions: 25
-    replicas: 3
-  - name: "int-connect-cluster-configs"
-    partitions: 1
-    replicas: 3
-  - name: "int-connect-cluster-status"
-    partitions: 5
-    replicas: 3
-  - name: "epay-db-history"
-    partitions: 1
-    replicas: 3
-   
+___________________________________________________________________________________________________________
 
-# PDF Recommendation: Distributed tracing for environment
-tracing:
-  enabled: false
-  type: "tempo"
-  # Create our own Tempo instance for int environment
-  tempo:
-    enabled: false
-    name: "int-tempo"
-    namespace: "int-tempo"
-    tenants:
-       tenantName: dev
-       tenantId: "1610b0c3-c509-4592-a256-a1871353dbfa"
-
-    # Tempo instance configuration for latest operator
-    spec:
-      # Storage configuration
-      storage:
-        secret:
-          name: "tempo-s3-storage-secret"
-          type: "s3"
-      # Retention policy
-      retention:
-        global:
-          traces: "168h"  # 7 days
-      # Resource configuration
-      resources:
-        total:
-          limits:
-            memory: "2Gi"
-            cpu: "1000m"
-          requests:
-            memory: "1Gi" 
-            cpu: "500m"
-      # Service configuration for int
-      services:
-        distributor:
-          replicas: 1
-        ingester:
-          replicas: 1
-        querier:
-          replicas: 1
-        query_frontend:
-          replicas: 1
-        compactor:
-          replicas: 1
-    # Persistence for our Tempo instance
-    persistence:
-      enabled: true
-      size: "50Gi"
-      storageClass: "trident-csi-retain"
-# Environment-level monitoring infrastructure
-monitoring:
-  enabled: false
-  
-  # Use OpenShift User Workload Monitoring (built-in Prometheus)
-  userWorkloadMonitoring:
-    enabled: true
-    namespace: "openshift-user-workload-monitoring"
-    
-  # Disable separate Prometheus deployment - use OpenShift built-in
-  prometheus:
-    enabled: true
-    retention: "30d"
-    
-  # Grafana for enhanced dashboards (optional - OpenShift Console has basic monitoring)
-  grafana:
-    enabled: true
-    persistence:
-      enabled: true
-      size: "20Gi"
-      storageClass: "trident-csi"
-    resources:
-      requests:
-        memory: "1Gi"
-        cpu: "500m"
-      limits:
-        memory: "2Gi"
-        cpu: "1"
-    
-  # ServiceMonitor for infrastructure components (required for OpenShift monitoring)
-  serviceMonitor:
-    enabled: true
-    labels:
-      app: "epay-infrastructure-monitoring"
-    endpoints:
-      - port: "metrics"
-        interval: "30s"
-        path: "/metrics"
-    
-  # PrometheusRule for infrastructure alerting (works with OpenShift monitoring)
-  prometheusRule:
-    enabled: true
-    rules:
-      - alert: "KafkaClusterDown"
-        expr: "kafka_server_replicamanager_leadercount == 0"
-        for: "5m"
-        labels:
-          severity: "critical"
-        annotations:
-          summary: "Kafka cluster is down"
-          description: "Kafka cluster has no active leaders"
-      
-      - alert: "TempoDown"
-        expr: "up{job='tempo'} == 0"
-        for: "5m"
-        labels:
-          severity: "critical"
-        annotations:
-          summary: "Tempo tracing is down"
-          description: "Tempo distributed tracing service is unavailable"
-        
-
-  kiali:
-    serviceAccount:
-      name: int-kiali-service-account
-      namespace: int-istio-system
-
-    # Horizontal Pod Autoscaler configuration
-    hpa:
-      enabled: true
-      minReplicas: 1
-      maxReplicas: 2
-      targetDeploymentName: kiali
-      cpu:
-        averageUtilization: 80
-      memory:
-        averageUtilization: 80
-
-    deployment:
-      cluster_wide_access: true
-      instance_name: kiali
-      logger:
-        log_level: info
-      view_only_mode: false
-
-    external_services:
-      tracing:
-        auth:
-          insecure_skip_verify: false
-          type: "none"
-          use_kiali_token: false
-        enabled: false
-        in_cluster_url: ""
-        namespace_selector: false
-        provider: ""
-        query_timeout: 30s
-        url: ""
-        use_grpc: false
-        
-      grafana:
-        enabled: false
-      prometheus:
-        auth:
-          type: "none"
-          use_kiali_token: false
-        thanos_proxy:
-          enabled: false
-        url: ""    
-
-    # RBAC configuration
-    rbac:
-      # General Kiali labels
-      labels:
-        app: kiali
-        app.kubernetes.io/instance: int-kiali
-        app.kubernetes.io/name: kiali
-        app.kubernetes.io/part-of: kiali
-
-      # Annotations for the ClusterRoleBindings
-      annotations:
-        operator-sdk/primary-resource: int-istio-system/int-kiali
-        operator-sdk/primary-resource-type: Kiali.kiali.io
-
-      clusterRoleBindings:
-        # ClusterRoleBinding for 'cluster-monitoring-view'
-        monitoring:
-          name: int-kiali-cluster-monitoring-view
-          roleName: cluster-monitoring-view
-
-        # ClusterRoleBinding for OAuth
-        oauth:
-          name: int-kiali-int-istio-system-oauth
-          roleName: int-kiali-int-istio-system-oauth
-
-        # ClusterRoleBinding for Kiali Viewer
-        viewer:
-          name: int-kiali
-          roleName: int-kiali-viewer
+amq-streams-console-operator-pod-current-logs
 
 
-# Environment-level persistent storage
-persistentStorage:
-  enabled: true
-  
-  # Storage classes configuration
-  storageClasses:
-    default: "trident-csi-retain"
-  
-  # Persistent volumes for infrastructure components
-  volumes:
-    # Tempo storage
-    tempo:
-      enabled: true
-      size: "50Gi"
-      storageClass: "trident-csi-retain"
-      accessMode: "ReadWriteOnce"
-      
-    # Prometheus storage (disabled - using OpenShift User Workload Monitoring)
-    prometheus:
-      enabled: true
-      size: "200Gi"
-      storageClass: "trident-csi-retain"
-      accessMode: "ReadWriteOnce"      
-    # Grafana storage
-    grafana:
-      enabled: true
-      size: "20Gi"
-      storageClass: "trident-csi-retain"
-      accessMode: "ReadWriteOnce"
-      
-    # Kafka storage
-    kafka:
-      enabled: true
-      size: "100Gi"
-      storageClass: "trident-csi-retain"
-      accessMode: "ReadWriteOnce"
-      
-    # Environment logs storage
-    environment-logs:
-      enabled: true
-      size: "50Gi"
-      storageClass: "trident-csi-retain"
-      accessMode: "ReadWriteMany"
-      
-    # Backup storage
-    backup:
-      enabled: true
-      size: "500Gi"
-      storageClass: "trident-csi-retain"
-      accessMode: "ReadWriteOnce"
-      
 
+INFO exec -a "java" java -Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -cp "." -jar /deployments/quarkus-run.jar 
+INFO running in /deployments
+__  ____  __  _____   ___  __ ____  ______ 
+ --/ __ \/ / / / _ | / _ \/ //_/ / / / __/ 
+ -/ /_/ / /_/ / __ |/ , _/ ,< / /_/ /\ \   
+--\___\_\____/_/ |_/_/|_/_/|_|\____/___/   
+2026-04-18 18:29:04,725 INFO  [io.qua.ope.run.OperatorProducer] (main) Quarkus Java Operator SDK extension 7.1.1.redhat-00002 (commit: bbd08ea) built on Mon Apr 07 13:41:33 UTC 2025
+2026-04-18 18:29:05,068 INFO  [io.jav.ope.Operator] (main) Registered reconciler: 'consolereconciler' for resource: 'class com.github.streamshub.console.api.v1alpha1.Console' for namespace(s): [all namespaces]
+2026-04-18 18:29:05,069 INFO  [io.qua.ope.run.AppEventListener] (main) Starting operator.
+2026-04-18 18:29:05,069 INFO  [io.jav.ope.Operator] (main) Operator SDK 5.0.4.redhat-00001 (commit: 2a58f2b) built on Thu Apr 03 15:50:23 UTC 2025 starting...
+2026-04-18 18:29:05,073 INFO  [io.jav.ope.Operator] (main) Client version: 7.1.0.redhat-00001
+2026-04-18 18:29:05,087 INFO  [io.jav.ope.pro.Controller] (Controller Starter for: consolereconciler) Starting 'consolereconciler' controller for reconciler: com.github.streamshub.console.ConsoleReconciler, resource: com.github.streamshub.console.api.v1alpha1.Console
+2026-04-18 18:29:09,611 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (InformerWrapper [consoles.console.streamshub.github.com/v1alpha1] 50) The client is using resource type 'consoles' with unstable version 'v1alpha1'
+2026-04-18 18:29:14,026 INFO  [io.jav.ope.pro.Controller] (Controller Starter for: consolereconciler) 'consolereconciler' controller started
+2026-04-18 18:29:14,401 INFO  [io.jav.ope.LeaderElectionManager] (pool-10-thread-1) New leader with identity: amq-streams-console-operator-v3.0.1-3-bfb7d7454-pw2lr
+2026-04-18 18:29:14,469 INFO  [io.jav.ope.pro.Controller] (Event processor starter for: consolereconciler) Started event processing for controller: consolereconciler
+2026-04-18 18:29:14,596 INFO  [io.quarkus] (main) console-operator 0.8.6.redhat-00002 on JVM (powered by Quarkus 3.20.2.redhat-00004) started in 21.915s. Listening on: http://0.0.0.0:8080
+2026-04-18 18:29:14,606 INFO  [io.quarkus] (main) Profile prod activated. 
+2026-04-18 18:29:14,607 INFO  [io.quarkus] (main) Installed features: [cdi, hibernate-validator, kubernetes, kubernetes-client, micrometer, operator-sdk, smallrye-context-propagation, smallrye-health, vertx]
+2026-04-18 18:29:15,317 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (pool-13-thread-1) The client is using resource type 'kafkas' with unstable version 'v1beta2'
+2026-04-18 18:29:17,018 WARN  [io.fab.kub.cli.dsl.int.VersionUsageUtils] (pool-13-thread-2) The client is using resource type 'kafkausers' with unstable version 'v1beta2'
+2026-04-18 18:29:24,070 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-141) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-20 11:27:44,966 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-151) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/int-kafka/consoles/int-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=int-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-20 12:02:59,006 ERROR [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-168) Error during event processing ExecutionScope{ resource id: ResourceID{name='int-console', namespace='int-kafka'}, version: 714509278}: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/int-kafka/consoles/int-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=int-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.KubernetesClientException.copyAsCause(KubernetesClientException.java:205)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.waitForResult(OperationSupport.java:507)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handleResponse(OperationSupport.java:524)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:419)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:397)
+	at io.fabric8.kubernetes.client.dsl.internal.BaseOperation.handlePatch(BaseOperation.java:764)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.lambda$patch$2(HasMetadataOperation.java:231)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:236)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:251)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:44)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher$CustomResourceFacade.patchStatus(ReconciliationDispatcher.java:445)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleErrorStatusHandler(ReconciliationDispatcher.java:216)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleReconcile(ReconciliationDispatcher.java:132)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleDispatch(ReconciliationDispatcher.java:97)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleExecution(ReconciliationDispatcher.java:68)
+	at io.javaoperatorsdk.operator.processing.event.EventProcessor$ReconcilerExecutor.run(EventProcessor.java:467)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/int-kafka/consoles/int-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=int-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:642)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:622)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.assertResponseCode(OperationSupport.java:582)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.lambda$handleResponse$0(OperationSupport.java:549)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient.lambda$completeOrCancel$10(StandardHttpClient.java:141)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler.onBodyDone(ByteArrayBodyHandler.java:51)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest.lambda$consumeBytes$1(VertxHttpRequest.java:120)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.http.impl.HttpEventHandler.handleEnd(HttpEventHandler.java:76)
+	at io.vertx.core.http.impl.HttpClientResponseImpl.handleEnd(HttpClientResponseImpl.java:250)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.lambda$new$0(Http1xClientConnection.java:424)
+	at io.vertx.core.streams.impl.InboundBuffer.handleEvent(InboundBuffer.java:279)
+	at io.vertx.core.streams.impl.InboundBuffer.write(InboundBuffer.java:157)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.handleEnd(Http1xClientConnection.java:734)
+	at io.vertx.core.impl.ContextImpl.lambda$execute$7(ContextImpl.java:329)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	... 1 more
 
-# OpenTelemetry configuration for environment
-opentelemetry:
-  enabled: false
-  
-  # OpenTelemetry Collector
-  collector:
-    enabled: true
-    replicas: 2
-    resources:
-      requests:
-        memory: "1Gi"
-        cpu: "500m"
-      limits:
-        memory: "2Gi"
-        cpu: "1"
-    
-    # Collector configuration
-    config:
-      receivers:
-        otlp:
-          protocols:
-            grpc:
-              endpoint: "0.0.0.0:4317"
-            http:
-              endpoint: "0.0.0.0:4318"
-        jaeger:
-          protocols:
-            grpc:
-              endpoint: "0.0.0.0:14250"
-            thrift_http:
-              endpoint: "0.0.0.0:14268"
-      
-      processors:
-        batch:
-          timeout: "1s"
-          send_batch_size: 1024
-        memory_limiter:
-          limit_mib: 1024
-      
-      exporters:
-        tempo:
-          endpoint: "tempo-distributor.int-tempo.svc.cluster.local:4317"
-          tls:
-            insecure: true
-      
-      service:
-        pipelines:
-          traces:
-            receivers: ["otlp", "jaeger"]
-            processors: ["memory_limiter", "batch"]
-            exporters: ["tempo"]
+2026-04-20 12:03:59,292 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-188) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/int-kafka/consoles/int-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=int-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-20 16:25:26,748 WARN  [io.ver.cor.imp.BlockedThreadChecker] (vertx-blocked-thread-checker) Thread Thread[vert.x-eventloop-thread-13,5,main] has been blocked for 2065 ms, time limit is 2000 ms: io.vertx.core.VertxException: Thread blocked
+	at java.base@17.0.16/sun.nio.ch.EPoll.wait(Native Method)
+	at java.base@17.0.16/sun.nio.ch.EPollSelectorImpl.doSelect(EPollSelectorImpl.java:118)
+	at java.base@17.0.16/sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:129)
+	at java.base@17.0.16/sun.nio.ch.SelectorImpl.select(SelectorImpl.java:141)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:62)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:891)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:526)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base@17.0.16/java.lang.Thread.run(Thread.java:840)
 
-# TempoStack Configuration
-tempo:
-  name: simplest
-  namespace: perf-tempo
-  storage:
-    secretName: tempo-s3-storage-secret
-    type: s3
-  storageSize: 100Gi
-  resources:
-    total:
-      limits:
-        memory: 10Gi
-        cpu: 6000m
-  tenants:
-    mode: openshift
-    authentication:
-      - tenantName: dev
-        tenantId: "1610b0c3-c509-4592-a256-a1871353dbfa"
-  template:
-    gateway:
-      enabled: true
-    queryFrontend:
-      jaegerQuery:
-        enabled: true
-#
-# OpenTelemetry Collector Configuration
-otelCollector:
-  name: dev
-  namespace: tracing-system
-  image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.92.0
-  serviceAccountName: dev-collector
-  tempoGateway:
-    host: tempo-simplest-gateway
-    grpcPort: 8090
-    httpPort: 8080
+2026-04-21 05:49:34,312 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-169) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/int-kafka/consoles/int-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=int-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-21 06:36:38,733 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-183) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/int-kafka/consoles/int-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=int-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-21 06:57:30,934 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-186) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/int-kafka/consoles/int-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=int-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-21 07:46:10,898 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-185) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/int-kafka/consoles/int-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=int-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-21 07:47:28,759 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-146) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/int-kafka/consoles/int-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=int-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "int-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-21 09:39:02,123 ERROR [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-147) Error during event processing ExecutionScope{ resource id: ResourceID{name='sit-console', namespace='sit-kafka'}, version: 716165571}: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/sit-kafka/consoles/sit-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "sit-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=sit-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "sit-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.KubernetesClientException.copyAsCause(KubernetesClientException.java:205)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.waitForResult(OperationSupport.java:507)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handleResponse(OperationSupport.java:524)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:419)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:397)
+	at io.fabric8.kubernetes.client.dsl.internal.BaseOperation.handlePatch(BaseOperation.java:764)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.lambda$patch$2(HasMetadataOperation.java:231)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:236)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:251)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:44)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher$CustomResourceFacade.patchStatus(ReconciliationDispatcher.java:445)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleErrorStatusHandler(ReconciliationDispatcher.java:216)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleReconcile(ReconciliationDispatcher.java:132)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleDispatch(ReconciliationDispatcher.java:97)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleExecution(ReconciliationDispatcher.java:68)
+	at io.javaoperatorsdk.operator.processing.event.EventProcessor$ReconcilerExecutor.run(EventProcessor.java:467)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/sit-kafka/consoles/sit-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "sit-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=sit-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "sit-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:642)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:622)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.assertResponseCode(OperationSupport.java:582)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.lambda$handleResponse$0(OperationSupport.java:549)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient.lambda$completeOrCancel$10(StandardHttpClient.java:141)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler.onBodyDone(ByteArrayBodyHandler.java:51)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest.lambda$consumeBytes$1(VertxHttpRequest.java:120)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.http.impl.HttpEventHandler.handleEnd(HttpEventHandler.java:76)
+	at io.vertx.core.http.impl.HttpClientResponseImpl.handleEnd(HttpClientResponseImpl.java:250)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.lambda$new$0(Http1xClientConnection.java:424)
+	at io.vertx.core.streams.impl.InboundBuffer.handleEvent(InboundBuffer.java:279)
+	at io.vertx.core.streams.impl.InboundBuffer.write(InboundBuffer.java:157)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.handleEnd(Http1xClientConnection.java:734)
+	at io.vertx.core.impl.ContextImpl.lambda$execute$7(ContextImpl.java:329)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	... 1 more
 
+2026-04-21 09:40:43,754 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-158) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/sit-kafka/consoles/sit-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "sit-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=sit-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "sit-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-21 11:10:40,592 ERROR [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-169) Error during event processing ExecutionScope{ resource id: ResourceID{name='dev-console', namespace='dev-kafka'}, version: 716286189}: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.KubernetesClientException.copyAsCause(KubernetesClientException.java:205)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.waitForResult(OperationSupport.java:507)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handleResponse(OperationSupport.java:524)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:419)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:397)
+	at io.fabric8.kubernetes.client.dsl.internal.BaseOperation.handlePatch(BaseOperation.java:764)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.lambda$patch$2(HasMetadataOperation.java:231)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:236)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:251)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:44)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher$CustomResourceFacade.patchStatus(ReconciliationDispatcher.java:445)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleErrorStatusHandler(ReconciliationDispatcher.java:216)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleReconcile(ReconciliationDispatcher.java:132)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleDispatch(ReconciliationDispatcher.java:97)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleExecution(ReconciliationDispatcher.java:68)
+	at io.javaoperatorsdk.operator.processing.event.EventProcessor$ReconcilerExecutor.run(EventProcessor.java:467)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:642)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:622)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.assertResponseCode(OperationSupport.java:582)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.lambda$handleResponse$0(OperationSupport.java:549)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient.lambda$completeOrCancel$10(StandardHttpClient.java:141)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler.onBodyDone(ByteArrayBodyHandler.java:51)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest.lambda$consumeBytes$1(VertxHttpRequest.java:120)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.http.impl.HttpEventHandler.handleEnd(HttpEventHandler.java:76)
+	at io.vertx.core.http.impl.HttpClientResponseImpl.handleEnd(HttpClientResponseImpl.java:250)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.lambda$new$0(Http1xClientConnection.java:424)
+	at io.vertx.core.streams.impl.InboundBuffer.handleEvent(InboundBuffer.java:279)
+	at io.vertx.core.streams.impl.InboundBuffer.write(InboundBuffer.java:157)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.handleEnd(Http1xClientConnection.java:734)
+	at io.vertx.core.impl.ContextImpl.lambda$execute$7(ContextImpl.java:329)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	... 1 more
 
-################################################################
-# Istio Configuration
-istio:
-  namespace: int-istio-system
-  meshConfig:
-    enableTracing: true
-    extensionProviders:
-      - name: otel
-        opentelemetry:
-          port: 4317
-          service: dev-collector.int-istio-system.svc.cluster.local
+2026-04-21 11:10:40,765 ERROR [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-169) Error during event processing ExecutionScope{ resource id: ResourceID{name='dev-console', namespace='dev-kafka'}, version: 716286219}: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.KubernetesClientException.copyAsCause(KubernetesClientException.java:205)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.waitForResult(OperationSupport.java:507)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handleResponse(OperationSupport.java:524)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:419)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:397)
+	at io.fabric8.kubernetes.client.dsl.internal.BaseOperation.handlePatch(BaseOperation.java:764)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.lambda$patch$2(HasMetadataOperation.java:231)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:236)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:251)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:44)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher$CustomResourceFacade.patchStatus(ReconciliationDispatcher.java:445)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleErrorStatusHandler(ReconciliationDispatcher.java:216)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleReconcile(ReconciliationDispatcher.java:132)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleDispatch(ReconciliationDispatcher.java:97)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleExecution(ReconciliationDispatcher.java:68)
+	at io.javaoperatorsdk.operator.processing.event.EventProcessor$ReconcilerExecutor.run(EventProcessor.java:467)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:642)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:622)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.assertResponseCode(OperationSupport.java:582)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.lambda$handleResponse$0(OperationSupport.java:549)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient.lambda$completeOrCancel$10(StandardHttpClient.java:141)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler.onBodyDone(ByteArrayBodyHandler.java:51)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest.lambda$consumeBytes$1(VertxHttpRequest.java:120)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.http.impl.HttpEventHandler.handleEnd(HttpEventHandler.java:76)
+	at io.vertx.core.http.impl.HttpClientResponseImpl.handleEnd(HttpClientResponseImpl.java:250)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.lambda$new$0(Http1xClientConnection.java:424)
+	at io.vertx.core.streams.impl.InboundBuffer.handleEvent(InboundBuffer.java:279)
+	at io.vertx.core.streams.impl.InboundBuffer.write(InboundBuffer.java:157)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.handleEnd(Http1xClientConnection.java:734)
+	at io.vertx.core.impl.ContextImpl.lambda$execute$7(ContextImpl.java:329)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	... 1 more
 
-# Kiali Configuration
-kiali:
-  namespace: int-kiali
-  deployment:
-    cluster_wide_access: true
-    instance_name: kiali
-    logger:
-      log_level: info
-    view_only_mode: false
-  external_services:
-    tracing:
-      enabled: true
-      in_cluster_url: 'https://simplest-gateway.int-tempo.svc.cluster.local:8080/api/traces/v1/dev'
-      url: 'https://tempo-simplest-gateway-int-tempo.apps.int.epay.sbi/api/traces/v1/dev/search'
-      auth:
-        type: bearer
-        use_kiali_token: true
-        insecure_skip_verify: true
-      provider: jaeger
-      query_timeout: 30
-      namespace_selector: true
-    grafana:
-      enabled: false
-    prometheus:
-      thanos_proxy:
-        enabled: true
-      url: 'https://thanos-querier.openshift-monitoring.svc.cluster.local:9091'
-      auth:
-        type: bearer
-        use_kiali_token: true
+2026-04-21 11:10:52,386 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-188) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-22 12:10:35,063 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-169) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-24 11:28:00,873 ERROR [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-172) Error during event processing ExecutionScope{ resource id: ResourceID{name='dev-console', namespace='dev-kafka'}, version: 721983715}: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.KubernetesClientException.copyAsCause(KubernetesClientException.java:205)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.waitForResult(OperationSupport.java:507)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handleResponse(OperationSupport.java:524)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:419)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:397)
+	at io.fabric8.kubernetes.client.dsl.internal.BaseOperation.handlePatch(BaseOperation.java:764)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.lambda$patch$2(HasMetadataOperation.java:231)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:236)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:251)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:44)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher$CustomResourceFacade.patchStatus(ReconciliationDispatcher.java:445)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleErrorStatusHandler(ReconciliationDispatcher.java:216)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleReconcile(ReconciliationDispatcher.java:132)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleDispatch(ReconciliationDispatcher.java:97)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleExecution(ReconciliationDispatcher.java:68)
+	at io.javaoperatorsdk.operator.processing.event.EventProcessor$ReconcilerExecutor.run(EventProcessor.java:467)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:642)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:622)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.assertResponseCode(OperationSupport.java:582)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.lambda$handleResponse$0(OperationSupport.java:549)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient.lambda$completeOrCancel$10(StandardHttpClient.java:141)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler.onBodyDone(ByteArrayBodyHandler.java:51)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest.lambda$consumeBytes$1(VertxHttpRequest.java:120)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.http.impl.HttpEventHandler.handleEnd(HttpEventHandler.java:76)
+	at io.vertx.core.http.impl.HttpClientResponseImpl.handleEnd(HttpClientResponseImpl.java:250)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.lambda$new$0(Http1xClientConnection.java:424)
+	at io.vertx.core.streams.impl.InboundBuffer.handleEvent(InboundBuffer.java:279)
+	at io.vertx.core.streams.impl.InboundBuffer.write(InboundBuffer.java:157)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.handleEnd(Http1xClientConnection.java:734)
+	at io.vertx.core.impl.ContextImpl.lambda$execute$7(ContextImpl.java:329)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	... 1 more
 
-# Telemetry Generation Jobs
-telemetrygen:
-  image: ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:v0.92.0
-  namespace: int-istio-system
-  grpc:
-    enabled: true
-    count: 10
-  http:
-    enabled: true
-    count: 10
+2026-04-25 23:32:17,428 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-181) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-25 23:33:02,237 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-172) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-26 03:23:37,526 INFO  [io.sma.health] (vert.x-eventloop-thread-2) SRHCK01001: Reporting health down status: {"status":"DOWN","checks":[{"name":"Quarkus Operator SDK health check","status":"DOWN","data":{"consolereconciler":"unhealthy: ControllerResourceEventSource"}}]}
+2026-04-27 07:38:47,865 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-143) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-27 07:54:26,911 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-146) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-27 07:54:47,665 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-167) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-27 10:27:17,108 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-170) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-27 10:36:21,698 ERROR [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-180) Error during event processing ExecutionScope{ resource id: ResourceID{name='dev-console', namespace='dev-kafka'}, version: 727724267}: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.KubernetesClientException.copyAsCause(KubernetesClientException.java:205)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.waitForResult(OperationSupport.java:507)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handleResponse(OperationSupport.java:524)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:419)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:397)
+	at io.fabric8.kubernetes.client.dsl.internal.BaseOperation.handlePatch(BaseOperation.java:764)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.lambda$patch$2(HasMetadataOperation.java:231)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:236)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:251)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:44)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher$CustomResourceFacade.patchStatus(ReconciliationDispatcher.java:445)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleErrorStatusHandler(ReconciliationDispatcher.java:216)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleReconcile(ReconciliationDispatcher.java:132)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleDispatch(ReconciliationDispatcher.java:97)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleExecution(ReconciliationDispatcher.java:68)
+	at io.javaoperatorsdk.operator.processing.event.EventProcessor$ReconcilerExecutor.run(EventProcessor.java:467)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:642)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:622)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.assertResponseCode(OperationSupport.java:582)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.lambda$handleResponse$0(OperationSupport.java:549)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient.lambda$completeOrCancel$10(StandardHttpClient.java:141)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler.onBodyDone(ByteArrayBodyHandler.java:51)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest.lambda$consumeBytes$1(VertxHttpRequest.java:120)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.http.impl.HttpEventHandler.handleEnd(HttpEventHandler.java:76)
+	at io.vertx.core.http.impl.HttpClientResponseImpl.handleEnd(HttpClientResponseImpl.java:250)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.lambda$new$0(Http1xClientConnection.java:424)
+	at io.vertx.core.streams.impl.InboundBuffer.handleEvent(InboundBuffer.java:279)
+	at io.vertx.core.streams.impl.InboundBuffer.write(InboundBuffer.java:157)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.handleEnd(Http1xClientConnection.java:734)
+	at io.vertx.core.impl.ContextImpl.lambda$execute$7(ContextImpl.java:329)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	... 1 more
 
-####
-Security:
-  serviceAccounts:
-    create: true
-    list:
-      - name: "kiali-service-account"
-        annotations:
-          "my-annotation-key": "kiali monitoring"
-#      - name: "my-second-serviceaccount"
-#        annotations:
-#          "description": "Service Account for my application's backend"
-#      - name: "my-third-serviceaccount"
-####
+2026-04-27 11:00:27,628 ERROR [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-88) Error during event processing ExecutionScope{ resource id: ResourceID{name='dev-console', namespace='dev-kafka'}, version: 727767123}: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.KubernetesClientException.copyAsCause(KubernetesClientException.java:205)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.waitForResult(OperationSupport.java:507)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handleResponse(OperationSupport.java:524)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:419)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:397)
+	at io.fabric8.kubernetes.client.dsl.internal.BaseOperation.handlePatch(BaseOperation.java:764)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.lambda$patch$2(HasMetadataOperation.java:231)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:236)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:251)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:44)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher$CustomResourceFacade.patchStatus(ReconciliationDispatcher.java:445)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleErrorStatusHandler(ReconciliationDispatcher.java:216)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleReconcile(ReconciliationDispatcher.java:132)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleDispatch(ReconciliationDispatcher.java:97)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleExecution(ReconciliationDispatcher.java:68)
+	at io.javaoperatorsdk.operator.processing.event.EventProcessor$ReconcilerExecutor.run(EventProcessor.java:467)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:642)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:622)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.assertResponseCode(OperationSupport.java:582)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.lambda$handleResponse$0(OperationSupport.java:549)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient.lambda$completeOrCancel$10(StandardHttpClient.java:141)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler.onBodyDone(ByteArrayBodyHandler.java:51)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest.lambda$consumeBytes$1(VertxHttpRequest.java:120)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.http.impl.HttpEventHandler.handleEnd(HttpEventHandler.java:76)
+	at io.vertx.core.http.impl.HttpClientResponseImpl.handleEnd(HttpClientResponseImpl.java:250)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.lambda$new$0(Http1xClientConnection.java:424)
+	at io.vertx.core.streams.impl.InboundBuffer.handleEvent(InboundBuffer.java:279)
+	at io.vertx.core.streams.impl.InboundBuffer.write(InboundBuffer.java:157)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.handleEnd(Http1xClientConnection.java:734)
+	at io.vertx.core.impl.ContextImpl.lambda$execute$7(ContextImpl.java:329)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	... 1 more
+
+2026-04-27 11:01:07,707 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-181) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-27 11:01:19,173 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-173) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-28 06:43:18,921 ERROR [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-153) Error during event processing ExecutionScope{ resource id: ResourceID{name='dev-console', namespace='dev-kafka'}, version: 727816906}: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.KubernetesClientException.copyAsCause(KubernetesClientException.java:205)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.waitForResult(OperationSupport.java:507)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handleResponse(OperationSupport.java:524)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:419)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.handlePatch(OperationSupport.java:397)
+	at io.fabric8.kubernetes.client.dsl.internal.BaseOperation.handlePatch(BaseOperation.java:764)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.lambda$patch$2(HasMetadataOperation.java:231)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:236)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:251)
+	at io.fabric8.kubernetes.client.dsl.internal.HasMetadataOperation.patch(HasMetadataOperation.java:44)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher$CustomResourceFacade.patchStatus(ReconciliationDispatcher.java:445)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleErrorStatusHandler(ReconciliationDispatcher.java:216)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleReconcile(ReconciliationDispatcher.java:132)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleDispatch(ReconciliationDispatcher.java:97)
+	at io.javaoperatorsdk.operator.processing.event.ReconciliationDispatcher.handleExecution(ReconciliationDispatcher.java:68)
+	at io.javaoperatorsdk.operator.processing.event.EventProcessor$ReconcilerExecutor.run(EventProcessor.java:467)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: io.fabric8.kubernetes.client.KubernetesClientException: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}).
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:642)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.requestFailure(OperationSupport.java:622)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.assertResponseCode(OperationSupport.java:582)
+	at io.fabric8.kubernetes.client.dsl.internal.OperationSupport.lambda$handleResponse$0(OperationSupport.java:549)
+	at java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:646)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.StandardHttpClient.lambda$completeOrCancel$10(StandardHttpClient.java:141)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.http.ByteArrayBodyHandler.onBodyDone(ByteArrayBodyHandler.java:51)
+	at java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:863)
+	at java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:841)
+	at java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:510)
+	at java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2147)
+	at io.fabric8.kubernetes.client.vertx.VertxHttpRequest.lambda$consumeBytes$1(VertxHttpRequest.java:120)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:270)
+	at io.vertx.core.impl.ContextInternal.dispatch(ContextInternal.java:252)
+	at io.vertx.core.http.impl.HttpEventHandler.handleEnd(HttpEventHandler.java:76)
+	at io.vertx.core.http.impl.HttpClientResponseImpl.handleEnd(HttpClientResponseImpl.java:250)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.lambda$new$0(Http1xClientConnection.java:424)
+	at io.vertx.core.streams.impl.InboundBuffer.handleEvent(InboundBuffer.java:279)
+	at io.vertx.core.streams.impl.InboundBuffer.write(InboundBuffer.java:157)
+	at io.vertx.core.http.impl.Http1xClientConnection$StreamImpl.handleEnd(Http1xClientConnection.java:734)
+	at io.vertx.core.impl.ContextImpl.lambda$execute$7(ContextImpl.java:329)
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:173)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:166)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:472)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	... 1 more
+
+2026-04-28 15:21:19,103 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-145) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+2026-04-28 21:58:32,650 WARN  [io.jav.ope.pro.eve.EventProcessor] (ReconcilerExecutor-consolereconciler-143) Resource Kubernetes Resource Creator/Update Conflict during reconciliation. Message: Failure executing: PATCH at: https://172.30.0.1:443/apis/console.streamshub.github.com/v1alpha1/namespaces/dev-kafka/consoles/dev-console/status?fieldManager=consolereconciler&force=true. Message: Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again. Received status: Status(apiVersion=v1, code=409, details=StatusDetails(causes=[], group=console.streamshub.github.com, kind=consoles, name=dev-console, retryAfterSeconds=null, uid=null, additionalProperties={}), kind=Status, message=Operation cannot be fulfilled on consoles.console.streamshub.github.com "dev-console": the object has been modified; please apply your changes to the latest version and try again, metadata=ListMeta(_continue=null, remainingItemCount=null, resourceVersion=null, selfLink=null, additionalProperties={}), reason=Conflict, status=Failure, additionalProperties={}). Resource name: null
+	at java.base@17.0.16/java.lang.Thread.run(Thread.java:840)
